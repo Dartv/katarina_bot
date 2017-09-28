@@ -1,5 +1,5 @@
-const hello = require('./hello');
+const add = require('./add');
 
-const commands = [hello];
+const commands = [add];
 
-module.exports = client => commands.forEach(cmd => client.commands.add(cmd));
+module.exports = client => client.commands.add(...commands);
