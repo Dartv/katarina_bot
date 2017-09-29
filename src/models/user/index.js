@@ -15,7 +15,6 @@ const UserSchema = new Schema({
       ref: {
         type: String,
         maxlength: 40,
-        unique: true,
       },
       url: {
         type: SchemaTypes.Url,

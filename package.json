@@ -16,6 +16,7 @@
     "ghastly": "^0.3.0",
     "mongoose": "^4.11.13",
     "mongoose-type-url": "^1.0.2",
+    "mz": "^2.7.0",
     "ramda": "^0.24.1",
     "valid-url": "^1.0.9"
   },
