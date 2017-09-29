@@ -21,7 +21,8 @@ const UserSchema = new Schema({
         maxlength: 2000,
       },
     }],
-    max: 20,
+    max: 50,
+    default: [],
   },
 }, options);
 

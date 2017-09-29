@@ -1,7 +1,7 @@
 const User = require('../models/user');
-const { getOrCreateUser, isValidUrl, isValidImageUrl } = require('./middleware');
+const { getOrCreateUser, isValidUrl, isValidImageUrl, isRefAlreadyInUse } = require('./middleware');
 
-const middleware = [getOrCreateUser(), isValidUrl('url'), isValidImageUrl('url')];
+const middleware = [getOrCreateUser(), isValidUrl('url'), isValidImageUrl('url'), isRefAlreadyInUse()];
 
 const parameters = [
   {

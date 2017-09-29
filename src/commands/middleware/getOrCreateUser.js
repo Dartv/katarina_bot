@@ -4,10 +4,7 @@ module.exports = () => async (next, context) => {
   const { message: { author: { id: discordId } } } = context;
   let user = await User.findOneByDiscordId(discordId);
 
-  if (user) {
-    Object.assign(context, { user });
-    return next(context);
-  }
+  if (user) return next({ ...context, user });
 
   try {
     user = await new User({ discordId }).save();
@@ -15,7 +12,5 @@ module.exports = () => async (next, context) => {
     return context.message.reply(err.message);
   }
 
-  Object.assign(context, { user });
-
-  return next(context);
+  return next({ ...context, user });
 };

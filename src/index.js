@@ -1,16 +1,16 @@
 const { Client } = require('ghastly');
-const express = require('express');
 require('dotenv').config({ path: './.env' });
 
-const app = express();
+const prefix = process.env.BOT_PREFIX || 'kat!';
 
-const client = new Client({ prefix: '!' });
+const client = new Client({ prefix });
 
 require('./services/mongo_connect');
 require('./commands')(client);
 
-client.on('ready', () => console.log('I\'m ready!'));
+client.on('ready', () => {
+  console.log('I\'m ready!');
+  client.user.setGame(prefix);
+});
 
 client.login(process.env.BOT_TOKEN);
-
-app.listen(process.env.APP_PORT || 3000);
