@@ -1,4 +1,5 @@
 const { getOrCreateUser, userHasImage } = require('./middleware');
+const { formatDescription } = require('../util');
 
 const middleware = [getOrCreateUser(), userHasImage('ref')];
 
@@ -24,5 +25,5 @@ module.exports = () => ({
   middleware,
   handler,
   triggers: ['post'],
-  description: 'Posts a referenced image',
+  description: formatDescription('post', 'Posts an image', '<name>'),
 });

@@ -18,5 +18,5 @@ module.exports = () => ({
   middleware,
   handler,
   triggers: ['list'],
-  description: 'Lists all available refs',
+  description: 'Lists all available images',
 });

@@ -10,7 +10,7 @@ require('./commands')(client);
 
 client.on('ready', () => {
   console.log('I\'m ready!');
-  client.user.setGame(prefix);
+  client.user.setGame(`${prefix}help`);
 });
 
 client.login(process.env.BOT_TOKEN);

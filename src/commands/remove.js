@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const { getOrCreateUser, userHasImage } = require('./middleware');
+const { formatDescription } = require('../util');
 
 const middleware = [getOrCreateUser(), userHasImage('ref')];
 
@@ -15,5 +16,5 @@ module.exports = () => ({
   middleware,
   handler: User.removeImageLink.bind(User),
   triggers: ['remove'],
-  description: 'Remove an image reference',
+  description: formatDescription('remove', 'Removes an image', '<name>'),
 });

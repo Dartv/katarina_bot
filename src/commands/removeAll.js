@@ -7,5 +7,5 @@ module.exports = () => ({
   middleware,
   handler: User.removeAllImageLinks.bind(User),
   triggers: ['removeall'],
-  description: 'Remove all image links',
+  description: 'Removes all images',
 });
