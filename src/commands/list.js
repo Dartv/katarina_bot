@@ -3,9 +3,13 @@ const { getOrCreateUser } = require('./middleware');
 
 const middleware = [getOrCreateUser()];
 
-const listRefs = R.compose(
-  R.join(', '),
-  R.map(R.prop('ref')),
+const listRefs = R.ifElse(
+  R.length,
+  R.compose(
+    R.join(', '),
+    R.map(R.prop('ref'))
+  ),
+  R.always('nothing!'),
 );
 
 const handler = async context => context.message.reply(listRefs(context.user.images));

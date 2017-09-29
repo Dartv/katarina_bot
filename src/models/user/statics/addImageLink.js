@@ -9,5 +9,6 @@ module.exports = async function addImageLink({
     return message.reply(err.message);
   }
 
-  return message.reply(`successfully added an image link. Post it with \`kat!post ${ref}\`.`);
+  message.reply(`successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`);
+  return this;
 };
