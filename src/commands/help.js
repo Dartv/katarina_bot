@@ -1,6 +1,7 @@
 const { RichEmbed } = require('discord.js');
 
-const { COLOR_INFO } = require('../util/constants');
+const { COLOR_INFO, COMMAND_USAGE_MAP } = require('../util/constants');
+const { formatDescription } = require('../util');
 
 const handler = async ({ commands }) => {
   const embed = new RichEmbed({ title: 'COMMANDS LIST' });
@@ -11,7 +12,8 @@ const handler = async ({ commands }) => {
 
   keys.forEach((key) => {
     const { name, description } = commands.get(key);
-    embed.addField(name, description);
+    const usage = COMMAND_USAGE_MAP[name];
+    embed.addField(name, formatDescription({ usage, description, commandName: name }));
   });
 
   return embed;

@@ -1,6 +1,5 @@
 const User = require('../models/user');
 const { getOrCreateUser, isValidUrl, isValidImageUrl, isRefAlreadyInUse } = require('./middleware');
-const { formatDescription } = require('../util');
 
 const middleware = [getOrCreateUser(), isValidUrl('url'), isValidImageUrl('url'), isRefAlreadyInUse('ref')];
 const parameters = [
@@ -13,16 +12,11 @@ const parameters = [
     description: 'image url',
   },
 ];
-const commandName = 'add';
 
 module.exports = () => ({
   parameters,
   middleware,
   handler: User.addImageLink.bind(User),
-  triggers: [commandName],
-  description: formatDescription({
-    commandName,
-    description: 'Adds an image link',
-    usage: '<name> <image url>',
-  }),
+  triggers: ['add'],
+  description: 'Adds an image link',
 });
