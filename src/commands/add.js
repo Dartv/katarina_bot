@@ -3,7 +3,6 @@ const { getOrCreateUser, isValidUrl, isValidImageUrl, isRefAlreadyInUse } = requ
 const { formatDescription } = require('../util');
 
 const middleware = [getOrCreateUser(), isValidUrl('url'), isValidImageUrl('url'), isRefAlreadyInUse('ref')];
-
 const parameters = [
   {
     name: 'ref',
@@ -14,11 +13,16 @@ const parameters = [
     description: 'image url',
   },
 ];
+const commandName = 'add';
 
 module.exports = () => ({
   parameters,
   middleware,
   handler: User.addImageLink.bind(User),
-  triggers: ['add'],
-  description: formatDescription('add', 'Adds an image link', '<name> <image url>'),
+  triggers: [commandName],
+  description: formatDescription({
+    commandName,
+    description: 'Adds an image link',
+    usage: '<name> <image url>',
+  }),
 });

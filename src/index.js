@@ -1,7 +1,7 @@
 const { Client } = require('ghastly');
 require('dotenv').config({ path: './.env' });
 
-const prefix = process.env.BOT_PREFIX || 'kat!';
+const prefix = process.env.BOT_PREFIX;
 
 const client = new Client({ prefix });
 

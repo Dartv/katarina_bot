@@ -1,9 +1,11 @@
 const { RichEmbed } = require('discord.js');
 
-const handler = async ({ commands }) => {
-  const embed = new RichEmbed({ title: 'Commands list' });
+const { COLOR_INFO } = require('../util/constants');
 
-  embed.setColor('#b8daff');
+const handler = async ({ commands }) => {
+  const embed = new RichEmbed({ title: 'COMMANDS LIST' });
+
+  embed.setColor(COLOR_INFO);
 
   const keys = Array.from(commands.commands.keys());
 

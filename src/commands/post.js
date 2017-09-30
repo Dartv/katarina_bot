@@ -2,7 +2,6 @@ const { getOrCreateUser, userHasImage } = require('./middleware');
 const { formatDescription } = require('../util');
 
 const middleware = [getOrCreateUser(), userHasImage('ref')];
-
 const parameters = [
   {
     name: 'ref',
@@ -15,6 +14,7 @@ const parameters = [
     defaultValue: false,
   },
 ];
+const commandName = 'post';
 
 const handler = async context => context.args.asUrl
     ? context.image.url
@@ -24,6 +24,10 @@ module.exports = () => ({
   parameters,
   middleware,
   handler,
-  triggers: ['post'],
-  description: formatDescription('post', 'Posts an image', '<name>'),
+  triggers: [commandName, 'p'],
+  description: formatDescription({
+    commandName,
+    description: 'Posts an image',
+    usage: '<name>',
+  }),
 });

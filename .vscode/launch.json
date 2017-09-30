@@ -5,7 +5,19 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceRoot}\\src\\index.js"
+        "program": "${workspaceRoot}\\src\\index.js",
+        "envFile": "${workspaceRoot}/.env"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Tests",
+        "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+        "args": [
+            "-i"
+        ],
+        "internalConsoleOptions": "openOnSessionStart",
+        "envFile": "${workspaceRoot}/.env"
       }
     ]
   }

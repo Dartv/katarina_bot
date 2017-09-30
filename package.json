@@ -7,7 +7,13 @@
   "private": false,
   "scripts": {
     "start": "node src/index.js",
-    "start:watch": "nodemon src/index.js --watch"
+    "start:watch": "nodemon --ignore __tests__/ src/index.js --watch",
+    "jest": "./node_modules/.bin/jest"
+  },
+  "jest": {
+    "transform": {
+      ".*": "babel-jest"
+    }
   },
   "dependencies": {
     "discord.js": "^11.2.1",

@@ -1,5 +1,14 @@
-module.exports = (command, description, usage) => `
-${description}
+const R = require('ramda');
 
-usage: \`${process.env.BOT_PREFIX}${command} ${usage}\`
-`;
+module.exports = R.when(
+  R.compose(R.not, R.is(String)),
+  R.ifElse(
+    R.has('usage'),
+    ({ commandName, description, usage }) => R.compose(
+      R.join(''),
+      R.append(`usage: \`${process.env.BOT_PREFIX}${commandName} ${usage}\``),
+      R.append('\n\n'),
+    )(description),
+    R.prop('description'),
+  ),
+);
