@@ -3,7 +3,10 @@ const { formatDescription } = require('../');
 describe('formatDescription', () => {
   const commandName = 'test';
   const description = 'description';
-  const usage = '<param>';
+  const parameters = [
+    { description: 'fizz' },
+    { description: 'buzz' },
+  ];
 
   beforeEach(() => {
     process.env.BOT_PREFIX = '!';
@@ -18,7 +21,7 @@ describe('formatDescription', () => {
   });
 
   it('should properly format description', () => {
-    const actual = formatDescription({ commandName, description, usage });
+    const actual = formatDescription({ commandName, description, parameters });
     expect(actual).toMatchSnapshot();
   });
 });

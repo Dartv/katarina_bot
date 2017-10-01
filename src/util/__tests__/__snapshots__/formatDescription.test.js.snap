@@ -3,5 +3,5 @@
 exports[`formatDescription should properly format description 1`] = `
 "description
 
-usage: \`!test <param>\`"
+usage: \`!test <fizz> <buzz>\`"
 `;

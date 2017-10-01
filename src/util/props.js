@@ -6,4 +6,5 @@ module.exports = simpleClique(R.prop, [
   'ref',
   'usage',
   'description',
+  'parameters',
 ]);

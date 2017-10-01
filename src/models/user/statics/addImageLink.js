@@ -9,6 +9,12 @@ module.exports = async function addImageLink({
     return message.reply(err.message);
   }
 
-  message.reply(`successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`);
+  try {
+    await message.delete();
+  } catch (err) {
+    await message.reply(err.message);
+  }
+
+  await message.reply(`successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`);
   return this;
 };

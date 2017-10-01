@@ -5,9 +5,11 @@ module.exports = arg => async (next, context) => {
     return context.message.reply('you don\'t have any images right now');
   }
 
-  const image = findByRef(context.args[arg], context.user.images);
+  const ref = context.args[arg];
 
-  if (!image) return context.message.reply('you don\'t have any image with that ref');
+  const image = findByRef(ref, context.user.images);
+
+  if (!image) return context.message.reply(`you don't have any image named "${ref}"`);
 
   return next({ ...context, image });
 };
