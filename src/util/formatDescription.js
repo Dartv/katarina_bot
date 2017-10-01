@@ -1,14 +1,16 @@
 const R = require('ramda');
 
+const props = require('./props');
+
 module.exports = R.when(
   R.compose(R.not, R.is(String)),
   R.ifElse(
-    R.prop('usage'),
+    props.usage,
     ({ commandName, description, usage }) => R.compose(
       R.join(''),
       R.append(`usage: \`${process.env.BOT_PREFIX}${commandName} ${usage}\``),
       R.append('\n\n'),
     )(description),
-    R.prop('description'),
+    props.description,
   ),
 );

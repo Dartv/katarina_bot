@@ -1,27 +1,14 @@
 const { getOrCreateUser, userHasImage } = require('./middleware');
+const { ref } = require('../util/parameters');
 
 const middleware = [getOrCreateUser(), userHasImage('ref')];
-const parameters = [
-  {
-    name: 'ref',
-    description: 'reference name',
-  },
-  {
-    name: 'asUrl',
-    description: 'post as url',
-    optional: true,
-    defaultValue: false,
-  },
-];
 
-const handler = async context => context.args.asUrl
-    ? context.image.url
-    : context.message.channel.send('', { file: context.image.url });
+const handler = async context => context.message.channel.send('', { file: context.image.url });
 
 module.exports = () => ({
-  parameters,
   middleware,
   handler,
+  parameters: [ref],
   triggers: ['post', 'p'],
   description: 'Posts an image',
 });

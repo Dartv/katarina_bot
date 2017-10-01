@@ -1,5 +1,6 @@
 const R = require('ramda');
 const { getOrCreateUser } = require('./middleware');
+const props = require('../util/props');
 
 const middleware = [getOrCreateUser()];
 
@@ -7,7 +8,7 @@ const listRefs = R.ifElse(
   R.length,
   R.compose(
     R.join(', '),
-    R.map(R.prop('ref'))
+    R.map(props.ref)
   ),
   R.always('nothing!'),
 );
