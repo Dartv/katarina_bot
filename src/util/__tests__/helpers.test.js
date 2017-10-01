@@ -1,5 +1,5 @@
 const R = require('ramda');
-const { indexByName, eqProp, findByRef } = require('../helpers');
+const { indexByName, eqProp, findByRef, concatRight, joinWithArray } = require('../helpers');
 
 describe('indexByName', () => {
   it('should index by name', () => {
@@ -30,5 +30,17 @@ describe('findByRef', () => {
   it('should find element by "ref" prop', () => {
     const array = [{ ref: 1 }, { ref: 2 }];
     expect(findByRef(1, array)).toEqual(array[0]);
+  });
+});
+
+describe('concatRight', () => {
+  it('should concat two arrays from right', () => {
+    expect(concatRight([2, 3], [1])).toEqual([1, 2, 3]);
+  });
+});
+
+describe('joinWithArray', () => {
+  it('should join string with array', () => {
+    expect(joinWithArray('Hello', ['John', 'Marry'])).toBe('Hello, John, Marry');
   });
 });

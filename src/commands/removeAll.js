@@ -6,6 +6,6 @@ const middleware = [getOrCreateUser()];
 module.exports = () => ({
   middleware,
   handler: User.removeAllImageLinks.bind(User),
-  triggers: ['removeall'],
+  triggers: ['removeall', 'ra'],
   description: 'Removes all images',
 });

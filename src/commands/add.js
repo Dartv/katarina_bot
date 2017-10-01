@@ -8,6 +8,6 @@ module.exports = () => ({
   middleware,
   parameters: [ref, url],
   handler: User.addImageLink.bind(User),
-  triggers: ['add'],
+  triggers: ['add', 'a'],
   description: 'Adds an image link',
 });

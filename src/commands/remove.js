@@ -8,6 +8,6 @@ module.exports = () => ({
   middleware,
   parameters: [ref],
   handler: User.removeImageLink.bind(User),
-  triggers: ['remove'],
+  triggers: ['remove', 'r'],
   description: 'Removes an image',
 });

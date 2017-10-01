@@ -18,6 +18,6 @@ const handler = async context => context.message.reply(listRefs(context.user.ima
 module.exports = () => ({
   middleware,
   handler,
-  triggers: ['list'],
+  triggers: ['list', 'l'],
   description: 'Lists all available images',
 });
