@@ -1,4 +1,4 @@
-module.exports = async function removeImageLink({
+export default async function removeImageLink({
   user,
   message,
   image,
@@ -9,6 +9,6 @@ module.exports = async function removeImageLink({
     return message.reply(err.message);
   }
 
-  message.reply(`successfully removed "${image.ref}"`);
+  await message.reply(`successfully removed "${image.ref}"`);
   return this;
-};
+}

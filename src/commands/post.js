@@ -1,9 +1,9 @@
-const { getOrCreateUser, userHasImage } = require('./middleware');
-const { ref } = require('../util/parameters');
+import { getOrCreateUser, userHasImage } from './middleware';
+import { ref } from '../util/parameters';
 
-const middleware = [getOrCreateUser(), userHasImage('ref')];
+export const middleware = [getOrCreateUser(), userHasImage('ref')];
 
-const handler = async ({ message, image }) => {
+export const handler = async ({ message, image }) => {
   try {
     await message.delete();
   } catch (err) {
@@ -16,7 +16,7 @@ const handler = async ({ message, image }) => {
   return message.channel.send(msg, options);
 };
 
-module.exports = () => ({
+export default () => ({
   middleware,
   handler,
   parameters: [ref],

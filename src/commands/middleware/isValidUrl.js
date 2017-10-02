@@ -1,6 +1,6 @@
-const { isUri } = require('valid-url');
+import { isUri } from 'valid-url';
 
-module.exports = arg => async (next, context) => {
+export default arg => async (next, context) => {
   if (isUri(context.args[arg])) return next(context);
 
   return context.message.reply('invalid url provided');

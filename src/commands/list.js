@@ -1,8 +1,8 @@
-const R = require('ramda');
-const { getOrCreateUser } = require('./middleware');
-const props = require('../util/props');
+import R from 'ramda';
+import { getOrCreateUser } from './middleware';
+import props from '../util/props';
 
-const middleware = [getOrCreateUser()];
+export const middleware = [getOrCreateUser()];
 
 const listRefs = R.ifElse(
   R.length,
@@ -13,9 +13,9 @@ const listRefs = R.ifElse(
   R.always('nothing!'),
 );
 
-const handler = async context => context.message.reply(listRefs(context.user.images));
+export const handler = async context => context.message.reply(listRefs(context.user.images));
 
-module.exports = () => ({
+export default () => ({
   middleware,
   handler,
   triggers: ['list', 'l'],

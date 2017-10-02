@@ -1,4 +1,4 @@
-const { formatDescription } = require('../');
+import { formatDescription } from '../';
 
 describe('formatDescription', () => {
   const commandName = 'test';

@@ -1,11 +1,13 @@
-const User = require('../models/user');
-const { getOrCreateUser } = require('./middleware');
+import User from '../models/user';
+import { getOrCreateUser } from './middleware';
 
-const middleware = [getOrCreateUser()];
+export const middleware = [getOrCreateUser()];
 
-module.exports = () => ({
+export const handler = User.removeAllImageLinks.bind(User);
+
+export default () => ({
   middleware,
-  handler: User.removeAllImageLinks.bind(User),
+  handler,
   triggers: ['removeall', 'ra'],
   description: 'Removes all images',
 });

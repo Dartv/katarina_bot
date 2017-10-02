@@ -1,4 +1,4 @@
-module.exports = async function addImageLink({
+export default async function addImageLink({
   args: { ref, url },
   user,
   message,
@@ -15,6 +15,8 @@ module.exports = async function addImageLink({
     await message.reply(err.message);
   }
 
-  await message.reply(`successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`);
+  await message.reply(
+    `successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`
+  );
   return this;
-};
+}

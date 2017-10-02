@@ -1,5 +1,5 @@
-const R = require('ramda');
-const { indexByName, eqProp, findByRef, concatRight, joinWithArray } = require('../helpers');
+import R from 'ramda';
+import { indexByName, eqProp, findByRef, concatRight, joinWithArray } from '../helpers';
 
 describe('indexByName', () => {
   it('should index by name', () => {

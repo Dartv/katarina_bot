@@ -1,11 +1,4 @@
-const addImageLink = require('./addImageLink');
-const findOneByDiscordId = require('./findOneByDiscordId');
-const removeImageLink = require('./removeImageLink');
-const removeAllImageLinks = require('./removeAllImageLinks');
-
-module.exports = {
-  addImageLink,
-  findOneByDiscordId,
-  removeImageLink,
-  removeAllImageLinks,
-};
+export { default as addImageLink } from './addImageLink';
+export { default as findOneByDiscordId } from './findOneByDiscordId';
+export { default as removeImageLink } from './removeImageLink';
+export { default as removeAllImageLinks } from './removeAllImageLinks';

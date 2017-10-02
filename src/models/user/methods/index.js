@@ -1,9 +1,3 @@
-const addImageLink = require('./addImageLink');
-const removeImageLink = require('./removeImageLink');
-const removeAllImageLinks = require('./removeAllImageLinks');
-
-module.exports = {
-  addImageLink,
-  removeImageLink,
-  removeAllImageLinks,
-};
+export { default as addImageLink } from './addImageLink';
+export { default as removeImageLink } from './removeImageLink';
+export { default as removeAllImageLinks } from './removeAllImageLinks';

@@ -1,5 +1,1 @@
-const formatDescription = require('./formatDescription');
-
-module.exports = {
-  formatDescription,
-};
+export { default as formatDescription } from './formatDescription';

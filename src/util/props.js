@@ -1,7 +1,7 @@
-const { simpleClique } = require('cliquer');
-const R = require('ramda');
+import { simpleClique } from 'cliquer';
+import R from 'ramda';
 
-module.exports = simpleClique(R.prop, [
+export default simpleClique(R.prop, [
   'name',
   'ref',
   'usage',

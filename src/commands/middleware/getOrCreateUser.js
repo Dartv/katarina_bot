@@ -1,6 +1,6 @@
-const User = require('../../models/user');
+import User from '../../models/user';
 
-module.exports = () => async (next, context) => {
+export default () => async (next, context) => {
   const { message: { author: { id: discordId } } } = context;
   let user = await User.findOneByDiscordId(discordId);
 

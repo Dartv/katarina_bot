@@ -1,3 +1,3 @@
-module.exports = function findOneByDiscordId(discordId) {
+export default async function findOneByDiscordId(discordId) {
   return this.findOne({ discordId });
-};
+}

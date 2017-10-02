@@ -1,11 +1,11 @@
-const add = require('./add');
-const post = require('./post');
-const list = require('./list');
-const remove = require('./remove');
-const removeAll = require('./removeAll');
-const art = require('./art');
-const help = require('./help');
+import add from './add';
+import post from './post';
+import list from './list';
+import remove from './remove';
+import removeAll from './removeAll';
+import art from './art';
+import help from './help';
 
 const commands = [add, post, list, remove, removeAll, art, help];
 
-module.exports = client => client.commands.add(...commands);
+export default client => client.commands.add(...commands);

@@ -1,16 +1,16 @@
-const R = require('ramda');
+import R from 'ramda';
 
-const props = require('./props');
-const { concatRight } = require('./helpers');
+import props from './props';
+import { concatRight } from './helpers';
 
-const formatParameter = R.compose(
+export const formatParameter = R.compose(
   R.join(''),
   R.append('>'),
   R.prepend(' <'),
   props.description,
 );
 
-const formatParameters = ({ commandName, parameters, description }) => R.compose(
+export const formatParameters = ({ commandName, parameters, description }) => R.compose(
   R.join(''),
   R.append('`'),
   concatRight(R.map(formatParameter, parameters)),
@@ -18,7 +18,7 @@ const formatParameters = ({ commandName, parameters, description }) => R.compose
   R.append('\n\n'),
 )(description);
 
-module.exports = R.when(
+export default R.when(
   R.compose(R.not, R.is(String)),
   R.ifElse(
     props.parameters,
@@ -26,6 +26,3 @@ module.exports = R.when(
     props.description,
   ),
 );
-
-module.exports.formatParameter = formatParameter;
-module.exports.formatParameters = formatParameters;

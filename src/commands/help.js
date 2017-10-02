@@ -1,10 +1,10 @@
-const { RichEmbed } = require('discord.js');
+import { RichEmbed } from 'discord.js';
 
-const { COLOR_INFO } = require('../util/constants');
-const { formatDescription } = require('../util');
-const { joinWithArray } = require('../util/helpers');
+import { COLOR_INFO } from '../util/constants';
+import { formatDescription } from '../util';
+import { joinWithArray } from '../util/helpers';
 
-const handler = async ({ commands }) => {
+export const handler = async ({ commands }) => {
   const embed = new RichEmbed({ title: 'COMMANDS LIST' });
 
   embed.setColor(COLOR_INFO);
@@ -22,7 +22,7 @@ const handler = async ({ commands }) => {
   return embed;
 };
 
-module.exports = () => ({
+export default () => ({
   handler,
   triggers: ['help'],
   description: 'Prints all available commands',

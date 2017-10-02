@@ -1,6 +1,7 @@
-const R = require('ramda');
+import R from 'ramda';
 
-module.exports = function addImageLink(image) {
+export default async function addImageLink(image) {
   this.images = R.without([image], this.images);
-  return this.save();
-};
+  await this.save();
+  return this;
+}

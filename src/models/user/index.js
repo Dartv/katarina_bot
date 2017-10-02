@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
-require('mongoose-type-url');
-
-const statics = require('./statics');
-const methods = require('./methods');
+import mongoose from 'mongoose';
+import 'mongoose-type-url';
+import * as statics from './statics';
+import * as methods from './methods';
 
 const { Schema, SchemaTypes } = mongoose;
 
@@ -28,4 +27,4 @@ const UserSchema = new Schema({
 
 Object.assign(UserSchema, { statics, methods });
 
-module.exports = mongoose.model('user', UserSchema);
+export default mongoose.model('user', UserSchema);

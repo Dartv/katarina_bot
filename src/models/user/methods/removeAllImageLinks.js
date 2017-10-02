@@ -1,4 +1,5 @@
-module.exports = function addImageLink() {
+export default async function addImageLink() {
   this.images = [];
-  return this.save();
-};
+  await this.save();
+  return this;
+}

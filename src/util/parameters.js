@@ -1,12 +1,9 @@
-const { indexByName } = require('./helpers');
+export const ref = {
+  name: 'ref',
+  description: 'image reference name',
+};
 
-module.exports = indexByName([
-  {
-    name: 'ref',
-    description: 'image reference name',
-  },
-  {
-    name: 'url',
-    description: 'image url',
-  },
-]);
+export const url = {
+  name: 'url',
+  description: 'image url',
+};
