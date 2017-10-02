@@ -1,15 +1,16 @@
-import { findByRef } from '../../util/helpers';
+import { findByRef, dispatchError } from '../../util/helpers';
 
 export default arg => async (next, context) => {
   if (!context.user || !context.user.images.length) {
-    return context.message.reply('you don\'t have any images right now');
+    return dispatchError('you don\'t have any images right now', context);
   }
 
   const ref = context.args[arg];
-
   const image = findByRef(ref, context.user.images);
 
-  if (!image) return context.message.reply(`you don't have any image named "${ref}"`);
+  if (!image) {
+    return dispatchError(`you don't have any image "${ref}"`, context);
+  }
 
   return next({ ...context, image });
 };

@@ -7,3 +7,8 @@ export const url = {
   name: 'url',
   description: 'image url',
 };
+
+export const content = {
+  name: 'content',
+  description: 'content',
+};

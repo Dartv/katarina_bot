@@ -1,25 +1,40 @@
+import R from 'ramda';
+
 import { expectUser, expectUserToHaveImage } from './middleware';
-import { ref } from '../util/parameters';
+import { ref, content } from '../util/parameters';
+import { FileResponse } from './responses';
 
 export const middleware = [expectUser(), expectUserToHaveImage('ref')];
 
-export const handler = async ({ message, image }) => {
+export const handler = async ({ args, message, image }) => {
   try {
     await message.delete();
   } catch (err) {
     await message.reply(err.message);
   }
 
-  const msg = `Author: ${message.author.username}#${message.author.discriminator}`;
-  const options = { files: [image.url] };
+  const responseContent = R.when(
+    R.identity,
+    R.compose(
+      R.join(' '),
+      R.prepend(`Author: ${message.author.username}#${message.author.discriminator}`),
+      R.prepend('\n'),
+    ),
+    args.content
+  );
 
-  return message.channel.send(msg, options);
+  return new FileResponse(responseContent, [image.url]);
 };
 
 export default () => ({
   middleware,
   handler,
-  parameters: [ref],
+  parameters: [ref, {
+    ...content,
+    optional: true,
+    repeatable: true,
+    defaultValue: '',
+  }],
   triggers: ['post', 'p'],
   description: 'Posts an image',
 });

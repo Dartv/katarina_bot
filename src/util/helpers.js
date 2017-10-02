@@ -1,6 +1,7 @@
 import R from 'ramda';
 
 import props from './props';
+import { ErrorResponse } from '../commands/responses';
 
 export const indexByName = R.indexBy(props.name);
 
@@ -10,6 +11,8 @@ export const findByRef = R.curry((value, array) => R.find(eqProp(props.ref, valu
 
 export const concatRight = R.flip(R.concat);
 
+export const isImage = R.test(/\.(jpeg|jpg|gif|png)$/);
+
 export const joinWithArray = R.curry((str, array) => R.when(
   R.always(R.length(array)),
   R.compose(
@@ -18,3 +21,11 @@ export const joinWithArray = R.curry((str, array) => R.when(
   ),
   str
 ));
+
+export const dispatch = R.curry((response, context) => context.client.dispatcher.dispatchResponse(
+  context,
+  response
+));
+
+export const dispatchError = R.curry((error, context) =>
+  dispatch(new ErrorResponse(error), context));

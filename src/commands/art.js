@@ -1,11 +1,13 @@
 import fs from 'mz/fs';
 
+import { FileResponse } from './responses';
+
 const path = process.env.IMAGE_ART_DIR;
 
-export const handler = async (context) => {
-  const files = await fs.readdir(path);
-  const file = files[Math.floor(Math.random() * files.length)];
-  return context.message.channel.send('', { files: [`${path}/${file}`] });
+export const handler = async ({ dispatch }) => {
+  const images = await fs.readdir(path);
+  const image = images[Math.floor(Math.random() * images.length)];
+  return dispatch(new FileResponse('', [`${path}/${image}`]));
 };
 
 export default () => ({
