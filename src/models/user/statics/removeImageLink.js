@@ -1,14 +1,21 @@
+import { ErrorResponse, SuccessResponse } from '../../../commands/responses';
+
 export default async function removeImageLink({
   user,
   message,
   image,
 }) {
   try {
-    await user.removeImageLink(image);
+    await message.delete();
   } catch (err) {
-    return message.reply(err.message);
+    return new ErrorResponse(err.message);
   }
 
-  await message.reply(`successfully removed "${image.ref}"`);
-  return this;
+  try {
+    await user.removeImageLink(image);
+  } catch (err) {
+    return new ErrorResponse(err.message);
+  }
+
+  return new SuccessResponse(`successfully removed "${image.ref}"`);
 }

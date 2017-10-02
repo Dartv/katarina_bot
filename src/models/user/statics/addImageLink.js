@@ -1,22 +1,23 @@
+import { ErrorResponse, SuccessResponse } from '../../../commands/responses';
+
 export default async function addImageLink({
   args: { ref, url },
   user,
   message,
 }) {
   try {
-    await user.addImageLink({ ref, url });
+    await message.delete();
   } catch (err) {
-    return message.reply(err.message);
+    return new ErrorResponse(err.message);
   }
 
   try {
-    await message.delete();
+    await user.addImageLink({ ref, url });
   } catch (err) {
-    await message.reply(err.message);
+    return new ErrorResponse(err.message);
   }
 
-  await message.reply(
+  return new SuccessResponse(
     `successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`
   );
-  return this;
 }
