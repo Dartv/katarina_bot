@@ -1,12 +1,12 @@
 import User from '../models/user';
-import { getOrCreateUser, isValidUrl, isValidImageUrl, isRefAlreadyInUse } from './middleware';
+import { expectUser, expectValidUrl, expectValidImageUrl, expectRefToBeUnique } from './middleware';
 import { ref, url } from '../util/parameters';
 
 export const middleware = [
-  getOrCreateUser(),
-  isValidUrl('url'),
-  isValidImageUrl('url'),
-  isRefAlreadyInUse('ref'),
+  expectUser(),
+  expectValidUrl('url'),
+  expectValidImageUrl('url'),
+  expectRefToBeUnique('ref'),
 ];
 
 export const handler = User.addImageLink.bind(User);

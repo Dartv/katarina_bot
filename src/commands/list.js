@@ -1,8 +1,8 @@
 import R from 'ramda';
-import { getOrCreateUser } from './middleware';
+import { expectUser } from './middleware';
 import props from '../util/props';
 
-export const middleware = [getOrCreateUser()];
+export const middleware = [expectUser()];
 
 const listRefs = R.ifElse(
   R.length,

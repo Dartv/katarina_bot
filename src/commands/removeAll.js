@@ -1,7 +1,7 @@
 import User from '../models/user';
-import { getOrCreateUser } from './middleware';
+import { expectUser } from './middleware';
 
-export const middleware = [getOrCreateUser()];
+export const middleware = [expectUser()];
 
 export const handler = User.removeAllImageLinks.bind(User);
 
