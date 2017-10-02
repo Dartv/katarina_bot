@@ -9,7 +9,8 @@ export default class ErrorResponse extends Response {
       const embed = new RichEmbed();
       embed
         .setColor(COLOR_SUCCESS)
-        .setTitle('✅ Success!')
+        .setAuthor(message.author.username, message.author.avatarURL)
+        .setTitle('✅ SUCCESS!')
         .setDescription(description);
       return message.channel.send({ embed });
     });

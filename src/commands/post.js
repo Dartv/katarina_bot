@@ -2,6 +2,7 @@ import R from 'ramda';
 
 import { expectUser, expectUserToHaveImage } from './middleware';
 import { ref, content } from '../util/parameters';
+import { getFullName } from '../util/helpers';
 import { FileResponse } from './responses';
 
 export const middleware = [expectUser(), expectUserToHaveImage('ref')];
@@ -17,7 +18,7 @@ export const handler = async ({ args, message, image }) => {
     R.identity,
     R.compose(
       R.join(' '),
-      R.prepend(`Author: ${message.author.username}#${message.author.discriminator}`),
+      R.prepend(`Author: ${getFullName(message.author)}`),
       R.prepend('\n'),
     ),
     args.content

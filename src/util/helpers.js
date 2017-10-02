@@ -22,6 +22,8 @@ export const joinWithArray = R.curry((str, array) => R.when(
   str
 ));
 
+export const getFullName = ({ username, discriminator }) => `${username}#${discriminator}`;
+
 export const dispatch = R.curry((response, context) => context.client.dispatcher.dispatchResponse(
   context,
   response
