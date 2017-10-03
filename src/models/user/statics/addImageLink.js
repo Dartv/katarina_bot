@@ -4,11 +4,12 @@ export default async function addImageLink({
   args: { ref, url },
   user,
   message,
+  dispatch,
 }) {
   try {
     await message.delete();
   } catch (err) {
-    return new ErrorResponse(err.message);
+    await dispatch(new ErrorResponse(err.message));
   }
 
   try {
