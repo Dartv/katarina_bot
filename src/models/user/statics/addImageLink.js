@@ -1,24 +1,21 @@
 import { ErrorResponse, SuccessResponse } from '../../../commands/responses';
+import { handleAll, deleteMessage } from '../../../util/handlers';
 
-export default async function addImageLink({
-  args: { ref, url },
-  user,
-  message,
-  dispatch,
-}) {
-  try {
-    await message.delete();
-  } catch (err) {
-    await dispatch(new ErrorResponse(err.message));
-  }
+export const addImageLink = ({ args: { ref, url }, user }) => user.addImageLink({ ref, url });
 
+export default async (context) => {
   try {
-    await user.addImageLink({ ref, url });
+    await handleAll([
+      deleteMessage,
+      addImageLink,
+    ], context);
   } catch (err) {
     return new ErrorResponse(err.message);
   }
 
+  const { args: { ref } } = context;
+
   return new SuccessResponse(
     `successfully added an image link. Post it with \`${process.env.BOT_PREFIX}post ${ref}\`.`
   );
-}
+};

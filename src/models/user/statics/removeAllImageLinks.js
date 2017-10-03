@@ -1,20 +1,17 @@
 import { ErrorResponse, SuccessResponse } from '../../../commands/responses';
+import { handleAll, deleteMessage } from '../../../util/handlers';
 
-export default async function removeImageLink({
-  user,
-  message,
-}) {
-  try {
-    await message.delete();
-  } catch (err) {
-    return new ErrorResponse(err.message);
-  }
+const removeAllImageLinks = ({ user }) => user.removeAllImageLinks();
 
+export default async (context) => {
   try {
-    await user.removeAllImageLinks();
+    await handleAll([
+      deleteMessage,
+      removeAllImageLinks,
+    ], context);
   } catch (err) {
     return new ErrorResponse(err.message);
   }
 
   return new SuccessResponse('successfully removed all image links');
-}
+};

@@ -1,30 +1,26 @@
-import R from 'ramda';
-
 import { expectUser, expectUserToHaveImage } from './middleware';
 import { ref, content } from '../util/parameters';
-import { getFullName } from '../util/helpers';
-import { FileResponse } from './responses';
+import { ImageResponse, ErrorResponse, FileResponse } from './responses';
+import { handleAll, deleteMessage } from '../util/handlers';
 
 export const middleware = [expectUser(), expectUserToHaveImage('ref')];
 
-export const handler = async ({ args, message, image }) => {
+export const postMessage = async ({ args, image }) => {
+  if (args.content) return new ImageResponse(image.url, args.content.join(' '));
+
+  return new FileResponse('', [image.url]);
+};
+
+export const handler = async (context) => {
   try {
-    await message.delete();
+    const [, res] = await handleAll([
+      deleteMessage,
+      postMessage,
+    ], context);
+    return res;
   } catch (err) {
-    await message.reply(err.message);
+    return ErrorResponse(err.message);
   }
-
-  const responseContent = R.when(
-    R.identity,
-    R.compose(
-      R.join(' '),
-      R.prepend(`Author: ${getFullName(message.author)}`),
-      R.prepend('\n'),
-    ),
-    args.content
-  );
-
-  return new FileResponse(responseContent, [image.url]);
 };
 
 export default () => ({

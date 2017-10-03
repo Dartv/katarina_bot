@@ -15,3 +15,7 @@ client.on('ready', () => {
 });
 
 client.login(process.env.BOT_TOKEN);
+
+client.on('dispatchError', (error) => {
+  console.log(error);
+});
