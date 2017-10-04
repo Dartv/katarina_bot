@@ -8,4 +8,10 @@ export const deleteMessage = async ({ message, dispatch, formatter: { code } }) 
       dispatch(new ErrorResponse(`Unable to delete own message: ${code(err.message)}`)));
 
 
-export const handleAll = R.curry(async (fns, context) => Promise.all(R.juxt(fns)(context)));
+export const concurrently = R.curry((handlers, context) => R.compose(
+  p => p.then().catch(err => new ErrorResponse(err.message)),
+  R.last,
+  R.juxt(handlers),
+)(context));
+
+export const concurrentlyD = handlers => concurrently([deleteMessage, ...handlers]);

@@ -11,4 +11,12 @@ export const url = {
 export const content = {
   name: 'content',
   description: 'content',
+  optional: true,
+  repeatable: true,
+  defaultValue: '',
+};
+
+export const emoji = {
+  name: 'emoji',
+  description: 'emoji',
 };

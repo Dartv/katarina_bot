@@ -4,13 +4,13 @@ import { RichEmbed } from 'discord.js';
 import { COLOR_SUCCESS } from '../../util/constants';
 
 export default class ErrorResponse extends Response {
-  constructor(description) {
+  constructor(title, description = '') {
     super(async ({ message }) => {
       const embed = new RichEmbed();
       embed
         .setColor(COLOR_SUCCESS)
         .setAuthor(message.author.username, message.author.avatarURL)
-        .setTitle('✅ SUCCESS!')
+        .setTitle(`✅ ${title}!`)
         .setDescription(description);
       return message.channel.send({ embed });
     });

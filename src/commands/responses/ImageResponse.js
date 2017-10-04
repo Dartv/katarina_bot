@@ -10,9 +10,8 @@ export default class ImageResponse extends Response {
       embed
         .setColor(COLOR_INFO)
         .setAuthor(message.author.username, message.author.avatarURL)
+        .setDescription(content)
         .setImage(image);
-
-      if (content) embed.setDescription(content);
 
       return message.channel.send({ embed });
     });

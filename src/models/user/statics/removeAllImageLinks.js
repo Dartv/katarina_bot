@@ -1,17 +1,11 @@
-import { ErrorResponse, SuccessResponse } from '../../../commands/responses';
-import { handleAll, deleteMessage } from '../../../util/handlers';
+import R from 'ramda';
 
-const removeAllImageLinks = ({ user }) => user.removeAllImageLinks();
+import { SuccessResponse } from '../../../commands/responses';
+import { concurrentlyD } from '../../../util/handlers';
 
-export default async (context) => {
-  try {
-    await handleAll([
-      deleteMessage,
-      removeAllImageLinks,
-    ], context);
-  } catch (err) {
-    return new ErrorResponse(err.message);
-  }
+const removeAllImageLinks = async ({ user }) => user.removeAllImageLinks();
 
-  return new SuccessResponse('successfully removed all image links');
-};
+export default async context => R.compose(
+  p => p.then(() => new SuccessResponse('Successfully removed all image links')),
+  concurrentlyD([removeAllImageLinks]),
+)(context);
