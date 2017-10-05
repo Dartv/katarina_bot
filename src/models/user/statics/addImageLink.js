@@ -3,7 +3,9 @@ import R from 'ramda';
 import { SuccessResponse } from '../../../commands/responses';
 import { concurrentlyD } from '../../../util/handlers';
 
-export const addImageLink = async ({ args: { ref, url }, user }) => user.addImageLink({ ref, url });
+export const addImageLink = async ({ args: { ref, url }, user }) => {
+  return user.addImageLink({ ref, url });
+};
 
 export default async context => R.compose(
   p => p.then(() => new SuccessResponse(

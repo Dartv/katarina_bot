@@ -14,4 +14,8 @@ client.on('ready', () => {
   client.user.setGame(`${prefix}help`);
 });
 
+client.on('dispatchFail', (context, error) => {
+  console.error(error);
+});
+
 client.login(process.env.BOT_TOKEN);
