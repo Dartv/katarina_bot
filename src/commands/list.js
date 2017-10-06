@@ -1,8 +1,8 @@
 import R from 'ramda';
-import { expectUser } from './middleware';
+import { injectUser } from './middleware';
 import { TextResponse } from './responses';
 
-export const middleware = [expectUser()];
+export const middleware = [injectUser()];
 
 const listRefs = R.ifElse(
   R.length,

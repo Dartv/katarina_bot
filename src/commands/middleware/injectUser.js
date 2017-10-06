@@ -1,4 +1,4 @@
-import User from '../../models/user';
+import { User } from '../../models';
 import { dispatchError } from '../../util/helpers';
 
 export default () => async (next, context) => {

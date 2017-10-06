@@ -1,8 +1,8 @@
-import User from '../models/user';
-import { expectUser, expectUserToHaveImage } from './middleware';
+import { User } from '../models';
+import { injectUser, expectUserToHaveImage } from './middleware';
 import { ref } from '../util/parameters';
 
-export const middleware = [expectUser(), expectUserToHaveImage('ref')];
+export const middleware = [injectUser(), expectUserToHaveImage('ref')];
 
 export const handler = User.removeImageLink.bind(User);
 

@@ -1,7 +1,7 @@
-import User from '../models/user';
-import { expectUser } from './middleware';
+import { User } from '../models';
+import { injectUser } from './middleware';
 
-export const middleware = [expectUser()];
+export const middleware = [injectUser()];
 
 export const handler = User.removeAllImageLinks.bind(User);
 

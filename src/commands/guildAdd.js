@@ -1,22 +1,24 @@
-import { User } from '../models';
+import { Guild } from '../models';
 import {
   injectUser,
   expectValidUrl,
   expectValidImageUrl,
   expectRefToBeUnique,
   checkAttachment,
+  injectGuild,
 } from './middleware';
 import { ref, url } from '../util/parameters';
 
 export const middleware = [
+  injectGuild(),
   injectUser(),
   checkAttachment(),
   expectValidUrl('url'),
   expectValidImageUrl('url'),
-  expectRefToBeUnique('ref', ['user', 'images']),
+  expectRefToBeUnique('ref', ['guild', 'images']),
 ];
 
-export const handler = User.addImageLink.bind(User);
+export const handler = Guild.addImageLink.bind(Guild);
 
 export default () => ({
   middleware,
@@ -26,6 +28,6 @@ export default () => ({
     optional: true,
     defaultValue: '',
   }],
-  triggers: ['add', 'a'],
+  triggers: ['guildadd', 'ga'],
   description: 'Adds an image link',
 });

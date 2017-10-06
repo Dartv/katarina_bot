@@ -1,9 +1,9 @@
-import { expectUser, expectUserToHaveImage } from './middleware';
+import { injectUser, expectUserToHaveImage } from './middleware';
 import { ref, content } from '../util/parameters';
 import { ImageResponse, FileResponse } from './responses';
 import { concurrentlyD } from '../util/handlers';
 
-export const middleware = [expectUser(), expectUserToHaveImage('ref')];
+export const middleware = [injectUser(), expectUserToHaveImage('ref')];
 
 export const postMessage = async ({ args: { content: msg }, image }) => {
   if (msg) return new ImageResponse(image.url, msg.join(' '));
