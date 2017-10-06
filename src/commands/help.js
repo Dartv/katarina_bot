@@ -6,9 +6,9 @@ import { formatDescription } from '../util';
 import { joinWithArray } from '../util/helpers';
 
 export const handler = R.once(async ({ commands }) => {
-  const embed = new RichEmbed({ title: 'COMMANDS LIST' });
+  const embed = new RichEmbed();
 
-  embed.setColor(COLOR_INFO);
+  embed.setColor(COLOR_INFO).setTitle('COMMANDS LIST');
 
   const keys = Array.from(commands.commands.keys());
 

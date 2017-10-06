@@ -9,7 +9,7 @@ export const deleteMessage = async ({ message, dispatch, formatter: { code } }) 
 
 
 export const concurrently = R.curry((handlers, context) => R.compose(
-  p => p.then().catch(err => new ErrorResponse(err.message)),
+  p => p.catch(err => new ErrorResponse(err.message)),
   R.last,
   R.juxt(handlers),
 )(context));
