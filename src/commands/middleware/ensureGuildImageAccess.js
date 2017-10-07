@@ -1,11 +1,12 @@
+import R from 'ramda';
+
 import { dispatchError } from '../../util/helpers';
+import { isImageOwner, isAdmin } from './util.js';
 
-export default () => async (next, context) => {
-  const { user, image } = context;
+const hasPerms = R.allPass([isImageOwner, isAdmin]);
 
-  if (image.user.id !== user.id) {
-    return dispatchError('you can only remove images that belongs to you', context);
-  }
-
-  return next(context);
-};
+export default () => async (next, context) => R.ifElse(
+  hasPerms,
+  next,
+  dispatchError('only administrator or image owner can remove this image'),
+)(context);
