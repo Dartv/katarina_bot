@@ -3,7 +3,7 @@ import R from 'ramda';
 import { dispatchError } from '../../util/helpers';
 import { isImageOwner, isAdmin } from './util.js';
 
-const hasPerms = R.allPass([isImageOwner, isAdmin]);
+const hasPerms = R.anyPass([isImageOwner, isAdmin]);
 
 export default () => async (next, context) => R.ifElse(
   hasPerms,
