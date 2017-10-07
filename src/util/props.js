@@ -7,4 +7,5 @@ export default simpleClique(R.prop, [
   'usage',
   'description',
   'parameters',
+  'optional',
 ]);

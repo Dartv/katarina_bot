@@ -11,5 +11,5 @@ export default () => ({
   handler,
   parameters: [ref],
   triggers: ['remove', 'r'],
-  description: 'Removes an image',
+  description: 'Removes an image from the user',
 });

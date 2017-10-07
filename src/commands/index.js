@@ -8,6 +8,8 @@ import help from './help';
 import emojify from './emojify';
 import guildAdd from './guildAdd';
 import guildPost from './guildPost';
+import guildList from './guildList';
+import guildRemove from './guildRemove';
 
 const commands = [
   add,
@@ -15,11 +17,14 @@ const commands = [
   list,
   remove,
   removeAll,
-  art,
   help,
   emojify,
   guildAdd,
   guildPost,
+  guildList,
+  guildRemove,
 ];
+
+if (process.env.IMAGE_ART_DIR) commands.push(art);
 
 export default client => client.commands.add(...commands);

@@ -8,6 +8,6 @@ export default () => ({
   middleware,
   handler,
   parameters: [ref, content],
-  triggers: ['guildpost', 'gp'],
-  description: 'Posts an image',
+  triggers: ['gpost', 'gp'],
+  description: 'Posts an image from this guild\'s images',
 });

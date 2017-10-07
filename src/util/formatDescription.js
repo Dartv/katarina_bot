@@ -10,10 +10,22 @@ export const formatParameter = R.compose(
   props.description,
 );
 
+export const formatOptionalParameter = R.ifElse(
+  props.optional,
+  R.compose(
+    R.join(''),
+    R.append(']'),
+    R.prepend(' ['),
+    R.trim,
+    formatParameter
+  ),
+  formatParameter,
+);
+
 export const formatParameters = ({ commandName, parameters, description }) => R.compose(
   R.join(''),
   R.append('`'),
-  concatRight(R.map(formatParameter, parameters)),
+  concatRight(R.map(formatOptionalParameter, parameters)),
   R.append(`usage: \`${process.env.BOT_PREFIX}${commandName}`),
   R.append('\n\n'),
 )(description);

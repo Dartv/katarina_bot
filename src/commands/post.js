@@ -18,5 +18,5 @@ export default () => ({
   handler,
   parameters: [ref, content],
   triggers: ['post', 'p'],
-  description: 'Posts an image',
+  description: 'Posts an image from the user\'s images',
 });

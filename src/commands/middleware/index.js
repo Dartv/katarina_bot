@@ -6,3 +6,4 @@ export { default as expectRefToBeUnique } from './expectRefToBeUnique';
 export { default as checkAttachment } from './checkAttachment';
 export { default as injectGuild } from './injectGuild';
 export { default as expectGuildToHaveImage } from './expectGuildToHaveImage';
+export { default as ensureGuildImageAccess } from './ensureGuildImageAccess';

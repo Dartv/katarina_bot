@@ -4,7 +4,7 @@ import { TextResponse } from './responses';
 
 export const middleware = [injectUser()];
 
-const listRefs = R.ifElse(
+export const listRefs = R.ifElse(
   R.length,
   R.compose(
     R.join(', '),
@@ -20,5 +20,5 @@ export default () => ({
   middleware,
   handler,
   triggers: ['list'],
-  description: 'Lists all available images',
+  description: 'Lists user\'s images',
 });

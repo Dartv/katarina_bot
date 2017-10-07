@@ -28,6 +28,6 @@ export default () => ({
     optional: true,
     defaultValue: '',
   }],
-  triggers: ['guildadd', 'ga'],
-  description: 'Adds an image link',
+  triggers: ['gadd', 'ga'],
+  description: 'Adds an image link for the guild',
 });

@@ -9,5 +9,5 @@ export default () => ({
   middleware,
   handler,
   triggers: ['removeall', 'ra'],
-  description: 'Removes all images',
+  description: 'Removes all user\'s images',
 });

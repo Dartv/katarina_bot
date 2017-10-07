@@ -27,5 +27,5 @@ export default () => ({
     defaultValue: '',
   }],
   triggers: ['add', 'a'],
-  description: 'Adds an image link',
+  description: 'Adds an image link for the user',
 });
