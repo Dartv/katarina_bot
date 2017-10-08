@@ -16,9 +16,9 @@ describe('ensureGuildImageAccess', () => {
         },
       },
     };
-    const result = await ensureGuildImageAccess()(next, context);
+    const nextContext = await ensureGuildImageAccess()(next, context);
 
-    expect(result).toBe(true);
+    expect(nextContext).toBe(true);
   });
 
   test('user should be able to remove guild\'s image if he is admin', async () => {
@@ -37,12 +37,12 @@ describe('ensureGuildImageAccess', () => {
         },
       },
     };
-    const result = await ensureGuildImageAccess()(next, context);
+    const nextContext = await ensureGuildImageAccess()(next, context);
 
-    expect(result).toBe(true);
+    expect(nextContext).toBe(true);
   });
 
-  test('user shoudn\'t be able to remove guild\'s image if it isn\'t his image', async () => {
+  test('user shoudn\'t be able to remove guild\'s image if he has no access to it', async () => {
     const context = {
       user: {
         id: 1,
@@ -63,8 +63,8 @@ describe('ensureGuildImageAccess', () => {
         },
       },
     };
-    const result = await ensureGuildImageAccess()(next, context);
+    const nextContext = await ensureGuildImageAccess()(next, context);
 
-    expect(result).toBe('error');
+    expect(nextContext).toBe('error');
   });
 });

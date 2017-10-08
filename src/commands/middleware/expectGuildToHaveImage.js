@@ -9,7 +9,7 @@ export default arg => async (next, context) => {
   const image = findByRef(ref, context.guild.images);
 
   if (!image) {
-    return dispatchError(`this guild doesn't have image "${ref}"`, context);
+    return dispatchError(`this guild doesn't have an image "${ref}"`, context);
   }
 
   return next({ ...context, image });

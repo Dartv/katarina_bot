@@ -16,9 +16,9 @@ describe('checkAttachment', () => {
         },
       },
     };
-    const result = await checkAttachment()(next, context);
+    const nextContext = await checkAttachment()(next, context);
 
-    expect(result.args.url).toBe(url);
+    expect(nextContext.args.url).toBe(url);
   });
 
   it('should pass context further as it is if the message doesn\'t have attachments', async () => {
@@ -29,8 +29,8 @@ describe('checkAttachment', () => {
         },
       },
     };
-    const result = await checkAttachment()(next, context);
+    const nextContext = await checkAttachment()(next, context);
 
-    expect(result).toEqual(context);
+    expect(nextContext).toEqual(context);
   });
 });

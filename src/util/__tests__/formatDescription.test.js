@@ -16,7 +16,7 @@ describe('formatDescription', () => {
     expect(formatDescription(description)).toBe(description);
   });
 
-  it('should return just a description if no "usage" property provided', () => {
+  it('should return just the description if no "usage" property provided', () => {
     expect(formatDescription({ description })).toBe(description);
   });
 

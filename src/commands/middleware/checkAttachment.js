@@ -1,5 +1,5 @@
 export default () => async (next, context) => {
-  if (context.message.attachments.size > 0) {
+  if (context.message.attachments.size) {
     const url = context.message.attachments.first().url;
     Object.assign(context, { args: Object.assign(context.args, { url }) });
   }
