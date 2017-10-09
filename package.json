@@ -18,7 +18,7 @@
     }
   },
   "pre-commit": [
-    "test"
+    "jest"
   ],
   "dependencies": {
     "cliquer": "^0.1.5",
