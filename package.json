@@ -17,6 +17,9 @@
       ".*": "babel-jest"
     }
   },
+  "pre-commit": [
+    "test"
+  ],
   "dependencies": {
     "cliquer": "^0.1.5",
     "discord.js": "^11.2.1",
