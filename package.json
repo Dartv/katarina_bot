@@ -30,8 +30,11 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-standard": "^10.2.1",
@@ -41,6 +44,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest": "^21.2.1"
+    "jest": "^21.2.1",
+    "precommit": "^1.2.2"
   }
 }

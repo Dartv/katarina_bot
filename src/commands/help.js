@@ -5,7 +5,7 @@ import { COLOR_INFO } from '../util/constants';
 import { formatDescription } from '../util';
 import { joinWithArray } from '../util/helpers';
 
-export const handler = R.once(async ({ commands, message }) => {
+export const handler = R.once(async ({ commands }) => {
   const embed = new RichEmbed();
 
   embed.setColor(COLOR_INFO).setTitle('COMMANDS LIST');
@@ -22,7 +22,7 @@ export const handler = R.once(async ({ commands, message }) => {
     }
   });
 
-  return message.channel.send({ embed });
+  return embed;
 });
 
 export default () => ({
