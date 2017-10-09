@@ -11,7 +11,7 @@
     "start:watch": "nodemon --ignore __tests__/ src --exec node_modules/.bin/babel-node",
     "debug": "nodemon --inspect --watch src --exec node_modules/.bin/babel-node src/index.js",
     "jest": "./node_modules/.bin/jest",
-    "foo": "echo \"foo\" && exit 0"
+    "eslint": "./node_modules/.bin/eslint src"
   },
   "jest": {
     "transform": {
@@ -19,7 +19,7 @@
     }
   },
   "pre-commit": [
-    "foo",
+    "eslint",
     "jest"
   ],
   "dependencies": {
