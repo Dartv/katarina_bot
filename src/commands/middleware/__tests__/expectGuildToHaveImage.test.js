@@ -45,7 +45,6 @@ describe('expectGuildToHaveImage', () => {
     });
     const response = await expectGuildToHaveImage('ref')(next, context);
     const expectedResponseMessage = messages.dynamic.msg1(context.args.ref);
-    
 
     expect(response.embed.fields[1].value).toBe(expectedResponseMessage);
   });
