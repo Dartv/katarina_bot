@@ -7,12 +7,12 @@ describe('expectGuildToHaveImage', () => {
   const next = R.identity;
 
   it('should inject image to context args if the guild has image', async () => {
-    const ref = 'fizz';
+    const ref = 'foo';
     const image = { ref };
     const context = createContext({
       args: { ref },
       guild: {
-        images: [{ ref: 'buzz' }, image],
+        images: [{ ref: 'bar' }, image],
       },
     });
     const nextContext = await expectGuildToHaveImage('ref')(next, context);
@@ -23,7 +23,7 @@ describe('expectGuildToHaveImage', () => {
   it('should dispatch an error when the guild doesn\'t have any images', async () => {
     const context = createContext({
       args: {
-        ref: 'fizz',
+        ref: 'foo',
       },
       guild: {
         images: [],
@@ -37,10 +37,10 @@ describe('expectGuildToHaveImage', () => {
   it('should dispatch an error when the guild doesn\'t have requested image', async () => {
     const context = createContext({
       args: {
-        ref: 'fizz',
+        ref: 'foo',
       },
       guild: {
-        images: [{ ref: 'buzz' }],
+        images: [{ ref: 'bar' }],
       },
     });
     const response = await expectGuildToHaveImage('ref')(next, context);

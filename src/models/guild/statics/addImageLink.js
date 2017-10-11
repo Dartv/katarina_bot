@@ -9,7 +9,7 @@ export const addImageLink = async ({ args: { ref, url }, user, guild }) =>
 export default async context => R.compose(
   p => p.then(() => new SuccessResponse(
     'Successfully added an image link',
-    `post it with \`${process.env.BOT_PREFIX}guildpost ${context.args.ref}\`.`
+    `post it with \`${process.env.BOT_PREFIX}gpost ${context.args.ref}\`.`
   )),
   concurrentlyD([addImageLink]),
 )(context);
