@@ -1,12 +1,13 @@
 import R from 'ramda';
 
-import { ensureGuildImageAccess } from '../';
+import ensureGuildImageAccess, { messages } from '../ensureGuildImageAccess';
+import { createContext } from '../../../util/tests';
 
 describe('ensureGuildImageAccess', () => {
   const next = R.T;
 
   test('user should be able to remove guild\'s image if it\'s his image', async () => {
-    const context = {
+    const context = createContext({
       user: {
         id: 1,
       },
@@ -15,14 +16,14 @@ describe('ensureGuildImageAccess', () => {
           id: 1,
         },
       },
-    };
+    });
     const nextContext = await ensureGuildImageAccess()(next, context);
 
     expect(nextContext).toBe(true);
   });
 
   test('user should be able to remove guild\'s image if he is admin', async () => {
-    const context = {
+    const context = createContext({
       user: {
         id: 1,
       },
@@ -36,14 +37,14 @@ describe('ensureGuildImageAccess', () => {
           hasPermission: R.T,
         },
       },
-    };
+    });
     const nextContext = await ensureGuildImageAccess()(next, context);
 
     expect(nextContext).toBe(true);
   });
 
   test('user shoudn\'t be able to remove guild\'s image if he has no access to it', async () => {
-    const context = {
+    const context = createContext({
       user: {
         id: 1,
       },
@@ -57,14 +58,10 @@ describe('ensureGuildImageAccess', () => {
           hasPermission: R.F,
         },
       },
-      client: {
-        dispatcher: {
-          dispatchResponse: () => 'error',
-        },
-      },
-    };
-    const nextContext = await ensureGuildImageAccess()(next, context);
+    });
+    const errorResponse = await ensureGuildImageAccess()(next, context);
+    const response = await errorResponse.executor(context);
 
-    expect(nextContext).toBe('error');
+    expect(response.embed.fields[1].value).toBe(messages.msg1);
   });
 });

@@ -1,5 +1,5 @@
 import { User } from '../../models';
-import { dispatchError } from '../../util/helpers';
+import { ErrorResponse } from '../responses';
 
 export default () => async (next, context) => {
   const { message: { author: { id: discordId } } } = context;
@@ -10,7 +10,7 @@ export default () => async (next, context) => {
   try {
     user = await new User({ discordId }).save();
   } catch (err) {
-    return dispatchError(err.message, context);
+    return ErrorResponse(err.message, context);
   }
 
   return next({ ...context, user });

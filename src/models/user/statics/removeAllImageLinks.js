@@ -6,6 +6,6 @@ import { concurrentlyD } from '../../../util/handlers';
 const removeAllImageLinks = async ({ user }) => user.removeAllImageLinks();
 
 export default async context => R.compose(
-  p => p.then(() => new SuccessResponse('Successfully removed all image links')),
+  p => p.then(() => SuccessResponse('Successfully removed all image links', '', context)),
   concurrentlyD([removeAllImageLinks]),
 )(context);

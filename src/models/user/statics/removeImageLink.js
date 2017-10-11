@@ -6,6 +6,7 @@ import { concurrentlyD } from '../../../util/handlers';
 export const removeImageLink = async ({ user, image }) => user.removeImageLink(image);
 
 export default async context => R.compose(
-  p => p.then(() => new SuccessResponse(`successfully removed "${context.image.ref}"`)),
+  p => p.then(() =>
+    SuccessResponse(`successfully removed "${context.image.ref}"`, '', context)),
   concurrentlyD([removeImageLink]),
 )(context);

@@ -13,8 +13,8 @@ export const listRefs = R.ifElse(
   R.always('nothing!'),
 );
 
-export const handler = async ({ user: { images } }) =>
-  new TextResponse('Your images:', listRefs(images));
+export const handler = async context =>
+  TextResponse('Your images:', listRefs(context.user.images), context);
 
 export default () => ({
   middleware,

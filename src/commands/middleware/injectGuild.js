@@ -1,5 +1,5 @@
 import { Guild } from '../../models';
-import { dispatchError } from '../../util/helpers';
+import { ErrorResponse } from '../responses';
 
 export default () => async (next, context) => {
   const { message: { guild: { id: discordId } } } = context;
@@ -9,7 +9,7 @@ export default () => async (next, context) => {
     try {
       guild = await new Guild({ discordId }).save();
     } catch (err) {
-      return dispatchError(err.message, context);
+      return ErrorResponse(err.message, context);
     }
   }
 

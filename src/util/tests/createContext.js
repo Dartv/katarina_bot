@@ -14,9 +14,7 @@ export default R.mergeDeepRight({
     },
   },
   client: {
-    dispatcher: {
-      dispatchResponse: (ctx, response) => response.executor(ctx),
-    },
+    dispatch: (ctx, response) => response.executor(ctx),
   },
   formatter: MarkdownFormatter,
 });

@@ -4,8 +4,8 @@ import { listRefs } from './list';
 
 export const middleware = [injectUser(), injectGuild()];
 
-export const handler = async ({ guild: { images } }) =>
-  new TextResponse('This guild\'s images:', listRefs(images));
+export const handler = async context =>
+  TextResponse('This guild\'s images:', listRefs(context.guild.images), context);
 
 export default () => ({
   middleware,

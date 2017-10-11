@@ -1,11 +1,12 @@
+import R from 'ramda';
 import { Response } from 'ghastly/command';
 import { RichEmbed } from 'discord.js';
 
 import { COLOR_INFO } from '../../util/constants';
 
-export default class ImageResponse extends Response {
-  constructor(image, content) {
-    super(async ({ message }) => {
+export class ImageResponse extends Response {
+  constructor(image, content, { message }) {
+    super(async () => {
       const embed = new RichEmbed();
       embed
         .setColor(COLOR_INFO)
@@ -17,3 +18,5 @@ export default class ImageResponse extends Response {
     });
   }
 }
+
+export default R.construct(ImageResponse);

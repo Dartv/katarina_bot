@@ -1,4 +1,5 @@
-import { findByRef, dispatchError } from '../../util/helpers';
+import { findByRef } from '../../util/helpers';
+import { ErrorResponse } from '../responses';
 
 export const messages = {
   msg1: 'this guild doesn\'t have any images right now',
@@ -9,14 +10,14 @@ export const messages = {
 
 export default arg => async (next, context) => {
   if (!context.guild || !context.guild.images.length) {
-    return dispatchError(messages.msg1, context);
+    return ErrorResponse(messages.msg1, context);
   }
 
   const ref = context.args[arg];
   const image = findByRef(ref, context.guild.images);
 
   if (!image) {
-    return dispatchError(messages.dynamic.msg1(ref), context);
+    return ErrorResponse(messages.dynamic.msg1(ref), context);
   }
 
   return next({ ...context, image });

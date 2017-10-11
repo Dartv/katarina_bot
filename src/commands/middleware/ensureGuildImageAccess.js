@@ -1,12 +1,16 @@
 import R from 'ramda';
 
-import { dispatchError } from '../../util/helpers';
+import { ErrorResponse } from '../responses';
 import { isImageOwner, isAdmin } from './util.js';
 
 const hasPerms = R.anyPass([isImageOwner, isAdmin]);
 
+export const messages = {
+  msg1: 'only administrator or image owner can remove this image',
+};
+
 export default () => async (next, context) => R.ifElse(
   hasPerms,
   next,
-  dispatchError('only administrator or image owner can remove this image'),
+  ErrorResponse(messages.msg1),
 )(context);

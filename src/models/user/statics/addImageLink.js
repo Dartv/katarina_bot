@@ -6,9 +6,10 @@ import { concurrentlyD } from '../../../util/handlers';
 export const addImageLink = async ({ args: { ref, url }, user }) => user.addImageLink({ ref, url });
 
 export default async context => R.compose(
-  p => p.then(() => new SuccessResponse(
+  p => p.then(() => SuccessResponse(
     'Successfully added an image link',
-    `post it with \`${process.env.BOT_PREFIX}post ${context.args.ref}\`.`
+    `post it with \`${process.env.BOT_PREFIX}post ${context.args.ref}\`.`,
+    context,
   )),
   concurrentlyD([addImageLink]),
 )(context);

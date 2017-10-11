@@ -2,14 +2,16 @@ import R from 'ramda';
 
 import { ErrorResponse } from '../commands/responses';
 
-export const deleteMessage = async ({ message, dispatch, formatter: { code } }) =>
+export const deleteMessage = async (context) => {
+  const { message, dispatch, formatter: { code } } = context;
   message.delete()
     .catch(err =>
-      dispatch(new ErrorResponse(`Unable to delete own message: ${code(err.message)}`)));
+      dispatch(ErrorResponse(`Unable to delete own message: ${code(err.message)}`, context)));
+};
 
 
 export const concurrently = R.curry((handlers, context) => R.compose(
-  p => p.catch(err => new ErrorResponse(err.message)),
+  p => p.catch(err => ErrorResponse(err.message, context)),
   R.last,
   R.juxt(handlers),
 )(context));
