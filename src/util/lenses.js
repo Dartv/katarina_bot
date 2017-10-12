@@ -11,6 +11,7 @@ const guild = R.lensProp('guild');
 const images = R.lensProp('images');
 const image = R.lensProp('image');
 const ref = R.lensProp('ref');
+const user = R.lensProp('user');
 
 const first = lensInvoker(0, 'first');
 
@@ -23,6 +24,8 @@ const argsUrl = R.compose(args, url);
 const argsRef = R.compose(args, ref);
 
 const guildImages = R.compose(guild, images);
+
+const userImages = R.compose(user, images);
 
 export default {
   args: Object.assign(args, {
@@ -39,6 +42,9 @@ export default {
   }),
   guild: Object.assign(guild, {
     images: guildImages,
+  }),
+  user: Object.assign(user, {
+    images: userImages,
   }),
   image,
 };

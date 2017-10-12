@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 import { User } from '../models';
 import {
   injectUser,
@@ -7,13 +9,14 @@ import {
   checkAttachment,
 } from './middleware';
 import { ref, url } from '../util/parameters';
+import { lenses } from '../util';
 
 export const middleware = [
   injectUser(),
   checkAttachment(),
   expectValidUrl('url'),
   expectValidImageUrl('url'),
-  expectRefToBeUnique('ref', ['user', 'images']),
+  expectRefToBeUnique(R.view(lenses.user.images)),
 ];
 
 export const handler = User.addImageLink.bind(User);

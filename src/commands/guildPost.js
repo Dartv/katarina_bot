@@ -2,7 +2,7 @@ import { injectGuild, injectUser, expectGuildToHaveImage } from './middleware';
 import { ref, content } from '../util/parameters';
 import { handler } from './post';
 
-export const middleware = [injectGuild(), injectUser(), expectGuildToHaveImage('ref')];
+export const middleware = [injectGuild(), injectUser(), expectGuildToHaveImage()];
 
 export default () => ({
   middleware,

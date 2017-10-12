@@ -1,12 +1,14 @@
 import R from 'ramda';
 
-import { findByRef } from '../../util/helpers';
 import { ErrorResponse } from '../responses';
+import { findByArgsRef } from './util';
 
-export default (arg, path) => async (next, context) => {
-  const image = findByRef(context.args[arg], R.path(path, context));
-
-  if (image) return ErrorResponse('ref is already in use', context);
-
-  return next(context);
+export const messages = {
+  msg1: 'ref is already in use',
 };
+
+export default lookup => async (next, context) => R.ifElse(
+  findByArgsRef(lookup),
+  ErrorResponse(messages.msg1),
+  next,
+)(context);

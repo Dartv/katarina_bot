@@ -10,7 +10,7 @@ import { ref } from '../util/parameters';
 export const middleware = [
   injectUser(),
   injectGuild(),
-  expectGuildToHaveImage('ref'),
+  expectGuildToHaveImage(),
   ensureGuildImageAccess(),
 ];
 

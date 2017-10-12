@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 import { Guild } from '../models';
 import {
   injectUser,
@@ -8,6 +10,7 @@ import {
   injectGuild,
 } from './middleware';
 import { ref, url } from '../util/parameters';
+import { lenses } from '../util';
 
 export const middleware = [
   injectGuild(),
@@ -15,7 +18,7 @@ export const middleware = [
   checkAttachment(),
   expectValidUrl('url'),
   expectValidImageUrl('url'),
-  expectRefToBeUnique('ref', ['guild', 'images']),
+  expectRefToBeUnique(R.view(lenses.guild.images)),
 ];
 
 export const handler = Guild.addImageLink.bind(Guild);
