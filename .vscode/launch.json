@@ -18,7 +18,10 @@
             "-i"
         ],
         "internalConsoleOptions": "openOnSessionStart",
-        "envFile": "${workspaceRoot}/.env"
+        "envFile": "${workspaceRoot}/.env",
+        "skipFiles": [
+          "<node_internals>/**"
+        ]
       },
       {
         "type": "node",

@@ -1,5 +1,8 @@
+import R from 'ramda';
+
 import { findByRef } from '../../util/helpers';
 import { ErrorResponse } from '../responses';
+import lenses from '../../util/lenses';
 
 export const messages = {
   msg1: 'this guild doesn\'t have any images right now',
@@ -8,17 +11,30 @@ export const messages = {
   },
 };
 
-export default arg => async (next, context) => {
-  if (!context.guild || !context.guild.images.length) {
-    return ErrorResponse(messages.msg1, context);
-  }
+const findGuildImage = R.converge(findByRef, [
+  R.view(lenses.args.ref),
+  R.view(lenses.guild.images),
+]);
 
-  const ref = context.args[arg];
-  const image = findByRef(ref, context.guild.images);
+const assignImage = R.converge(R.set(lenses.image), [
+  findGuildImage,
+  R.identity,
+]);
 
-  if (!image) {
-    return ErrorResponse(messages.dynamic.msg1(ref), context);
-  }
+const makeDynamicErrorResponse = R.converge(ErrorResponse, [
+  R.compose(messages.dynamic.msg1, R.view(lenses.args.ref)),
+  R.identity,
+]);
 
-  return next({ ...context, image });
-};
+export default () => async (next, context) => R.ifElse(
+  R.compose(R.length, R.view(lenses.guild.images)),
+  R.compose(
+    R.ifElse(
+      R.view(lenses.image),
+      next,
+      makeDynamicErrorResponse,
+    ),
+    assignImage,
+  ),
+  ErrorResponse(messages.msg1),
+)(context);
