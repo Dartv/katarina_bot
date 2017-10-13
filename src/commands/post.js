@@ -3,7 +3,7 @@ import * as params from '../util/parameters';
 import { ImageResponse, FileResponse } from './responses';
 import { concurrentlyD } from '../util/handlers';
 
-export const middleware = [injectUser(), expectUserToHaveImage('ref')];
+export const middleware = [injectUser(), expectUserToHaveImage()];
 
 export const postMessage = async (context) => {
   const { args: { content }, image } = context;
