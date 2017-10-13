@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import expectValidImageUrl, { messages } from '../expectValidImageUrl';
+import expectValidImageUrl, { PROVIDED_URL_DOESNT_POINT_TO_IMAGE } from '../expectValidImageUrl';
 import { createContext } from '../../../util/tests';
 
 describe('expectValidImageUrl', () => {
@@ -15,7 +15,7 @@ describe('expectValidImageUrl', () => {
     const errorResponse = await expectValidImageUrl()(next, context);
     const response = await errorResponse.executor(context);
 
-    expect(response.embed.fields[1].value).toBe(messages.msg1);
+    expect(response.embed.fields[1].value).toBe(PROVIDED_URL_DOESNT_POINT_TO_IMAGE);
   });
 
   it('should pass through if the provided url does point to an image', async () => {

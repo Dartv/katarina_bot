@@ -1,7 +1,10 @@
 import R from 'ramda';
 
 import { createContext } from '../../../util/tests';
-import expectGuildToHaveImage, { messages } from '../expectGuildToHaveImage';
+import expectGuildToHaveImage, {
+  GUILD_DOESNT_HAVE_ANY_IMAGES,
+  guildDoesntHaveImage,
+} from '../expectGuildToHaveImage';
 
 describe('expectGuildToHaveImage', () => {
   const next = R.identity;
@@ -32,7 +35,7 @@ describe('expectGuildToHaveImage', () => {
     const errorResponse = await expectGuildToHaveImage()(next, context);
     const response = await errorResponse.executor(context);
 
-    expect(response.embed.fields[1].value).toBe(messages.msg1);
+    expect(response.embed.fields[1].value).toBe(GUILD_DOESNT_HAVE_ANY_IMAGES);
   });
 
   it('should dispatch an error when the guild doesn\'t have requested image', async () => {
@@ -46,7 +49,7 @@ describe('expectGuildToHaveImage', () => {
     });
     const errorResponse = await expectGuildToHaveImage()(next, context);
     const response = await errorResponse.executor(context);
-    const expectedResponseMessage = messages.dynamic.msg1(context.args.ref);
+    const expectedResponseMessage = guildDoesntHaveImage(context.args.ref);
 
     expect(response.embed.fields[1].value).toBe(expectedResponseMessage);
   });

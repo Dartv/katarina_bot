@@ -1,6 +1,8 @@
 import R from 'ramda';
 
-import ensureGuildImageAccess, { messages } from '../ensureGuildImageAccess';
+import ensureGuildImageAccess, {
+  ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE,
+} from '../ensureGuildImageAccess';
 import { createContext } from '../../../util/tests';
 
 describe('ensureGuildImageAccess', () => {
@@ -62,6 +64,6 @@ describe('ensureGuildImageAccess', () => {
     const errorResponse = await ensureGuildImageAccess()(next, context);
     const response = await errorResponse.executor(context);
 
-    expect(response.embed.fields[1].value).toBe(messages.msg1);
+    expect(response.embed.fields[1].value).toBe(ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE);
   });
 });

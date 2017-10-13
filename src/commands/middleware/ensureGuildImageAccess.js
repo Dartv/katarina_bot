@@ -5,12 +5,11 @@ import { isImageOwner, isAdmin } from './util.js';
 
 const hasPerms = R.anyPass([isImageOwner, isAdmin]);
 
-export const messages = {
-  msg1: 'only administrator or image owner can remove this image',
-};
+export const ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE =
+  'only administrator or image owner can remove this image';
 
 export default () => async (next, context) => R.ifElse(
   hasPerms,
   next,
-  ErrorResponse(messages.msg1),
+  ErrorResponse(ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE),
 )(context);

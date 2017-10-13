@@ -4,12 +4,10 @@ import { lenses } from '../../util';
 import { isImage } from '../../util/helpers';
 import { ErrorResponse } from '../responses';
 
-export const messages = {
-  msg1: 'provided url doesn\'t point to an image',
-};
+export const PROVIDED_URL_DOESNT_POINT_TO_IMAGE = 'provided url doesn\'t point to an image';
 
 export default () => async (next, context) => R.ifElse(
   R.compose(isImage, R.view(lenses.args.url)),
   next,
-  ErrorResponse(messages.msg1),
+  ErrorResponse(PROVIDED_URL_DOESNT_POINT_TO_IMAGE),
 )(context);

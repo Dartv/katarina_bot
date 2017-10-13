@@ -2,7 +2,7 @@ import R from 'ramda';
 
 import { createContext } from '../../../util/tests';
 import { lenses } from '../../../util';
-import expectRefToBeUnique, { messages } from '../expectRefToBeUnique';
+import expectRefToBeUnique, { REF_ALREADY_IN_USE } from '../expectRefToBeUnique';
 
 describe('expectRefToBeUnique', () => {
   const next = R.identity;
@@ -23,8 +23,8 @@ describe('expectRefToBeUnique', () => {
     const responseA = await errorResponseA.executor(context);
     const responseB = await errorResponseB.executor(context);
 
-    expect(responseA.embed.fields[1].value).toBe(messages.msg1);
-    expect(responseB.embed.fields[1].value).toBe(messages.msg1);
+    expect(responseA.embed.fields[1].value).toBe(REF_ALREADY_IN_USE);
+    expect(responseB.embed.fields[1].value).toBe(REF_ALREADY_IN_USE);
   });
 
   it('should successfully pass through when the image with given ref isn\'t found', async () => {

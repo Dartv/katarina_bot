@@ -1,7 +1,10 @@
 import R from 'ramda';
 
 import { createContext } from '../../../util/tests';
-import expectUserToHaveImage, { messages } from '../expectUserToHaveImage';
+import expectUserToHaveImage, {
+  YOU_DONT_HAVE_ANY_IMAGES,
+  youDontHaveImage,
+} from '../expectUserToHaveImage';
 
 describe('expectUserToHaveImage', () => {
   const next = R.identity;
@@ -32,7 +35,7 @@ describe('expectUserToHaveImage', () => {
     const errorResponse = await expectUserToHaveImage()(next, context);
     const response = await errorResponse.executor(context);
 
-    expect(response.embed.fields[1].value).toBe(messages.msg1);
+    expect(response.embed.fields[1].value).toBe(YOU_DONT_HAVE_ANY_IMAGES);
   });
 
   it('should dispatch an error when the user doesn\'t have requested image', async () => {
@@ -46,7 +49,7 @@ describe('expectUserToHaveImage', () => {
     });
     const errorResponse = await expectUserToHaveImage()(next, context);
     const response = await errorResponse.executor(context);
-    const expectedResponseMessage = messages.dynamic.msg1(context.args.ref);
+    const expectedResponseMessage = youDontHaveImage(context.args.ref);
 
     expect(response.embed.fields[1].value).toBe(expectedResponseMessage);
   });

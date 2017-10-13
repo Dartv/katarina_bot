@@ -4,12 +4,9 @@ import { ErrorResponse } from '../responses';
 import lenses from '../../util/lenses';
 import { createErrorResponseFromArgsRef, assignImageByGuildImage } from './util';
 
-export const messages = {
-  msg1: 'this guild doesn\'t have any images right now',
-  dynamic: {
-    msg1: ref => `this guild doesn't have an image "${ref}"`,
-  },
-};
+export const GUILD_DOESNT_HAVE_ANY_IMAGES = 'this guild doesn\'t have any images right now';
+
+export const guildDoesntHaveImage = ref => `this guild doesn't have an image "${ref}"`;
 
 export default () => async (next, context) => R.ifElse(
   R.compose(R.length, R.view(lenses.guild.images)),
@@ -17,9 +14,9 @@ export default () => async (next, context) => R.ifElse(
     R.ifElse(
       R.view(lenses.image),
       next,
-      createErrorResponseFromArgsRef(messages.dynamic.msg1),
+      createErrorResponseFromArgsRef(guildDoesntHaveImage),
     ),
     assignImageByGuildImage,
   ),
-  ErrorResponse(messages.msg1),
+  ErrorResponse(GUILD_DOESNT_HAVE_ANY_IMAGES),
 )(context);

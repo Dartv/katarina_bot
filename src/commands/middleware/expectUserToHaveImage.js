@@ -4,12 +4,9 @@ import { ErrorResponse } from '../responses';
 import { lenses } from '../../util';
 import { assignImageByUserImage, createErrorResponseFromArgsRef } from './util';
 
-export const messages = {
-  msg1: 'you don\'t have any images right now',
-  dynamic: {
-    msg1: ref => `you don't have any image "${ref}"`,
-  },
-};
+export const YOU_DONT_HAVE_ANY_IMAGES = 'you don\'t have any images right now';
+
+export const youDontHaveImage = ref => `you don't have any image "${ref}"`;
 
 export default () => async (next, context) => R.ifElse(
   R.compose(R.length, R.view(lenses.user.images)),
@@ -17,9 +14,9 @@ export default () => async (next, context) => R.ifElse(
     R.ifElse(
       R.view(lenses.image),
       next,
-      createErrorResponseFromArgsRef(messages.dynamic.msg1),
+      createErrorResponseFromArgsRef(youDontHaveImage),
     ),
     assignImageByUserImage,
   ),
-  ErrorResponse(messages.msg1),
+  ErrorResponse(YOU_DONT_HAVE_ANY_IMAGES),
 )(context);
