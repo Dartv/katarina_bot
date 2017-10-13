@@ -1,9 +1,13 @@
+import R from 'ramda';
 import { isUri } from 'valid-url';
 
 import { ErrorResponse } from '../responses';
+import { lenses } from '../../util';
 
-export default arg => async (next, context) => {
-  if (isUri(context.args[arg])) return next(context);
+export const INVALID_URL_PROVIDED = 'invalid url provided';
 
-  return ErrorResponse('invalid url provided', context);
-};
+export default () => async (next, context) => R.ifElse(
+  R.compose(isUri, R.view(lenses.args.url)),
+  next,
+  ErrorResponse(INVALID_URL_PROVIDED),
+)(context);

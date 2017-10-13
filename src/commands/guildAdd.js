@@ -16,8 +16,8 @@ export const middleware = [
   injectGuild(),
   injectUser(),
   checkAttachment(),
-  expectValidUrl('url'),
-  expectValidImageUrl('url'),
+  expectValidUrl(),
+  expectValidImageUrl(),
   expectRefToBeUnique(R.view(lenses.guild.images)),
 ];
 
