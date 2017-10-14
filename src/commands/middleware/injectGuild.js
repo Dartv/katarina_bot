@@ -6,7 +6,9 @@ export default () => async (next, context) => {
 
   try {
     let guild = await Guild.findOneByDiscordId(discordId);
+
     if (!guild) guild = await new Guild({ discordId }).save();
+
     return next({ ...context, guild });
   } catch (err) {
     return ErrorResponse(err.message, context);

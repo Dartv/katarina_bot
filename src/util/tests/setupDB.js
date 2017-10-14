@@ -41,21 +41,12 @@ export const connect = () => new Promise((resolve, reject) => {
     });
 });
 
-export const clearDB = () => new Promise((resolve) => {
+export const clearDB = async () => {
   const collections = Object.keys(mongoose.connection.collections);
-  collections.forEach((key, i, array) =>
-    mongoose.connection.collections[key].remove(() =>
-      i === array.length - 1 && resolve()));
-});
-
-export const closeDB = async () => {
-  try {
-    return await config.connection.close();
-  } catch (err) {
-    console.error(err);
-    return err;
-  }
+  await Promise.all(collections.map(key => mongoose.connection.collections[key].remove()));
 };
+
+export const closeDB = () => mongoose.disconnect();
 
 export default async () => {
   await connect();

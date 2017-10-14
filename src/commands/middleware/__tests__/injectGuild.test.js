@@ -9,8 +9,9 @@ describe('injectGuild', () => {
   const next = R.identity;
 
   beforeEach(setupDB);
+  afterAll(closeDB);
 
-  it('should create new guild and inject it into the context if no guild exists', async () => {
+  it('should create a new guild and inject it into the context if no guild exists', async () => {
     const id = '123456789';
     const context = createContext({
       message: {
@@ -54,6 +55,4 @@ describe('injectGuild', () => {
 
     expect(response).toBeInstanceOf(ErrorResponse);
   });
-
-  afterAll(closeDB);
 });
