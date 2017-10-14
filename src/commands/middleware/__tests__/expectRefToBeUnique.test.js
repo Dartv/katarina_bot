@@ -4,6 +4,8 @@ import { createContext } from '../../../util/tests';
 import { lenses } from '../../../util';
 import expectRefToBeUnique, { REF_ALREADY_IN_USE } from '../expectRefToBeUnique';
 
+jest.mock('../../responses/ErrorResponse');
+
 describe('expectRefToBeUnique', () => {
   const next = R.identity;
 
@@ -23,8 +25,8 @@ describe('expectRefToBeUnique', () => {
     const responseA = await errorResponseA.executor(context);
     const responseB = await errorResponseB.executor(context);
 
-    expect(responseA.embed.fields[1].value).toBe(REF_ALREADY_IN_USE);
-    expect(responseB.embed.fields[1].value).toBe(REF_ALREADY_IN_USE);
+    expect(responseA).toBe(REF_ALREADY_IN_USE);
+    expect(responseB).toBe(REF_ALREADY_IN_USE);
   });
 
   it('should successfully pass through when the image with given ref isn\'t found', async () => {

@@ -6,6 +6,8 @@ import expectGuildToHaveImage, {
   guildDoesntHaveImage,
 } from '../expectGuildToHaveImage';
 
+jest.mock('../../responses/ErrorResponse');
+
 describe('expectGuildToHaveImage', () => {
   const next = R.identity;
 
@@ -32,10 +34,10 @@ describe('expectGuildToHaveImage', () => {
         images: [],
       },
     });
-    const errorResponse = await expectGuildToHaveImage()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await expectGuildToHaveImage()(next, context);
+    const response = await executor(context);
 
-    expect(response.embed.fields[1].value).toBe(GUILD_DOESNT_HAVE_ANY_IMAGES);
+    expect(response).toBe(GUILD_DOESNT_HAVE_ANY_IMAGES);
   });
 
   it('should dispatch an error when the guild doesn\'t have requested image', async () => {
@@ -47,10 +49,10 @@ describe('expectGuildToHaveImage', () => {
         images: [{ ref: 'bar' }],
       },
     });
-    const errorResponse = await expectGuildToHaveImage()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await expectGuildToHaveImage()(next, context);
+    const response = await executor(context);
     const expectedResponseMessage = guildDoesntHaveImage(context.args.ref);
 
-    expect(response.embed.fields[1].value).toBe(expectedResponseMessage);
+    expect(response).toBe(expectedResponseMessage);
   });
 });

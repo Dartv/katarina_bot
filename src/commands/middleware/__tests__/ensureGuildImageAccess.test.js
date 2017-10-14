@@ -5,6 +5,8 @@ import ensureGuildImageAccess, {
 } from '../ensureGuildImageAccess';
 import { createContext } from '../../../util/tests';
 
+jest.mock('../../responses/ErrorResponse');
+
 describe('ensureGuildImageAccess', () => {
   const next = R.T;
 
@@ -61,9 +63,9 @@ describe('ensureGuildImageAccess', () => {
         },
       },
     });
-    const errorResponse = await ensureGuildImageAccess()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await ensureGuildImageAccess()(next, context);
+    const response = await executor(context);
 
-    expect(response.embed.fields[1].value).toBe(ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE);
+    expect(response).toBe(ONLY_ADMIN_OR_OWNER_CAN_REMOVE_IMAGE);
   });
 });

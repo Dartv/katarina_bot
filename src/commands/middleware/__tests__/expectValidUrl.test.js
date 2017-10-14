@@ -3,6 +3,8 @@ import R from 'ramda';
 import expectValidUrl, { INVALID_URL_PROVIDED } from '../expectValidUrl';
 import { createContext } from '../../../util/tests';
 
+jest.mock('../../responses/ErrorResponse');
+
 describe('expectValidUrl', () => {
   const next = R.identity;
 
@@ -12,10 +14,10 @@ describe('expectValidUrl', () => {
         url: 'example..com',
       },
     });
-    const errorResponse = await expectValidUrl()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await expectValidUrl()(next, context);
+    const response = await executor(context);
 
-    expect(response.embed.fields[1].value).toBe(INVALID_URL_PROVIDED);
+    expect(response).toBe(INVALID_URL_PROVIDED);
   });
 
   it('should pass through if the provided url is valid', async () => {

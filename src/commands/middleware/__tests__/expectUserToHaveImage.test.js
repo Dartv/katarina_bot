@@ -6,6 +6,8 @@ import expectUserToHaveImage, {
   youDontHaveImage,
 } from '../expectUserToHaveImage';
 
+jest.mock('../../responses/ErrorResponse');
+
 describe('expectUserToHaveImage', () => {
   const next = R.identity;
 
@@ -32,10 +34,10 @@ describe('expectUserToHaveImage', () => {
         images: [],
       },
     });
-    const errorResponse = await expectUserToHaveImage()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await expectUserToHaveImage()(next, context);
+    const response = await executor(context);
 
-    expect(response.embed.fields[1].value).toBe(YOU_DONT_HAVE_ANY_IMAGES);
+    expect(response).toBe(YOU_DONT_HAVE_ANY_IMAGES);
   });
 
   it('should dispatch an error when the user doesn\'t have requested image', async () => {
@@ -47,10 +49,10 @@ describe('expectUserToHaveImage', () => {
         images: [{ ref: 'bar' }],
       },
     });
-    const errorResponse = await expectUserToHaveImage()(next, context);
-    const response = await errorResponse.executor(context);
+    const { executor } = await expectUserToHaveImage()(next, context);
+    const response = await executor(context);
     const expectedResponseMessage = youDontHaveImage(context.args.ref);
 
-    expect(response.embed.fields[1].value).toBe(expectedResponseMessage);
+    expect(response).toBe(expectedResponseMessage);
   });
 });
