@@ -1,6 +1,7 @@
 import fs from 'mz/fs';
 
 import { FileResponse } from './responses';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 const path = process.env.IMAGE_ART_DIR;
 
@@ -12,6 +13,6 @@ export const handler = async (context) => {
 
 export default () => ({
   handler,
-  triggers: ['art'],
+  triggers: COMMAND_TRIGGERS.ART,
   description: 'Posts a random anime girl',
 });

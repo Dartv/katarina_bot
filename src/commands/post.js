@@ -2,6 +2,7 @@ import { injectUser, expectUserToHaveImage } from './middleware';
 import * as params from '../util/parameters';
 import { ImageResponse, FileResponse } from './responses';
 import { concurrentlyD } from '../util/handlers';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [injectUser(), expectUserToHaveImage()];
 
@@ -17,6 +18,6 @@ export default () => ({
   middleware,
   handler,
   parameters: [params.ref, params.content],
-  triggers: ['post', 'p'],
+  triggers: COMMAND_TRIGGERS.POST,
   description: 'Posts an image from the user\'s images',
 });

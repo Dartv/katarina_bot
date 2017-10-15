@@ -7,9 +7,11 @@ import {
   expectValidImageUrl,
   expectRefToBeUnique,
   checkAttachment,
+  deleteMessage,
 } from './middleware';
 import { ref, url } from '../util/parameters';
 import { lenses } from '../util';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [
   injectUser(),
@@ -17,6 +19,7 @@ export const middleware = [
   expectValidUrl(),
   expectValidImageUrl(),
   expectRefToBeUnique(R.view(lenses.user.images)),
+  deleteMessage(),
 ];
 
 export const handler = User.addImageLink.bind(User);
@@ -29,6 +32,6 @@ export default () => ({
     optional: true,
     defaultValue: '',
   }],
-  triggers: ['add', 'a'],
+  triggers: COMMAND_TRIGGERS.ADD,
   description: 'Adds an image link for the user',
 });

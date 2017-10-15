@@ -1,15 +1,18 @@
-import R from 'ramda';
+import { SuccessResponse, ErrorResponse } from '../../../commands/responses';
+import { COMMAND_TRIGGERS as COMMANDS } from '../../../util/constants';
 
-import { SuccessResponse } from '../../../commands/responses';
-import { concurrentlyD } from '../../../util/handlers';
+export default async (context) => {
+  const { args: { ref, url }, user } = context;
 
-export const addImageLink = async ({ args: { ref, url }, user }) => user.addImageLink({ ref, url });
+  try {
+    await user.addImageLink({ ref, url });
+  } catch (err) {
+    return ErrorResponse(err.message);
+  }
 
-export default async context => R.compose(
-  p => p.then(() => SuccessResponse(
+  return SuccessResponse(
     'Successfully added an image link',
-    `post it with \`${process.env.BOT_PREFIX}post ${context.args.ref}\`.`,
+    `post it with \`${process.env.BOT_PREFIX}${COMMANDS.POST[0]} ${ref}\`.`,
     context,
-  )),
-  concurrentlyD([addImageLink]),
-)(context);
+  );
+};

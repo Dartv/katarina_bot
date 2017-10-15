@@ -11,6 +11,7 @@ import {
 } from './middleware';
 import { ref, url } from '../util/parameters';
 import { lenses } from '../util';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [
   injectGuild(),
@@ -31,6 +32,6 @@ export default () => ({
     optional: true,
     defaultValue: '',
   }],
-  triggers: ['gadd', 'ga'],
+  triggers: COMMAND_TRIGGERS.GUILD_ADD,
   description: 'Adds an image link for the guild',
 });

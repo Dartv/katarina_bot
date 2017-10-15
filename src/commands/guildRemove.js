@@ -6,6 +6,7 @@ import {
   ensureGuildImageAccess,
 } from './middleware';
 import { ref } from '../util/parameters';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [
   injectUser(),
@@ -20,6 +21,6 @@ export default () => ({
   middleware,
   handler,
   parameters: [ref],
-  triggers: ['gremove', 'gr'],
+  triggers: COMMAND_TRIGGERS.GUILD_REMOVE,
   description: 'Removes an image from the guild',
 });

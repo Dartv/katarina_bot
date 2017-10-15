@@ -1,6 +1,8 @@
 import R from 'ramda';
+
 import { injectUser } from './middleware';
 import { TextResponse } from './responses';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [injectUser()];
 
@@ -19,6 +21,6 @@ export const handler = async context =>
 export default () => ({
   middleware,
   handler,
-  triggers: ['list'],
+  triggers: COMMAND_TRIGGERS.LIST,
   description: 'Lists user\'s images',
 });

@@ -1,17 +1,19 @@
-import { concurrentlyD } from '../util/handlers';
-import { emoji as emojiParam, content as contentParam } from '../util/parameters';
+import * as parameters from '../util/parameters';
+import { deleteMessage } from './middleware';
+import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const emojifyMessage = async ({ args: { emoji, content } }) =>
+const middleware = [deleteMessage()];
+
+export const handler = async ({ args: { emoji, content } }) =>
   content.join(' ').replace(/o|о/gi, emoji);
 
-export const handler = concurrentlyD([emojifyMessage]);
-
 export default () => ({
+  middleware,
   handler,
-  parameters: [emojiParam, {
-    ...contentParam,
+  parameters: [parameters.emoji, {
+    ...parameters.content,
     optional: false,
   }],
-  triggers: ['emojify'],
+  triggers: COMMAND_TRIGGERS.EMOJIFY,
   description: 'Replaces every "o" letter with specified emoji',
 });

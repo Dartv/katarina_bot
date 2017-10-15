@@ -1,7 +1,7 @@
 import R from 'ramda';
 import { RichEmbed } from 'discord.js';
 
-import { COLOR_INFO } from '../util/constants';
+import { COLOR_INFO, COMMAND_TRIGGERS } from '../util/constants';
 import { formatDescription } from '../util';
 import { joinWithArray } from '../util/helpers';
 
@@ -27,6 +27,6 @@ export const handler = R.once(async ({ commands }) => {
 
 export default () => ({
   handler,
-  triggers: ['help'],
+  triggers: COMMAND_TRIGGERS.HELP,
   description: 'Prints all available commands',
 });
