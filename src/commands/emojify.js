@@ -1,4 +1,4 @@
-import * as parameters from '../util/parameters';
+import * as params from '../util/parameters';
 import { deleteMessage } from './middleware';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
@@ -10,8 +10,8 @@ export const handler = async ({ args: { emoji, content } }) =>
 export default () => ({
   middleware,
   handler,
-  parameters: [parameters.emoji, {
-    ...parameters.content,
+  parameters: [params.emoji, {
+    ...params.content,
     optional: false,
   }],
   triggers: COMMAND_TRIGGERS.EMOJIFY,

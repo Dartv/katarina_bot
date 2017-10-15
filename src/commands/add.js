@@ -9,7 +9,7 @@ import {
   checkAttachment,
   deleteMessage,
 } from './middleware';
-import { ref, url } from '../util/parameters';
+import * as params from '../util/parameters';
 import { lenses } from '../util';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
@@ -27,8 +27,8 @@ export const handler = User.addImageLink.bind(User);
 export default () => ({
   middleware,
   handler,
-  parameters: [ref, {
-    ...url,
+  parameters: [params.ref, {
+    ...params.url,
     optional: true,
     defaultValue: '',
   }],

@@ -7,7 +7,7 @@ export default async (context) => {
   try {
     await user.addImageLink({ ref, url });
   } catch (err) {
-    return ErrorResponse(err.message);
+    return ErrorResponse(err.message, context);
   }
 
   return SuccessResponse(

@@ -1,12 +1,14 @@
-import R from 'ramda';
+import { SuccessResponse, ErrorResponse } from '../../../commands/responses';
 
-import { SuccessResponse } from '../../../commands/responses';
-import { concurrentlyD } from '../../../util/handlers';
+export default async (context) => {
+  const { guild, image } = context;
+  const { ref } = image;
 
-export const removeImageLink = async ({ guild, image }) => guild.removeImageLink(image);
+  try {
+    await guild.removeImageLink(image);
+  } catch (err) {
+    return ErrorResponse(err.message, context);
+  }
 
-export default async context => R.compose(
-  p => p.then(() => SuccessResponse(`successfully removed "${context.image.ref}"
-    from this guild's images`, '', context)),
-  concurrentlyD([removeImageLink]),
-)(context);
+  return SuccessResponse(`successfully removed "${ref}" from this guild's images`, '', context);
+};

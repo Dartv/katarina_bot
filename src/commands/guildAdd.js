@@ -8,8 +8,9 @@ import {
   expectRefToBeUnique,
   checkAttachment,
   injectGuild,
+  deleteMessage,
 } from './middleware';
-import { ref, url } from '../util/parameters';
+import * as params from '../util/parameters';
 import { lenses } from '../util';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
@@ -20,6 +21,7 @@ export const middleware = [
   expectValidUrl(),
   expectValidImageUrl(),
   expectRefToBeUnique(R.view(lenses.guild.images)),
+  deleteMessage(),
 ];
 
 export const handler = Guild.addImageLink.bind(Guild);
@@ -27,8 +29,8 @@ export const handler = Guild.addImageLink.bind(Guild);
 export default () => ({
   middleware,
   handler,
-  parameters: [ref, {
-    ...url,
+  parameters: [params.ref, {
+    ...params.url,
     optional: true,
     defaultValue: '',
   }],

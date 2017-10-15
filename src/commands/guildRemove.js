@@ -4,6 +4,7 @@ import {
   injectGuild,
   expectGuildToHaveImage,
   ensureGuildImageAccess,
+  deleteMessage,
 } from './middleware';
 import { ref } from '../util/parameters';
 import { COMMAND_TRIGGERS } from '../util/constants';
@@ -13,6 +14,7 @@ export const middleware = [
   injectGuild(),
   expectGuildToHaveImage(),
   ensureGuildImageAccess(),
+  deleteMessage(),
 ];
 
 export const handler = Guild.removeImageLink.bind(Guild);

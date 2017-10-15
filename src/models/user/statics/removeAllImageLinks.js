@@ -1,11 +1,13 @@
-import R from 'ramda';
+import { SuccessResponse, ErrorResponse } from '../../../commands/responses';
 
-import { SuccessResponse } from '../../../commands/responses';
-import { concurrentlyD } from '../../../util/handlers';
+export default async (context) => {
+  const { user } = context;
 
-const removeAllImageLinks = async ({ user }) => user.removeAllImageLinks();
+  try {
+    await user.removeAllImageLinks();
+  } catch (err) {
+    return ErrorResponse(err.message, context);
+  }
 
-export default async context => R.compose(
-  p => p.then(() => SuccessResponse('Successfully removed all image links', '', context)),
-  concurrentlyD([removeAllImageLinks]),
-)(context);
+  return SuccessResponse('Successfully removed all image links', '', context);
+};

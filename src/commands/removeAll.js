@@ -1,8 +1,8 @@
 import { User } from '../models';
-import { injectUser } from './middleware';
+import { injectUser, deleteMessage } from './middleware';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const middleware = [injectUser()];
+export const middleware = [injectUser(), deleteMessage()];
 
 export const handler = User.removeAllImageLinks.bind(User);
 

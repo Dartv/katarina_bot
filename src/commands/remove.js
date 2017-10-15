@@ -1,9 +1,9 @@
 import { User } from '../models';
-import { injectUser, expectUserToHaveImage } from './middleware';
+import { injectUser, expectUserToHaveImage, deleteMessage } from './middleware';
 import { ref } from '../util/parameters';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const middleware = [injectUser(), expectUserToHaveImage()];
+export const middleware = [injectUser(), expectUserToHaveImage(), deleteMessage()];
 
 export const handler = User.removeImageLink.bind(User);
 

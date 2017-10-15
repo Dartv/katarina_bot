@@ -1,18 +1,15 @@
-import { injectUser, expectUserToHaveImage } from './middleware';
+import { injectUser, expectUserToHaveImage, deleteMessage } from './middleware';
 import * as params from '../util/parameters';
 import { ImageResponse, FileResponse } from './responses';
-import { concurrentlyD } from '../util/handlers';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const middleware = [injectUser(), expectUserToHaveImage()];
+export const middleware = [injectUser(), expectUserToHaveImage(), deleteMessage()];
 
-export const postMessage = async (context) => {
+export const handler = async (context) => {
   const { args: { content }, image } = context;
   if (content) return ImageResponse(image.url, content.join(' '), context);
   return FileResponse('', [image.url], context);
 };
-
-export const handler = concurrentlyD([postMessage]);
 
 export default () => ({
   middleware,
