@@ -1,17 +1,17 @@
 import R from 'ramda';
 
-import props from './props';
 import { concatRight } from './helpers';
+import lenses from './lenses';
 
 export const formatParameter = R.compose(
   R.join(''),
   R.append('>'),
   R.prepend(' <'),
-  props.description,
+  R.view(lenses.description),
 );
 
 export const formatOptionalParameter = R.ifElse(
-  props.optional,
+  R.view(lenses.optional),
   R.compose(
     R.join(''),
     R.append(']'),
@@ -33,8 +33,8 @@ export const formatParameters = ({ commandName, parameters, description }) => R.
 export default R.when(
   R.compose(R.not, R.is(String)),
   R.ifElse(
-    props.parameters,
+    R.view(lenses.parameters),
     formatParameters,
-    props.description,
+    R.view(lenses.description),
   ),
 );

@@ -1,12 +1,13 @@
 import R from 'ramda';
 
-import props from './props';
+import lenses from './lenses';
 
-export const indexByName = R.indexBy(props.name);
+export const indexByName = R.indexBy(R.view(lenses.name));
 
-export const eqProp = R.curry((prop, val, obj) => R.compose(R.equals(val), prop)(obj));
+export const lensEq = R.curry((lens, val, obj) => R.compose(R.equals(val), R.view(lens))(obj));
 
-export const findByRef = R.curry((value, array) => R.find(eqProp(props.ref, value), array));
+export const findByRef = R.curry((value, array) =>
+  R.find(lensEq(lenses.ref, value), array));
 
 export const concatRight = R.flip(R.concat);
 

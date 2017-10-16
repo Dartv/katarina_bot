@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { indexByName, eqProp, findByRef, concatRight, joinWithArray } from '../helpers';
+import { indexByName, lensEq, findByRef, concatRight, joinWithArray } from '../helpers';
 
 describe('indexByName', () => {
   it('should index by name', () => {
@@ -13,16 +13,16 @@ describe('indexByName', () => {
   });
 });
 
-describe('eqProp', () => {
-  const prop = R.prop('name');
+describe('lensEq', () => {
+  const lens = R.lensProp('name');
   const name = 'test';
 
   it('should return true when name matches', () => {
-    expect(eqProp(prop, name, { name })).toBe(true);
+    expect(lensEq(lens, name, { name })).toBe(true);
   });
 
   it('should return false when name does not match', () => {
-    expect(eqProp(prop, 'hello', { name })).toBe(false);
+    expect(lensEq(lens, 'hello', { name })).toBe(false);
   });
 });
 
