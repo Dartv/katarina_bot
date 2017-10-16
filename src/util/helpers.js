@@ -21,5 +21,3 @@ export const joinWithArray = R.curry((str, array) => R.when(
   ),
   str
 ));
-
-export const getFullName = ({ username, discriminator }) => `${username}#${discriminator}`;
