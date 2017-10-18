@@ -1,21 +1,11 @@
 import { Constants } from 'discord.js';
 
-export const COLOR_INFO = Constants.Colors.BLUE;
-
-export const COLOR_ERROR = Constants.Colors.DARK_RED;
-
-export const COLOR_SUCCESS = Constants.Colors.GREEN;
-
-export const COLOR_BLACK = '#000000';
-
-export const COLOR_WHITE = '#ffffff';
-
 export const COLORS = {
-  INFO: COLOR_INFO,
-  ERROR: COLOR_ERROR,
-  SUCCESS: COLOR_SUCCESS,
-  BLACK: COLOR_BLACK,
-  WHITE: COLOR_WHITE,
+  INFO: Constants.Colors.BLUE,
+  ERROR: Constants.Colors.DARK_RED,
+  SUCCESS: Constants.Colors.GREEN,
+  BLACK: '#000000',
+  WHITE: '#ffffff',
 };
 
 export const COMMAND_TRIGGERS = {
