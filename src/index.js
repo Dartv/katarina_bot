@@ -1,5 +1,7 @@
 import { Client } from 'ghastly';
 
+import { COMMAND_TRIGGERS } from './util/constants';
+
 require('dotenv').config({ path: './.env' });
 
 const prefix = process.env.BOT_PREFIX;
@@ -11,7 +13,7 @@ require('./commands').default(client);
 
 client.on('ready', () => {
   console.log('I\'m ready!');
-  client.user.setGame(`${prefix}help`);
+  client.user.setGame(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
 });
 
 client.on('dispatchFail', (reason, { error }) => {

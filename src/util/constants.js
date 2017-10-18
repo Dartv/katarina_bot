@@ -19,4 +19,5 @@ export const COMMAND_TRIGGERS = {
   GUILD_LIST: ['glist'],
   GUILD_POST: ['gpost', 'gp'],
   GUILD_REMOVE: ['gremove', 'gr'],
+  WRITE: ['write', 'w'],
 };
