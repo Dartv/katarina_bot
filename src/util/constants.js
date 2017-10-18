@@ -6,6 +6,18 @@ export const COLOR_ERROR = Constants.Colors.DARK_RED;
 
 export const COLOR_SUCCESS = Constants.Colors.GREEN;
 
+export const COLOR_BLACK = '#000000';
+
+export const COLOR_WHITE = '#ffffff';
+
+export const COLORS = {
+  INFO: COLOR_INFO,
+  ERROR: COLOR_ERROR,
+  SUCCESS: COLOR_SUCCESS,
+  BLACK: COLOR_BLACK,
+  WHITE: COLOR_WHITE,
+};
+
 export const COMMAND_TRIGGERS = {
   ADD: ['add', 'a'],
   ART: ['art'],
@@ -20,4 +32,13 @@ export const COMMAND_TRIGGERS = {
   GUILD_POST: ['gpost', 'gp'],
   GUILD_REMOVE: ['gremove', 'gr'],
   WRITE: ['write', 'w'],
+};
+
+export const FONTS = {
+  HELVETICA: 'Helvetica',
+  ttf: font => `${font}.ttf`,
+};
+
+export const DIRECTIONS = {
+  NORTH: 'North',
 };
