@@ -1,51 +1,43 @@
-import gm from 'gm';
 import path from 'path';
 import request from 'request';
 import R from 'ramda';
 import { tmpdir } from 'os';
 
+import { gm } from '../util';
 import { injectUser, expectUserToHaveImage } from './middleware';
 import { COMMAND_TRIGGERS, COLORS, FONTS, DIRECTIONS } from '../util/constants';
 import * as params from '../util/parameters';
+import { autoWrap } from '../util/helpers';
 import { FileResponse, ErrorResponse } from './responses';
 
 const WRITE_PATH = path.resolve(tmpdir(), '../tmp.png');
-const BREAK_AT = 17;
-
-const autoWrap = R.compose(
-  R.join(' '),
-  R.flatten,
-  R.intersperse('\n'),
-  R.splitEvery(BREAK_AT),
-);
+const BREAK_AT = 18;
 
 const calcFontSize = R.divide(R.__, 10);
 
 export const middleware = [injectUser(), expectUserToHaveImage()];
 
-const write = ({ width }, { image, args: { content } }) => new Promise((resolve, reject) => {
+const write = ({ width }, { image, args: { content } }) => {
   const fontSize = calcFontSize(width);
-  gm(request(image.url))
-    .stroke(COLORS.BLACK)
+  const text = R.join(' ', autoWrap(BREAK_AT)(content));
+  const img = gm(request(image.url))
     .fill(COLORS.WHITE)
-    .font(FONTS.ttf(FONTS.HELVETICA), fontSize)
-    .drawText(0, fontSize, autoWrap(content.join(' ')), DIRECTIONS.NORTH)
-    .write(WRITE_PATH, (err) => {
-      if (err) reject(err);
-      else resolve();
-    });
-});
+    .font(FONTS.ttf(FONTS.HELVETICA), fontSize);
 
-const getImageSize = image => new Promise((resolve, reject) => {
-  gm(image).size((err, val) => {
-    if (err) reject(err);
-    else resolve(val);
-  });
-});
+  if (width >= 400) {
+    const strokeWidth = Math.max(1, Math.round(fontSize / 100));
+    img.stroke(COLORS.BLACK, strokeWidth);
+  }
 
-const handler = async (context) => {
+  img.drawText(0, fontSize, text, DIRECTIONS.NORTH);
+
+  return img.write(WRITE_PATH);
+};
+
+
+export const handler = async (context) => {
   try {
-    const size = await getImageSize(request(context.image.url));
+    const size = await gm(request(context.image.url)).size();
     await write(size, context);
   } catch (err) {
     return ErrorResponse(err.message, context);
@@ -57,7 +49,10 @@ const handler = async (context) => {
 export default () => ({
   middleware,
   handler,
-  parameters: [params.ref, params.content],
+  parameters: [params.ref, {
+    ...params.content,
+    optional: false,
+  }],
   triggers: COMMAND_TRIGGERS.WRITE,
   description: 'Writes text on image',
 });

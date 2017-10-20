@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import lenses from './lenses';
+import lenses, { last } from './lenses';
 
 export const indexByName = R.indexBy(R.view(lenses.name));
 
@@ -21,3 +21,22 @@ export const joinWithArray = R.curry((str, array) => R.when(
   ),
   str
 ));
+
+export const autoWrap = breakAt => R.compose(
+  R.flatten,
+  R.intersperse('\n'),
+  R.reduce((acc, el) => R.ifElse(
+    R.anyPass([
+      R.complement(R.last),
+      R.compose(
+        R.gte(R.__, breakAt),
+        R.length,
+        R.join(' '),
+        R.append(el),
+        R.last,
+      ),
+    ]),
+    R.append([el]),
+    R.over(last, R.append(el)),
+  )(acc), []),
+);

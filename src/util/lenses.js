@@ -1,6 +1,7 @@
 import R from 'ramda';
 
 export const lensInvoker = R.curry((arity, prop) => R.lens(R.invoker(arity, prop), R.assoc(prop)));
+export const last = R.lens(R.last, (val, array) => R.update(R.dec(R.length(array)), val, array));
 
 const message = R.lensProp('message');
 const attachments = R.lensProp('attachments');

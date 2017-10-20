@@ -1,5 +1,12 @@
 import R from 'ramda';
-import { indexByName, lensEq, findByRef, concatRight, joinWithArray } from '../helpers';
+import {
+  indexByName,
+  lensEq,
+  findByRef,
+  concatRight,
+  joinWithArray,
+  autoWrap,
+} from '../helpers';
 
 describe('indexByName', () => {
   it('should index by name', () => {
@@ -42,5 +49,20 @@ describe('concatRight', () => {
 describe('joinWithArray', () => {
   it('should join string with array', () => {
     expect(joinWithArray('Hello', ['John', 'Marry'])).toBe('Hello, John, Marry');
+  });
+});
+
+describe('autoWrap', () => {
+  it('should auto wrap text', () => {
+    const breakAt = 18;
+    const content = ['hello', 'there', 'my', 'beautiful', 'friend.', 'How', 'are', 'you', 'doing?'];
+    const expected = [
+      'hello', 'there', 'my', '\n',
+      'beautiful', 'friend.', '\n',
+      'How', 'are', 'you', '\n',
+      'doing?',
+    ];
+    const actual = autoWrap(breakAt)(content);
+    expect(actual).toEqual(expected);
   });
 });
