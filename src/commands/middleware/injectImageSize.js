@@ -1,9 +1,10 @@
 import request from 'request';
-import R from 'ramda';
 
 import { gm } from '../../util';
 
 export default () => async (next, context) => {
-  const size = await gm(request(context.image.url)).size();
-  return next(R.mergeDeepRight(context, { image: { size } }));
+  // merging context.image with new parameter returns the whole mongoose document.
+  // eslint-disable-next-line no-param-reassign
+  context.image.size = await gm(request(context.image.url)).size();
+  return next(context);
 };
