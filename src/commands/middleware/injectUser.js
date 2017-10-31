@@ -8,7 +8,7 @@ export default () => async (next, context) => {
 
     if (!user) user = await new User({ discordId }).save();
 
-    return next({ ...context, user });
+    return next({ ...context, user: user.toObject() });
   } catch (err) {
     return ErrorResponse(err.message, context);
   }

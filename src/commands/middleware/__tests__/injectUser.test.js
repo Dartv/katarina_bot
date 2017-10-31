@@ -40,7 +40,7 @@ describe('injectUser', () => {
     const count = await User.find().count();
 
     expect(count).toBe(1);
-    expect(user.toObject()).toEqual(nextContext.user.toObject());
+    expect(user.toObject()).toEqual(nextContext.user);
   });
 
   it('should dispatch an error response', async () => {

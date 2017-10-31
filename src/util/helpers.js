@@ -23,6 +23,7 @@ export const joinWithArray = R.curry((str, array) => R.when(
 ));
 
 export const autoWrap = breakAt => R.compose(
+  R.join(' '),
   R.flatten,
   R.intersperse('\n'),
   R.reduce((acc, el) => R.ifElse(

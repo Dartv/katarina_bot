@@ -1,4 +1,6 @@
 import { Constants } from 'discord.js';
+import path from 'path';
+import { tmpdir } from 'os';
 
 export const COLORS = {
   INFO: Constants.Colors.BLUE,
@@ -32,3 +34,5 @@ export const FONTS = {
 export const DIRECTIONS = {
   NORTH: 'North',
 };
+
+export const TMP_IMAGE_PATH = path.resolve(tmpdir(), '../tmp.png');
