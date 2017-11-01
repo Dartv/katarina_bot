@@ -25,6 +25,7 @@
   "dependencies": {
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
+    "ffmpeg-binaries": "^3.2.2-3",
     "ghastly": "^0.4.0",
     "gm": "^1.23.0",
     "mongoose": "^4.11.13",

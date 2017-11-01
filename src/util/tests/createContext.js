@@ -12,6 +12,15 @@ export default R.mergeDeepRight({
     channel: {
       send: R.identity,
     },
+    member: {
+      voiceChannel: {},
+      voiceChannelID: null,
+    },
+    guild: {
+      voiceConnection: {
+        channel: {},
+      },
+    },
   },
   client: {
     dispatch: (ctx, response) => response.executor(ctx),

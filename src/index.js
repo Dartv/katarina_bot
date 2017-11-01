@@ -17,7 +17,7 @@ client.on('ready', () => {
 });
 
 client.on('dispatchFail', (reason, { error }) => {
-  if (error) console.error(error);
+  if (error) console.error(reason, error);
 });
 
 client.login(process.env.BOT_TOKEN);

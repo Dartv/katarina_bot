@@ -24,6 +24,7 @@ export const COMMAND_TRIGGERS = {
   GUILD_POST: ['gpost', 'gp'],
   GUILD_REMOVE: ['gremove', 'gr'],
   WRITE: ['write', 'w'],
+  JOIN: ['join'],
 };
 
 export const FONTS = {

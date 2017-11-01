@@ -41,3 +41,6 @@ export const autoWrap = breakAt => R.compose(
     R.over(last, R.append(el)),
   )(acc), []),
 );
+
+export const createErrorMessage = action =>
+  `Something bad happened when trying to ${action}. Please, try again!`;

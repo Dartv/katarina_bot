@@ -10,3 +10,4 @@ export { default as ensureGuildImageAccess } from './ensureGuildImageAccess';
 export { default as deleteMessage } from './deleteMessage';
 export { default as drawImageText } from './drawImageText';
 export { default as injectImageSize } from './injectImageSize';
+export { default as validateJoinVoiceChannel } from './validateJoinVoiceChannel';
