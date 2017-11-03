@@ -1,6 +1,8 @@
 import { Client } from 'ghastly';
+import YouTube from 'simple-youtube-api';
 
 import { COMMAND_TRIGGERS } from './util/constants';
+import store from './store';
 
 require('dotenv').config({ path: './.env' });
 
@@ -10,6 +12,9 @@ const client = new Client({ prefix });
 
 require('./services/mongo_connect');
 require('./commands').default(client);
+
+client.services.instance('music.youtube', new YouTube(process.env.YOUTUBE_API_KEY));
+client.services.instance('music.store', store);
 
 client.on('ready', () => {
   console.log('I\'m ready!');

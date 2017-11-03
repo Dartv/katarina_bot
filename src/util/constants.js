@@ -25,6 +25,7 @@ export const COMMAND_TRIGGERS = {
   GUILD_REMOVE: ['gremove', 'gr'],
   WRITE: ['write', 'w'],
   JOIN: ['join'],
+  PLAY: ['play'],
 };
 
 export const FONTS = {

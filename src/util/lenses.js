@@ -27,8 +27,12 @@ const id = R.lensProp('id');
 const channel = R.lensProp('channel');
 const joinable = R.lensProp('joinable');
 const speakable = R.lensProp('speakable');
+const entities = R.lensProp('entities');
+const allIds = R.lensProp('allIds');
 
 const first = lensInvoker(0, 'first');
+
+const head = R.lensIndex(0);
 
 const messageAttachments = R.compose(message, attachments);
 const messageAttachmentsSize = R.compose(messageAttachments, size);
@@ -51,6 +55,9 @@ const guildImages = R.compose(guild, images);
 
 const userImages = R.compose(user, images);
 
+const allIdsLast = R.compose(allIds, last);
+const allIdsHead = R.compose(allIds, head);
+
 export default {
   parameters,
   description,
@@ -58,6 +65,7 @@ export default {
   optional,
   name,
   ref,
+  entities,
   args: Object.assign(args, {
     url: argsUrl,
     ref: argsRef,
@@ -89,5 +97,9 @@ export default {
   }),
   user: Object.assign(user, {
     images: userImages,
+  }),
+  allIds: Object.assign(allIds, {
+    last: allIdsLast,
+    head: allIdsHead,
   }),
 };

@@ -11,3 +11,4 @@ export { default as deleteMessage } from './deleteMessage';
 export { default as drawImageText } from './drawImageText';
 export { default as injectImageSize } from './injectImageSize';
 export { default as validateJoinVoiceChannel } from './validateJoinVoiceChannel';
+export { default as injectYouTubeVideo } from './injectYouTubeVideo';
