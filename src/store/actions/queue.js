@@ -22,7 +22,7 @@ const reduceQueue = R.curry((reducer, id, state) => ({
 
 export const enqueue = (item, id) => reduceQueue(R.compose(
   R.over(lenses.allIds, R.append(item.id)),
-  R.set(R.compose(lenses.entities, R.lensProp(item.id)), item),
+  R.set(entity(item.id), item),
 ), id);
 
 

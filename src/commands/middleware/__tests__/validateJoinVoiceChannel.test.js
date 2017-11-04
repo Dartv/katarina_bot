@@ -1,7 +1,8 @@
 import R from 'ramda';
 
 import { createContext } from '../../../util/tests';
-import validateJoinVoiceChannel, { ERRORS } from '../validateJoinVoiceChannel';
+import { ERRORS } from '../../../util/constants';
+import validateJoinVoiceChannel from '../validateJoinVoiceChannel';
 
 jest.mock('../../responses/ErrorResponse');
 

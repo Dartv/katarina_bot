@@ -38,3 +38,11 @@ export const DIRECTIONS = {
 };
 
 export const TMP_IMAGE_PATH = path.resolve(tmpdir(), '../tmp.png');
+
+export const ERRORS = {
+  VC_NOT_FOUND: 'I\'m not in a voice channel',
+  VC_ALREADY_IN: 'I\'m already in your voice channel',
+  VC_NOT_JOINABLE: 'I\'m not allowed to join your voice channel',
+  VC_NOT_SPEAKABLE: 'I\'m not allowed to speak in your voice channel',
+  VC_ALREADY_QUEUED: 'This video is already queued',
+};
