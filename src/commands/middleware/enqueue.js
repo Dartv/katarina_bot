@@ -4,10 +4,13 @@ import { ERRORS } from '../../util/constants';
 
 
 export default () => async (next, context) => {
-  const { services, message: { guild }, video, dispatch, formatter: { bold } } = context;
-  const store = services.get('music.store');
+  const { message: { guild } } = context;
 
   if (!guild.voiceConnection) return new ErrorResponse(ERRORS.VC_NOT_FOUND, context);
+
+  const { services, video, dispatch, formatter: { bold } } = context;
+
+  const store = services.get('music.store');
 
   const queueItem = store.dispatch(getQueueItem(video.id, context));
 
