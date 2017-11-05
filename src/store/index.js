@@ -1,6 +1,8 @@
 import Store, { thunk } from 'repatch';
 
-export default new Store({
+export const initialState = {
   entities: {},
   allIds: {},
-}).addMiddleware(thunk);
+};
+
+export default new Store(initialState).addMiddleware(thunk);

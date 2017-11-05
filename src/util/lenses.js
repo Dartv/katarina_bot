@@ -5,6 +5,10 @@ export const last = R.lens(R.last, (val, array) => R.update(R.dec(R.length(array
 
 export const lensIsFalsy = R.curry((lens, data) => R.compose(R.not, R.view)(lens, data));
 
+export const viewOr = R.curryN(3,
+  (defaultValue, lens, data) => R.defaultTo(defaultValue, R.view(lens, data))
+);
+
 const message = R.lensProp('message');
 const attachments = R.lensProp('attachments');
 const url = R.lensProp('url');
@@ -58,6 +62,8 @@ const userImages = R.compose(user, images);
 const allIdsLast = R.compose(allIds, last);
 const allIdsHead = R.compose(allIds, head);
 
+const entity = entityId => R.compose(entities, R.lensProp(entityId));
+
 export default {
   parameters,
   description,
@@ -65,7 +71,6 @@ export default {
   optional,
   name,
   ref,
-  entities,
   args: Object.assign(args, {
     url: argsUrl,
     ref: argsRef,
@@ -97,6 +102,9 @@ export default {
   }),
   user: Object.assign(user, {
     images: userImages,
+  }),
+  entities: Object.assign(entities, {
+    entity,
   }),
   allIds: Object.assign(allIds, {
     last: allIdsLast,

@@ -1,16 +1,7 @@
 import R from 'ramda';
 
-import { lenses } from '../../util';
-
-const initialState = { entities: {}, allIds: [] };
-const entity = id => R.compose(
-  lenses.entities,
-  R.lensProp(id),
-);
-
-const viewOr = R.curryN(3,
-  (defaultValue, lens, data) => R.defaultTo(defaultValue, R.view(lens, data))
-);
+import { lenses, viewOr } from '../../util';
+import { initialState } from '../';
 
 const reduceQueue = R.curry((reducer, id, state) => ({
   ...state,
@@ -22,7 +13,7 @@ const reduceQueue = R.curry((reducer, id, state) => ({
 
 export const enqueue = (item, id) => reduceQueue(R.compose(
   R.over(lenses.allIds, R.append(item.id)),
-  R.set(entity(item.id), item),
+  R.set(lenses.entities.entity(item.id), item),
 ), id);
 
 
@@ -44,18 +35,18 @@ export const clear = reduceQueue(R.compose(
 ));
 
 export const getQueue = context => state => () =>
-  viewOr(initialState, entity(context.message.guild.id), state);
+  viewOr(initialState, lenses.entities.entity(context.message.guild.id), state);
 
 export const peek = context => () => dispatch => R.compose(
   R.converge(R.view, [
-    R.compose(entity, R.view(lenses.allIds.head)),
+    R.compose(lenses.entities.entity, R.view(lenses.allIds.head)),
     R.identity,
   ]),
   R.compose(dispatch, getQueue),
 )(context);
 
 export const getQueueItem = (id, context) => () => dispatch => R.compose(
-  R.view(entity(id)),
+  R.view(lenses.entities.entity(id)),
   R.compose(dispatch, getQueue),
 )(context);
 
