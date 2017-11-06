@@ -72,7 +72,7 @@ describe('enqueue', () => {
     const { executor } = await enqueue()(next, context);
     const response = await executor(context);
 
-    expect(response).toBe(ERRORS.VC_ALREADY_QUEUED);
+    expect(response).toBe(ERRORS.YT_ALREADY_QUEUED);
   });
 
   it('should pass if successfully queued', async () => {

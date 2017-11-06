@@ -7,7 +7,6 @@ import {
   expectValidImageUrl,
   expectRefToBeUnique,
   checkAttachment,
-  deleteMessage,
 } from './middleware';
 import * as params from '../util/parameters';
 import { lenses } from '../util';
@@ -19,7 +18,6 @@ export const middleware = [
   expectValidUrl(),
   expectValidImageUrl(),
   expectRefToBeUnique(R.view(lenses.user.images)),
-  deleteMessage(),
 ];
 
 export const handler = User.addImageLink.bind(User);

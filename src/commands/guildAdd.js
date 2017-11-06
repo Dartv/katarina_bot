@@ -8,7 +8,6 @@ import {
   expectRefToBeUnique,
   checkAttachment,
   injectGuild,
-  deleteMessage,
 } from './middleware';
 import * as params from '../util/parameters';
 import { lenses } from '../util';
@@ -21,7 +20,6 @@ export const middleware = [
   expectValidUrl(),
   expectValidImageUrl(),
   expectRefToBeUnique(R.view(lenses.guild.images)),
-  deleteMessage(),
 ];
 
 export const handler = Guild.addImageLink.bind(Guild);

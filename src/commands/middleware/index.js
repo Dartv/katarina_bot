@@ -14,3 +14,6 @@ export { default as validateJoinVoiceChannel } from './validateJoinVoiceChannel'
 export { default as injectYouTubeVideo } from './injectYouTubeVideo';
 export { default as enqueue } from './enqueue';
 export { default as ensureCanPlayNextSong } from './ensureCanPlayNextSong';
+export { default as checkYouTubeUrl } from './checkYouTubeUrl';
+export { default as youTubeSearchVideos } from './youTubeSearchVideos';
+export { default as youTubeAwaitVideoChoice } from './youTubeAwaitVideoChoice';

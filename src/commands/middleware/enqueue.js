@@ -12,7 +12,7 @@ export default () => async (next, context) => {
   const store = services.get('music.store');
   const queueItem = store.dispatch(getQueueItem(video.id, context));
 
-  if (queueItem) return new ErrorResponse(ERRORS.VC_ALREADY_QUEUED, context);
+  if (queueItem) return new ErrorResponse(ERRORS.YT_ALREADY_QUEUED, context);
 
   store.dispatch(enqueue(video, guild.id));
 

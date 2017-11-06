@@ -3,9 +3,24 @@ import { expectGuild } from 'ghastly/middleware';
 
 import { COMMAND_TRIGGERS } from '../util/constants';
 import { dequeue, peek } from '../store/actions/queue';
-import { injectYouTubeVideo, enqueue, ensureCanPlayNextSong } from './middleware';
+import {
+  injectYouTubeVideo,
+  enqueue,
+  ensureCanPlayNextSong,
+  checkYouTubeUrl,
+  youTubeSearchVideos,
+  youTubeAwaitVideoChoice,
+} from './middleware';
 
-const middleware = [expectGuild(), injectYouTubeVideo(), enqueue(), ensureCanPlayNextSong()];
+const middleware = [
+  expectGuild(),
+  checkYouTubeUrl(),
+  youTubeSearchVideos(),
+  youTubeAwaitVideoChoice(),
+  injectYouTubeVideo(),
+  enqueue(),
+  ensureCanPlayNextSong(),
+];
 
 const handler = async (context) => {
   const {
