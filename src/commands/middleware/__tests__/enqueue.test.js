@@ -48,20 +48,6 @@ describe('enqueue', () => {
     expect(getContext(state)).toMatchSnapshot();
   });
 
-  it('should dispatch an error if no voice channel found', async () => {
-    const context = {
-      message: {
-        guild: {
-          voiceConnection: null,
-        },
-      },
-    };
-    const { executor } = await enqueue()(next, context);
-    const response = await executor(context);
-
-    expect(response).toBe(ERRORS.VC_NOT_FOUND);
-  });
-
   it('should dispatch an error if the item is already queued', async () => {
     const context = {
       ...getContext(state),

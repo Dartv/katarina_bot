@@ -18,9 +18,7 @@ export default () => async (next, context) => {
       // eslint-disable-next-line max-len
       .setDescription(`You searched for "${query}". To play a video, enter the result number of the video (e.g. "1" to play the first result) within ${time} seconds.`);
 
-    videos.forEach((result, index) => {
-      const { title, description, publishedAt } = result;
-
+    videos.forEach(({ title, description, publishedAt }, index) => {
       embed.addField(
         // eslint-disable-next-line max-len
         `${index + 1}. ${title} [${publishedAt.getFullYear()}-${publishedAt.getMonth() + 1}-${publishedAt.getDate()}]`,

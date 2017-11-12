@@ -33,8 +33,11 @@ const joinable = R.lensProp('joinable');
 const speakable = R.lensProp('speakable');
 const entities = R.lensProp('entities');
 const allIds = R.lensProp('allIds');
+const player = R.lensProp('player');
+const dispatcher = R.lensProp('dispatcher');
 
 const first = lensInvoker(0, 'first');
+const end = lensInvoker(0, 'end');
 
 const head = R.lensIndex(0);
 
@@ -51,6 +54,15 @@ const messageGuild = R.compose(message, guild);
 const messageGuildVoiceConnection = R.compose(messageGuild, voiceConnection);
 const messageGuildVoiceConnectionChannel = R.compose(messageGuildVoiceConnection, channel);
 const messageGuildVoiceConnectionChannelId = R.compose(messageGuildVoiceConnectionChannel, id);
+const messageGuildVoiceConnectionPlayer = R.compose(messageGuildVoiceConnection, player);
+const messageGuildVoiceConnectionPlayerDispatcher = R.compose(
+  messageGuildVoiceConnectionPlayer,
+  dispatcher,
+);
+const messageGuildVoiceConnectionPlayerDispatcherEnd = R.compose(
+  messageGuildVoiceConnectionPlayerDispatcher,
+  end,
+);
 
 const argsUrl = R.compose(args, url);
 const argsRef = R.compose(args, ref);
@@ -93,6 +105,11 @@ export default {
       voiceConnection: Object.assign(messageGuildVoiceConnection, {
         channel: Object.assign(messageGuildVoiceConnectionChannel, {
           id: messageGuildVoiceConnectionChannelId,
+        }),
+        player: Object.assign(messageGuildVoiceConnectionPlayer, {
+          dispatcher: Object.assign(messageGuildVoiceConnectionPlayerDispatcher, {
+            end: messageGuildVoiceConnectionPlayerDispatcherEnd,
+          }),
         }),
       }),
     }),

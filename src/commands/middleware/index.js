@@ -17,3 +17,6 @@ export { default as ensureCanPlayNextSong } from './ensureCanPlayNextSong';
 export { default as checkYouTubeUrl } from './checkYouTubeUrl';
 export { default as youTubeSearchVideos } from './youTubeSearchVideos';
 export { default as youTubeAwaitVideoChoice } from './youTubeAwaitVideoChoice';
+export { default as ensureIsInVoiceChannel } from './ensureIsInVoiceChannel';
+export { default as ensureIsPlaying } from './ensureIsPlaying';
+export { default as stopCurrentlyPlaying } from './stopCurrentlyPlaying';

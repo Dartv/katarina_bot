@@ -10,10 +10,12 @@ import {
   checkYouTubeUrl,
   youTubeSearchVideos,
   youTubeAwaitVideoChoice,
+  ensureIsInVoiceChannel,
 } from './middleware';
 
 const middleware = [
   expectGuild(),
+  ensureIsInVoiceChannel(),
   checkYouTubeUrl(),
   youTubeSearchVideos(),
   youTubeAwaitVideoChoice(),

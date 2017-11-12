@@ -26,6 +26,7 @@ export const COMMAND_TRIGGERS = {
   WRITE: ['write', 'w'],
   JOIN: ['join'],
   PLAY: ['play'],
+  STOP: ['stop'],
 };
 
 export const FONTS = {
@@ -46,6 +47,7 @@ export const ERRORS = {
   VC_ALREADY_IN: 'I\'m already in your voice channel',
   VC_NOT_JOINABLE: 'I\'m not allowed to join your voice channel',
   VC_NOT_SPEAKABLE: 'I\'m not allowed to speak in your voice channel',
+  VC_NOT_PLAYING: 'Nothing is playing right now',
   YT_ALREADY_QUEUED: 'This video is already queued',
   YT_COULD_NOT_DISPLAY_SEARCH_RESULTS: 'Couldn\'t display a list of search results',
   YT_NO_CHOICE: 'You didn\'t specify a video to play',
