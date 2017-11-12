@@ -27,6 +27,7 @@ export const COMMAND_TRIGGERS = {
   JOIN: ['join'],
   PLAY: ['play'],
   STOP: ['stop'],
+  SKIP: ['skip'],
 };
 
 export const FONTS = {

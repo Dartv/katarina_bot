@@ -28,6 +28,7 @@ const handler = async (context) => {
   const {
     dispatch,
     services,
+    message: { guild },
   } = context;
   const store = services.get('music.store');
   const video = store.dispatch(peek(context));
@@ -38,7 +39,7 @@ const handler = async (context) => {
 
   await new Promise(resolve => dispatcher.once('end', resolve));
 
-  store.dispatch(dequeue(context.message.guild.id));
+  store.dispatch(dequeue(guild.id));
 
   return ensureCanPlayNextSong(true)(handler, context);
 };

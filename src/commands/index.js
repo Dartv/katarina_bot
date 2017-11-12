@@ -14,6 +14,7 @@ import write from './write';
 import join from './join';
 import play from './play';
 import stop from './stop';
+import skip from './skip';
 
 const commands = [
   add,
@@ -31,6 +32,7 @@ const commands = [
   join,
   play,
   stop,
+  skip,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

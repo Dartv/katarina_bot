@@ -9,6 +9,5 @@ export default () => async (next, context) => {
   } catch (err) {
     return ErrorResponse(err.message, context);
   }
-
   return next(context);
 };
