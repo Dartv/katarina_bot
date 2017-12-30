@@ -5,9 +5,8 @@ export const last = R.lens(R.last, (val, array) => R.update(R.dec(R.length(array
 
 export const lensIsFalsy = R.curry((lens, data) => R.compose(R.not, R.view)(lens, data));
 
-export const viewOr = R.curryN(3,
-  (defaultValue, lens, data) => R.defaultTo(defaultValue, R.view(lens, data))
-);
+export const viewOr = R.curryN(3, (defaultValue, lens, data) =>
+  R.defaultTo(defaultValue, R.view(lens, data)));
 
 const message = R.lensProp('message');
 const attachments = R.lensProp('attachments');
@@ -35,9 +34,12 @@ const entities = R.lensProp('entities');
 const allIds = R.lensProp('allIds');
 const player = R.lensProp('player');
 const dispatcher = R.lensProp('dispatcher');
+const paused = R.lensProp('paused');
 
 const first = lensInvoker(0, 'first');
 const end = lensInvoker(0, 'end');
+const pause = lensInvoker(0, 'pause');
+const resume = lensInvoker(0, 'resume');
 
 const head = R.lensIndex(0);
 
@@ -62,6 +64,18 @@ const messageGuildVoiceConnectionPlayerDispatcher = R.compose(
 const messageGuildVoiceConnectionPlayerDispatcherEnd = R.compose(
   messageGuildVoiceConnectionPlayerDispatcher,
   end,
+);
+const messageGuildVoiceConnectionPlayerDispatcherPaused = R.compose(
+  messageGuildVoiceConnectionPlayerDispatcher,
+  paused,
+);
+const messageGuildVoiceConnectionPlayerDispatcherPause = R.compose(
+  messageGuildVoiceConnectionPlayerDispatcher,
+  pause,
+);
+const messageGuildVoiceConnectionPlayerDispatcherResume = R.compose(
+  messageGuildVoiceConnectionPlayerDispatcher,
+  resume,
 );
 
 const argsUrl = R.compose(args, url);
@@ -109,6 +123,9 @@ export default {
         player: Object.assign(messageGuildVoiceConnectionPlayer, {
           dispatcher: Object.assign(messageGuildVoiceConnectionPlayerDispatcher, {
             end: messageGuildVoiceConnectionPlayerDispatcherEnd,
+            paused: messageGuildVoiceConnectionPlayerDispatcherPaused,
+            pause: messageGuildVoiceConnectionPlayerDispatcherPause,
+            resume: messageGuildVoiceConnectionPlayerDispatcherResume,
           }),
         }),
       }),

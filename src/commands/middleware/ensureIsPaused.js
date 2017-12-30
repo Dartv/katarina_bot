@@ -5,7 +5,7 @@ import { lenses } from '../../util';
 import { ERRORS } from '../../util/constants';
 
 export default () => async (next, context) => R.ifElse(
-  R.view(lenses.message.guild.voiceConnection.player.dispatcher),
+  R.view(lenses.message.guild.voiceConnection.player.dispatcher.paused),
   next,
-  ErrorResponse(ERRORS.VC_NOT_PLAYING),
+  ErrorResponse(ERRORS.VC_ALREADY_PLAYING),
 )(context);

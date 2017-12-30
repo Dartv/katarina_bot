@@ -20,3 +20,5 @@ export { default as youTubeAwaitVideoChoice } from './youTubeAwaitVideoChoice';
 export { default as ensureIsInVoiceChannel } from './ensureIsInVoiceChannel';
 export { default as ensureIsPlaying } from './ensureIsPlaying';
 export { default as stopCurrentlyPlaying } from './stopCurrentlyPlaying';
+export { default as ensureIsNotPaused } from './ensureIsNotPaused';
+export { default as ensureIsPaused } from './ensureIsPaused';
