@@ -58,6 +58,7 @@ export const ERRORS = {
   YT_COULD_NOT_DISPLAY_SEARCH_RESULTS: 'Cannot display a list of search results',
   YT_NO_CHOICE: 'You didn\'t specify a video to play',
   YT_NOT_FOUND: 'Requested video not found',
+  CMD_CD: 'This command is on the cooldown... Please, wait for a few seconds.',
 };
 
 export const EH_URL = process.env.EH_URL;

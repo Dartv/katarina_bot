@@ -22,3 +22,4 @@ export { default as ensureIsPlaying } from './ensureIsPlaying';
 export { default as stopCurrentlyPlaying } from './stopCurrentlyPlaying';
 export { default as ensureIsNotPaused } from './ensureIsNotPaused';
 export { default as ensureIsPaused } from './ensureIsPaused';
+export { default as withCooldown } from './withCooldown';
