@@ -7,6 +7,7 @@ import {
   joinWithArray,
   autoWrap,
   getRandomArrayIndex,
+  composeAll,
 } from '../helpers';
 
 describe('indexByName', () => {
@@ -67,5 +68,17 @@ describe('getRandomArrayIndex', () => {
   it('gets random index from array', () => {
     const array = [1, 2, 3, 4];
     expect(getRandomArrayIndex(array)).toEqual(expect.any(Number));
+  });
+});
+
+describe('composeAll', () => {
+  it('composes normal and async functions', () => {
+    const p = composeAll(
+      R.dec,
+      n => Promise.resolve(n - 1),
+      (a, b) => a + b,
+    )(1, 2);
+
+    expect(p).resolves.toBe(1);
   });
 });

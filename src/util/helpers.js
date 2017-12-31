@@ -44,3 +44,6 @@ export const autoWrap = breakAt => R.compose(
 );
 
 export const getRandomArrayIndex = R.compose(random, R.dec, R.length);
+
+export const composeAll = (...fns) => (...args) =>
+  R.flatten(fns).reduce((f, g) => f.then(g), Promise.resolve(...args));

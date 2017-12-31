@@ -5,8 +5,18 @@ import { tmpdir } from 'os';
 import { readFile } from 'mz/fs';
 import random from 'random-int';
 
-import { COMMAND_TRIGGERS, EH_URL } from '../util/constants';
+import {
+  COMMAND_TRIGGERS,
+  EH_URL,
+  // constructRequestUrl,
+  // getRandomPage,
+  // getRandomGalleryLink,
+  // getRandomImageLink,
+} from '../util';
 import { FileResponse, ErrorResponse } from './responses';
+import { withCooldown } from './middleware';
+
+export const middleware = [withCooldown(5000)];
 
 const HTML_FILE_PATH = join(tmpdir(), 'eh.html');
 
@@ -15,15 +25,7 @@ const get$ = async () => {
   return cheerio.load(html);
 };
 
-let COOLDOWN_AT = Date.now();
-
 export const handler = async (context) => {
-  if ((Date.now() - COOLDOWN_AT) / 1000 < 5) {
-    return ErrorResponse('You\'re spamming too much... Please, wait for a few seconds.', context);
-  }
-
-  COOLDOWN_AT = Date.now();
-
   try {
     let $ = await get$();
     let lastPage = +$('.ptt')
@@ -66,6 +68,7 @@ export const handler = async (context) => {
 
 export default () => ({
   handler,
+  middleware,
   triggers: COMMAND_TRIGGERS.EHRANDOM,
-  description: 'Posts random EH page',
+  description: 'Posts random EH image from a random gallery',
 });
