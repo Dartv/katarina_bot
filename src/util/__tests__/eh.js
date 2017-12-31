@@ -39,13 +39,13 @@ describe('eh', () => {
       const bar = 5;
       const params = { page, foo, bar };
       const expected = `${EH_URL}/?page=${page}&foo=${foo}&bar=${bar}`;
-      const actual = constructRequestUrl(params);
+      const actual = constructRequestUrl(EH_URL, params);
 
       expect(actual).toBe(expected);
     });
 
     it('returns base url if no params provided', () => {
-      expect(constructRequestUrl()).toBe(EH_URL);
+      expect(constructRequestUrl(EH_URL, {})).toBe(EH_URL);
     });
   });
 

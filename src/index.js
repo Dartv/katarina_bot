@@ -1,10 +1,10 @@
 import { Client } from 'ghastly';
 import YouTube from 'simple-youtube-api';
 
-import { COMMAND_TRIGGERS } from './util/constants';
 import store from './store';
 
 require('dotenv').config({ path: './.env' });
+const { COMMAND_TRIGGERS } = require('./util/constants');
 
 const prefix = process.env.BOT_PREFIX;
 

@@ -4,16 +4,16 @@ import { compose, reduce, keys, replace, defaultTo, curry } from 'ramda';
 import { EH_URL } from './constants';
 import { getRandomArrayIndex } from './helpers';
 
-export const constructRequestUrl = qparams => compose(
+export const constructRequestUrl = curry((url, qparams) => compose(
   replace(/&$/, ''),
-  reduce((url, key) => {
+  reduce((acc, key) => {
     const qparam = `${key}=${qparams[key]}`;
-    if (url === EH_URL) return `${url}/?${qparam}&`;
-    return `${url}${qparam}&`;
-  }, EH_URL),
+    if (acc === url) return `${acc}/?${qparam}&`;
+    return `${acc}${qparam}&`;
+  }, url),
   keys,
   defaultTo({}),
-)(qparams);
+)(qparams));
 
 export const getLastPage = $ => +$('.ptt')
   .find('td')

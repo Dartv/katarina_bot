@@ -1,6 +1,6 @@
 export * from './helpers';
-export * from './constants';
 export * from './eh';
+export * from './constants';
 
 export { default as formatDescription } from './formatDescription';
 export { default as lenses, lensIsFalsy, viewOr } from './lenses';
