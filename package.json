@@ -13,16 +13,12 @@
     "jest": "./node_modules/.bin/jest",
     "eslint": "./node_modules/.bin/eslint src"
   },
-  "jest": {
-    "transform": {
-      ".*": "babel-jest"
-    }
-  },
   "pre-commit": [
     "eslint",
     "jest"
   ],
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "ffmpeg-binaries": "^3.2.2-3",
@@ -31,8 +27,10 @@
     "mongoose": "^4.11.13",
     "mongoose-type-url": "^1.0.2",
     "mz": "^2.7.0",
+    "node-fetch": "^1.7.3",
     "node-opus": "^0.2.7",
     "ramda": "^0.24.1",
+    "random-int": "^1.0.0",
     "repatch": "^1.3.11",
     "request": "^2.83.0",
     "simple-youtube-api": "^3.0.1",

@@ -30,6 +30,7 @@ export const COMMAND_TRIGGERS = {
   SKIP: ['skip'],
   PAUSE: ['pause'],
   RESUME: ['resume'],
+  EHRANDOM: ['ehrandom', 'ehr'],
 };
 
 export const FONTS = {
@@ -58,3 +59,5 @@ export const ERRORS = {
   YT_NO_CHOICE: 'You didn\'t specify a video to play',
   YT_NOT_FOUND: 'Requested video not found',
 };
+
+export const EH_URL = process.env.EH_URL;
