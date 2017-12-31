@@ -6,7 +6,7 @@ import {
   getLastPage,
   constructRequestUrl,
   getGalleryTags,
-  getRandomGalleryTag,
+  getRandomGalleryLink,
 } from '../eh';
 import { EH_URL } from '../constants';
 
@@ -49,7 +49,7 @@ describe('eh', () => {
     });
   });
 
-  describe('getGalleryTags & getRandomGalleryTag', () => {
+  describe('getGalleryTags & getRandomGalleryLink', () => {
     const tagsLen = 5;
     const gs = times(() => times(() => random(1, 10000), 2), tagsLen);
     const tags = map(([gid, token]) => `
@@ -67,8 +67,8 @@ describe('eh', () => {
 
     expect(gtags).toHaveLength(tagsLen);
 
-    const $randomTag = getRandomGalleryTag($);
+    const url = getRandomGalleryLink($);
     const regex = new RegExp(`${EH_URL}/g/\\d+/\\d+$`);
-    expect($randomTag.attr('href')).toMatch(regex);
+    expect(url).toMatch(regex);
   });
 });

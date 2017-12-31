@@ -25,11 +25,11 @@ export const getRandomPage = compose(random, getLastPage);
 export const getTags = curry((q, $) => $(`a[href*="${EH_URL}/${q}/"]`));
 export const getGalleryTags = getTags('g');
 export const getImageTags = getTags('s');
-export const getRandomTag = curry((f, $) => {
+export const getRandomLink = curry((f, $) => {
   const tags = f($);
   const idx = getRandomArrayIndex(tags);
   const tag = tags[idx];
-  return $(tag);
+  return $(tag).attr('href');
 });
-export const getRandomGalleryTag = getRandomTag(getGalleryTags);
-export const getRandomImageTag = getRandomTag(getImageTags);
+export const getRandomGalleryLink = getRandomLink(getGalleryTags);
+export const getRandomImageLink = getRandomLink(getImageTags);
