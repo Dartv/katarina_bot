@@ -62,3 +62,4 @@ export const ERRORS = {
 };
 
 export const EH_URL = process.env.EH_URL;
+export const EH_HTML_PATH = path.join(tmpdir(), 'eh.html');

@@ -1,7 +1,9 @@
 import random from 'random-int';
-import { compose, reduce, keys, replace, defaultTo, curry } from 'ramda';
+import { compose, reduce, keys, replace, defaultTo, curry, invoker } from 'ramda';
+import cheerio from 'cheerio';
+import { readFile } from 'mz/fs';
 
-import { EH_URL } from './constants';
+import { EH_URL, EH_HTML_PATH } from './constants';
 import { getRandomArrayIndex } from './helpers';
 
 export const constructRequestUrl = curry((url, qparams) => compose(
@@ -33,3 +35,11 @@ export const getRandomLink = curry((f, $) => {
 });
 export const getRandomGalleryLink = getRandomLink(getGalleryTags);
 export const getRandomImageLink = getRandomLink(getImageTags);
+
+
+export const getHtml = invoker(0, 'text');
+export const getImageSrc = $ => $('#img').attr('src');
+export const readHtmlFromCache = async () => {
+  const html = await readFile(EH_HTML_PATH, 'utf8');
+  return cheerio.load(html);
+};

@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
-import { join } from 'path';
-import { tmpdir } from 'os';
-import { readFile } from 'mz/fs';
-import { objOf, invoker } from 'ramda';
+import { objOf } from 'ramda';
 
 import {
   constructRequestUrl,
@@ -12,23 +9,16 @@ import {
   getRandomImageLink,
   COMMAND_TRIGGERS,
   EH_URL,
+  readHtmlFromCache,
+  getHtml,
+  getImageSrc,
 } from '../util';
 import { FileResponse, ErrorResponse } from './responses';
 import { withCooldown } from './middleware';
 
 export const middleware = [withCooldown(5000)];
 
-const HTML_FILE_PATH = join(tmpdir(), 'eh.html');
-
-const get$ = async () => {
-  const html = await readFile(HTML_FILE_PATH, 'utf8');
-  return cheerio.load(html);
-};
-
-const getHtml = invoker(0, 'text');
-const getImageSrc = $ => $('#img').attr('src');
-
-export const handler = async context => get$()
+export const handler = async context => readHtmlFromCache()
   .then(getRandomPage)
   .then(objOf('page'))
   .then(constructRequestUrl(EH_URL))
