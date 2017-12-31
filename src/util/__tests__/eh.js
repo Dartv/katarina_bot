@@ -1,6 +1,13 @@
 import cheerio from 'cheerio';
+import { times, map } from 'ramda';
+import random from 'random-int';
 
-import { getLastPage, constructRequestUrl } from '../eh';
+import {
+  getLastPage,
+  constructRequestUrl,
+  getGalleryTags,
+  getRandomGalleryTag,
+} from '../eh';
 import { EH_URL } from '../constants';
 
 describe('eh', () => {
@@ -40,5 +47,28 @@ describe('eh', () => {
     it('returns base url if no params provided', () => {
       expect(constructRequestUrl()).toBe(EH_URL);
     });
+  });
+
+  describe('getGalleryTags & getRandomGalleryTag', () => {
+    const tagsLen = 5;
+    const gs = times(() => times(() => random(1, 10000), 2), tagsLen);
+    const tags = map(([gid, token]) => `
+      <a href="${EH_URL}/g/${gid}/${token}">gallery ${gid}</a>
+    `, gs).join('\n');
+    const html = `
+      <div>
+        <div>
+          ${tags}
+        </div>
+      </div>
+    `;
+    const $ = cheerio.load(html);
+    const gtags = getGalleryTags($);
+
+    expect(gtags).toHaveLength(tagsLen);
+
+    const $randomTag = getRandomGalleryTag($);
+    const regex = new RegExp(`${EH_URL}/g/\\d+/\\d+$`);
+    expect($randomTag.attr('href')).toMatch(regex);
   });
 });

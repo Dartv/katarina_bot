@@ -6,6 +6,7 @@ import {
   concatRight,
   joinWithArray,
   autoWrap,
+  getRandomArrayIndex,
 } from '../helpers';
 
 describe('indexByName', () => {
@@ -59,5 +60,12 @@ describe('autoWrap', () => {
     const expected = 'hello there my \n beautiful friend. \n How are you \n doing?';
     const actual = autoWrap(breakAt)(content);
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('getRandomArrayIndex', () => {
+  it('gets random index from array', () => {
+    const array = [1, 2, 3, 4];
+    expect(getRandomArrayIndex(array)).toEqual(expect.any(Number));
   });
 });

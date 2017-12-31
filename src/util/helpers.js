@@ -1,4 +1,5 @@
 import R from 'ramda';
+import random from 'random-int';
 
 import lenses, { last } from './lenses';
 
@@ -41,3 +42,5 @@ export const autoWrap = breakAt => R.compose(
     R.over(last, R.append(el)),
   )(acc), []),
 );
+
+export const getRandomArrayIndex = R.compose(random, R.dec, R.length);
