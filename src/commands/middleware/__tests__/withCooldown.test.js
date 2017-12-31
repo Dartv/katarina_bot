@@ -32,4 +32,15 @@ describe('withCooldown', () => {
 
     expect(response).toBe(true);
   });
+
+  it('does not throw when using different instances', async () => {
+    const COOLDOWN = 500;
+    const middleware1 = withCooldown(COOLDOWN, ERRORS.CMD_CD);
+    const middleware2 = withCooldown(COOLDOWN, ERRORS.CMD_CD);
+    const next = context => middleware2(T, context);
+    const context = createContext({});
+    const response = await middleware1(next, context);
+
+    expect(response).toBe(true);
+  });
 });

@@ -2,7 +2,7 @@ import { ErrorResponse } from '../responses';
 import { ERRORS } from '../../util/constants';
 
 export default (
-  COOLDOWN_TIME_IN_MS = 5000,
+  COOLDOWN_TIME_IN_MS = 1000,
   message = ERRORS.CMD_CD,
 ) => {
   let COOLDOWN_AT;
