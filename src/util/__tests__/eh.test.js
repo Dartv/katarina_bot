@@ -67,7 +67,7 @@ describe('eh', () => {
 
     expect(gtags).toHaveLength(tagsLen);
 
-    const url = getRandomGalleryLink($);
+    const { url } = getRandomGalleryLink($);
     const regex = new RegExp(`${EH_URL}/g/\\d+/\\d+$`);
     expect(url).toMatch(regex);
   });

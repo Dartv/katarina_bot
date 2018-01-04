@@ -1,9 +1,9 @@
-import { injectGuild, injectUser, expectGuildToHaveImage, deleteMessage } from './middleware';
+import { injectGuild, injectUser, expectGuildToHaveImage } from './middleware';
 import { ref, content } from '../util/parameters';
 import { handler } from './post';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const middleware = [injectGuild(), injectUser(), expectGuildToHaveImage(), deleteMessage()];
+export const middleware = [injectGuild(), injectUser(), expectGuildToHaveImage()];
 
 export default () => ({
   middleware,

@@ -31,7 +31,10 @@ export const getRandomLink = curry((f, $) => {
   const tags = f($);
   const idx = getRandomArrayIndex(tags);
   const tag = tags[idx];
-  return $(tag).attr('href');
+  return {
+    url: $(tag).attr('href'),
+    index: idx,
+  };
 });
 export const getRandomGalleryLink = getRandomLink(getGalleryTags);
 export const getRandomImageLink = getRandomLink(getImageTags);
