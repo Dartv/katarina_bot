@@ -1,5 +1,5 @@
 import random from 'random-int';
-import { compose, reduce, keys, replace, defaultTo, curry, invoker } from 'ramda';
+import { compose, reduce, keys, replace, defaultTo, curry, invoker, clamp, dec } from 'ramda';
 import cheerio from 'cheerio';
 import { readFile } from 'mz/fs';
 
@@ -22,7 +22,7 @@ export const getLastPage = $ => +$('.ptt')
   .last()
   .prev()
   .text();
-export const getRandomPage = compose(random, getLastPage);
+export const getRandomPage = compose(clamp(0, Infinity), dec, random, getLastPage);
 
 export const getTags = curry((q, $) => $(`a[href*="${EH_URL}/${q}/"]`));
 export const getGalleryTags = getTags('g');

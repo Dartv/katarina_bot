@@ -10,6 +10,7 @@ const options = { timestamps: true };
 
 const GuildSchema = new Schema({
   discordId: { type: String, required: true, index: true },
+  prefix: { type: String, index: true },
   images: {
     type: [{
       ref: {

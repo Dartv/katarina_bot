@@ -17,7 +17,9 @@ import stop from './stop';
 import skip from './skip';
 import pause from './pause';
 import resume from './resume';
-import ehrandom from './ehrandom';
+import eh from './eh';
+import exh from './exh';
+import ehignore from './ehignore';
 
 const commands = [
   add,
@@ -38,7 +40,8 @@ const commands = [
   skip,
   pause,
   resume,
-  ehrandom,
+  eh,
+  exh,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

@@ -30,7 +30,8 @@ export const COMMAND_TRIGGERS = {
   SKIP: ['skip'],
   PAUSE: ['pause'],
   RESUME: ['resume'],
-  EHRANDOM: ['ehrandom', 'ehr'],
+  EH: ['eh'],
+  EHIGNORE: ['ehignore'],
 };
 
 export const FONTS = {
@@ -61,5 +62,8 @@ export const ERRORS = {
   CMD_CD: 'This command is on the cooldown... Please, wait for a few seconds.',
 };
 
-export const EH_URL = process.env.EH_URL;
+export const {
+  EH_URL,
+  EH_API_URL,
+} = process.env;
 export const EH_HTML_PATH = path.join(tmpdir(), 'eh.html');

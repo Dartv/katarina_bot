@@ -18,17 +18,20 @@ export default () => async (next, context) => {
       // eslint-disable-next-line max-len
       .setDescription(`You searched for "${query}". To play a video, enter the result number of the video (e.g. "1" to play the first result) within ${time} seconds.`);
 
-    videos.forEach(({ title, description, publishedAt }, index) => {
+    videos.forEach(({ title, publishedAt, channel = {}, ...other }, index) => {
+      const getDateString = date =>
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
       embed.addField(
-        // eslint-disable-next-line max-len
-        `${index + 1}. ${title} [${publishedAt.getFullYear()}-${publishedAt.getMonth() + 1}-${publishedAt.getDate()}]`,
-        description,
+        /* eslint-disable max-len */
+        `${index + 1}. ${title}`,
+        `${channel.title}: ${getDateString(publishedAt)}`,
+        /* eslint-enable max-len */
       );
     });
 
-    await dispatch(embed);
+    const message = await dispatch(embed);
 
-    return next({ ...context, videos });
+    return next({ ...context, videos, youtube: { message } });
   } catch (err) {
     return new ErrorResponse(ERRORS.YT_COULD_NOT_DISPLAY_SEARCH_RESULTS, context);
   }
