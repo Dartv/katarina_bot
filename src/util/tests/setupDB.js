@@ -17,13 +17,9 @@ const config = {
 export const connect = () => new Promise((resolve, reject) => {
   if (config.connection) return resolve();
 
-  const options = {
-    useMongoClient: true,
-  };
-
   mongoose.Promise = Promise;
 
-  mongoose.connect(MONGO_TEST_URI, options);
+  mongoose.connect(MONGO_TEST_URI);
 
   config.connection = mongoose.connection;
 
@@ -33,7 +29,7 @@ export const connect = () => new Promise((resolve, reject) => {
       if (e.message.code === 'ETIMEDOUT') {
         console.log(e);
 
-        mongoose.connect(MONGO_TEST_URI, options);
+        mongoose.connect(MONGO_TEST_URI);
       }
 
       console.log(e);
