@@ -24,6 +24,14 @@ export const COMMAND_TRIGGERS = {
   GUILD_POST: ['gpost', 'gp'],
   GUILD_REMOVE: ['gremove', 'gr'],
   WRITE: ['write', 'w'],
+  JOIN: ['join'],
+  PLAY: ['play'],
+  STOP: ['stop'],
+  SKIP: ['skip'],
+  PAUSE: ['pause'],
+  RESUME: ['resume'],
+  EH: ['eh'],
+  EHIGNORE: ['ehignore'],
 };
 
 export const FONTS = {
@@ -36,3 +44,26 @@ export const DIRECTIONS = {
 };
 
 export const TMP_IMAGE_PATH = path.resolve(tmpdir(), '../tmp.png');
+
+export const YT_VIDEO_CHOICE_TIME = 15 * 1000;
+
+export const ERRORS = {
+  VC_NOT_FOUND: 'I\'m not in a voice channel',
+  VC_ALREADY_IN: 'I\'m already in your voice channel',
+  VC_NOT_JOINABLE: 'I\'m not allowed to join your voice channel',
+  VC_NOT_SPEAKABLE: 'I\'m not allowed to speak in your voice channel',
+  VC_NOT_PLAYING: 'I\'m not playing anything right now',
+  VC_ALREADY_PLAYING: 'I\'m already playing right now',
+  VC_UNABLE_TO_JOIN: 'Unable to join a voice channel. Please, try again!',
+  YT_ALREADY_QUEUED: 'This video is already queued',
+  YT_COULD_NOT_DISPLAY_SEARCH_RESULTS: 'Cannot display a list of search results',
+  YT_NO_CHOICE: 'You didn\'t specify a video to play',
+  YT_NOT_FOUND: 'Requested video not found',
+  CMD_CD: 'This command is on the cooldown... Please, wait for a few seconds.',
+};
+
+export const {
+  EH_URL,
+  EH_API_URL,
+} = process.env;
+export const EH_HTML_PATH = path.join(tmpdir(), 'eh.html');

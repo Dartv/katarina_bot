@@ -1,9 +1,9 @@
-import { injectUser, expectUserToHaveImage, deleteMessage } from './middleware';
+import { injectUser, expectUserToHaveImage } from './middleware';
 import * as params from '../util/parameters';
 import { ImageResponse, FileResponse } from './responses';
 import { COMMAND_TRIGGERS } from '../util/constants';
 
-export const middleware = [injectUser(), expectUserToHaveImage(), deleteMessage()];
+export const middleware = [injectUser(), expectUserToHaveImage()];
 
 export const handler = async (context) => {
   const { args: { content }, image } = context;

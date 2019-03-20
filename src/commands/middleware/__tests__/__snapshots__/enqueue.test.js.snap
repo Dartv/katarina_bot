@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`enqueue should match snapshots 1`] = `
+Object {
+  "allIds": Array [
+    1,
+  ],
+  "entities": Object {
+    "1": Object {
+      "allIds": Array [
+        2,
+      ],
+      "entities": Object {
+        "2": Object {
+          "id": 2,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`enqueue should match snapshots 2`] = `
+Object {
+  "args": Object {},
+  "dispatch": [Function],
+  "formatter": [Function],
+  "message": Object {
+    "author": Object {
+      "avatarURL": "http://example.com",
+      "discriminator": "1234",
+      "username": "John",
+    },
+    "channel": Object {
+      "send": [Function],
+    },
+    "guild": Object {
+      "id": 1,
+      "voiceConnection": Object {
+        "channel": Object {},
+      },
+    },
+    "member": Object {
+      "voiceChannel": Object {},
+      "voiceChannelID": null,
+    },
+  },
+  "services": Object {
+    "get": [Function],
+  },
+}
+`;

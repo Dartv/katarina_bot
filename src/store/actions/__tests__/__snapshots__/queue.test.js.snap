@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`queue should match snapshots 1`] = `
+Object {
+  "allIds": Array [],
+  "entities": Object {},
+}
+`;
+
+exports[`queue should match snapshots 2`] = `
+Object {
+  "allIds": Array [
+    1,
+  ],
+  "entities": Object {
+    "1": Object {
+      "allIds": Array [
+        2,
+        3,
+      ],
+      "entities": Object {
+        "2": Object {
+          "id": 2,
+        },
+        "3": Object {
+          "id": 3,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`queue should match snapshots 3`] = `
+Object {
+  "message": Object {
+    "guild": Object {
+      "id": 1,
+    },
+  },
+}
+`;

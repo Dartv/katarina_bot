@@ -23,6 +23,10 @@ const UserSchema = new Schema({
     max: 50,
     default: [],
   },
+  ignoreTags: [{
+    type: String,
+    default: [],
+  }],
 }, options);
 
 Object.assign(UserSchema, { statics, methods });

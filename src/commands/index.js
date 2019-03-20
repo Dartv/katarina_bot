@@ -11,6 +11,14 @@ import guildPost from './guildPost';
 import guildList from './guildList';
 import guildRemove from './guildRemove';
 import write from './write';
+import join from './join';
+import play from './play';
+import stop from './stop';
+import skip from './skip';
+import pause from './pause';
+import resume from './resume';
+import eh from './eh';
+import exh from './exh';
 
 const commands = [
   add,
@@ -25,6 +33,14 @@ const commands = [
   guildList,
   guildRemove,
   write,
+  join,
+  play,
+  stop,
+  skip,
+  pause,
+  resume,
+  eh,
+  exh,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

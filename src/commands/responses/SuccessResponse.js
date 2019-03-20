@@ -11,7 +11,7 @@ export class SuccessResponse extends Response {
       embed
         .setColor(COLORS.SUCCESS)
         .setAuthor(message.author.username, message.author.avatarURL)
-        .setTitle(`✅ ${title}!`)
+        .setTitle(`✅ ${title}`)
         .setDescription(description);
       return message.channel.send({ embed });
     });
