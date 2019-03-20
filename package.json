@@ -14,8 +14,7 @@
     "eslint": "./node_modules/.bin/eslint src"
   },
   "pre-commit": [
-    "eslint",
-    "jest"
+    "eslint"
   ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
