@@ -18,7 +18,7 @@ client.services.instance('music.store', store);
 
 client.on('ready', () => {
   console.log('I\'m ready!');
-  client.user.setGame(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
+  client.user.setActivity(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
 });
 
 client.on('dispatchFail', (reason, { error }) => {

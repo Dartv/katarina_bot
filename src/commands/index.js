@@ -19,6 +19,7 @@ import pause from './pause';
 import resume from './resume';
 import eh from './eh';
 import exh from './exh';
+import bssubscribe from './bssubscribe';
 
 const commands = [
   add,
@@ -41,6 +42,7 @@ const commands = [
   resume,
   eh,
   exh,
+  bssubscribe,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

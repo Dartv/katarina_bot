@@ -32,6 +32,9 @@ const GuildSchema = new Schema({
     max: 200,
     default: [],
   },
+  subscribedMappers: [String],
+  beatSaverLastViewedMapId: String,
+  beatSaverLastVisitedAt: String,
 }, options);
 
 Object.assign(GuildSchema, { statics, methods });

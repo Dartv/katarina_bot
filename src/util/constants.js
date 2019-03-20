@@ -31,7 +31,7 @@ export const COMMAND_TRIGGERS = {
   PAUSE: ['pause'],
   RESUME: ['resume'],
   EH: ['eh'],
-  EHIGNORE: ['ehignore'],
+  BSSUBSCRIBE: ['bssubscribe'],
 };
 
 export const FONTS = {
