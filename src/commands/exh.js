@@ -26,6 +26,7 @@ export const middleware = [withCooldown(5000)];
 export const handler = async (context) => {
   let cookie = `ipb_member_id=${EH_MEMBER_ID}; ipb_pass_hash=${EH_PASS_HASH};`;
   const { args: { query = '' } } = context;
+  // eslint-disable-next-line max-len
   const URL = `${EXH_URL}/?f_search=${query}&f_apply=Apply+Filter&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=4`;
 
   return fetch(URL, {
@@ -44,7 +45,7 @@ export const handler = async (context) => {
   .then(page => `${URL}&page=${page}`)
   .then(fetch, {
     headers: {
-      cookie: 'ipb_member_id=2930211; ipb_pass_hash=fc0d0b1e6207c54c504a10966514f8b9; ipb_coppa=0; ipb_session_id=b1da06e1213ae591ecd862287aa5dcaf; igneous=553fc13b3; lv=1522514475-1522514475',
+      cookie: null, // TODO: handle cookies
     },
   })
   .then(tap(console.log))

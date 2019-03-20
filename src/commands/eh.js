@@ -20,6 +20,7 @@ export const middleware = [withCooldown(5000)];
 
 export const handler = async (context) => {
   const { args: { query = '' } } = context;
+  // eslint-disable-next-line max-len
   const URL = `${EH_URL}/?f_search=${query}&f_doujinshi=1&f_manga=1&f_artistcg=1&f_gamecg=1&f_western=1&f_non-h=0&f_imageset=1&f_cosplay=1&f_asianporn=0&f_misc=1&f_apply=Apply+Filter&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=4`;
 
   return fetch(URL)
