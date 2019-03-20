@@ -19,7 +19,6 @@ import pause from './pause';
 import resume from './resume';
 import eh from './eh';
 import exh from './exh';
-import ehignore from './ehignore';
 
 const commands = [
   add,
