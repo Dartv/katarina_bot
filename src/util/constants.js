@@ -67,3 +67,17 @@ export const {
   EH_API_URL,
 } = process.env;
 export const EH_HTML_PATH = path.join(tmpdir(), 'eh.html');
+
+export const BOT_PREFIXES = [
+  '!',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '|',
+  ',',
+  '.',
+  '=',
+  '?',
+];
