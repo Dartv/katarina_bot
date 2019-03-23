@@ -4,8 +4,10 @@ import { RichEmbed } from 'discord.js';
 
 import { COLORS } from '../../util/constants';
 
+const DEFAULT_ERROR_MESSAGE = 'Ooops... Something went wrong!';
+
 export class ErrorResponse extends Response {
-  constructor(error, { message, formatter: { code } }) {
+  constructor(error = DEFAULT_ERROR_MESSAGE, { message, formatter: { code } }) {
     super(async () => {
       const embed = new RichEmbed();
       embed
