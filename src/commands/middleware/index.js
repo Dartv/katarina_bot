@@ -23,4 +23,6 @@ export { default as stopCurrentlyPlaying } from './stopCurrentlyPlaying';
 export { default as ensureIsNotPaused } from './ensureIsNotPaused';
 export { default as ensureIsPaused } from './ensureIsPaused';
 export { default as withCooldown } from './withCooldown';
-export { default as checkAlreadySubscribed } from './checkAlreadySubscribed';
+export { default as checkSubscribedToMapper } from './checkSubscribedToMapper';
+export { default as ensureSubscribedToMapper } from './ensureSubscribedToMapper';
+export { default as injectContext } from './injectContext';
