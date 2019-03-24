@@ -16,14 +16,18 @@ export const middleware = [
 
 // TODO: check if mapper exists
 export const handler = async (context) => {
-  const { args: { mapper }, user, guild, models: { Subscription } } = context;
+  const {
+    args: { mapper },
+    models: { Subscription },
+    message: { author, guild },
+  } = context;
 
   try {
     await new Subscription({
-      userId: user.id,
+      userId: author.id,
       guildId: guild.id,
       topic: Topics.MAPPER,
-      value: [mapper],
+      value: mapper,
     }).save();
   } catch (err) {
     console.error(err);

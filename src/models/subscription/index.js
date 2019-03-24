@@ -18,7 +18,7 @@ const SubscriptionSchema = new Schema({
       '{PATH} is not an available type',
     ],
   },
-  value: { type: [String], required: true },
+  value: { type: String, required: true },
 }, options);
 
 Object.assign(SubscriptionSchema);

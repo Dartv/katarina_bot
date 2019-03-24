@@ -7,14 +7,14 @@ import { COLORS } from '../../util/constants';
 const DEFAULT_ERROR_MESSAGE = 'Ooops... Something went wrong!';
 
 export class ErrorResponse extends Response {
-  constructor(error = DEFAULT_ERROR_MESSAGE, { message, formatter: { code } }) {
+  constructor(error, { message, formatter: { code } }) {
     super(async () => {
       const embed = new RichEmbed();
       embed
         .setColor(COLORS.ERROR)
         .setAuthor(message.author.username, message.author.avatarURL)
         .addField('💬 INPUT', code(message.content))
-        .addField('🚫 ERROR', error);
+        .addField('🚫 ERROR', error || DEFAULT_ERROR_MESSAGE);
       return message.channel.send({ embed });
     });
   }

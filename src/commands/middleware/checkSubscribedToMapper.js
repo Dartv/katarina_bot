@@ -1,12 +1,16 @@
 import { ErrorResponse } from '../responses';
 
 export default () => async (next, context) => {
-  const { args: { mapper }, models: { Subscription }, user } = context;
+  const {
+    args: { mapper },
+    models: { Subscription },
+    message: { author },
+  } = context;
 
-  const subscription = await Subscription.findOne({ userId: user.id, value: mapper });
+  const subscription = await Subscription.findOne({ userId: author.id, value: mapper });
 
   if (subscription) {
-    return new ErrorResponse(`You've already subscribed to ${mapper}`, context);
+    return ErrorResponse(`You've already subscribed to ${mapper}`, context);
   }
 
   return next(context);
