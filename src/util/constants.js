@@ -31,7 +31,8 @@ export const COMMAND_TRIGGERS = {
   PAUSE: ['pause'],
   RESUME: ['resume'],
   EH: ['eh'],
-  EHIGNORE: ['ehignore'],
+  MAPPER_SUB: ['mappersub'],
+  MAPPER_UNSUB: ['mapperunsub'],
 };
 
 export const FONTS = {
@@ -81,3 +82,8 @@ export const BOT_PREFIXES = [
   '=',
   '?',
 ];
+
+export const Topics = {
+  MAPPER: 1,
+  INFO: 2,
+};
