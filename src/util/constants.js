@@ -85,4 +85,5 @@ export const BOT_PREFIXES = [
 
 export const Topics = {
   MAPPER: 1,
+  INFO: 2,
 };

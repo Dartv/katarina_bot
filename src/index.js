@@ -9,10 +9,11 @@ const { COMMAND_TRIGGERS, BOT_PREFIXES } = require('./util/constants');
 const prefix = process.env.BOT_PREFIX;
 const messages = [];
 
-const client = new Client({ prefix });
+export const client = new Client({ prefix });
 
 require('./services/mongo_connect');
 require('./commands').default(client);
+const { CronService } = require('./services/cron');
 
 client.services.instance('music.youtube', new YouTube(process.env.YOUTUBE_API_KEY));
 client.services.instance('music.store', store);
@@ -20,6 +21,8 @@ client.services.instance('music.store', store);
 client.on('ready', () => {
   console.log('I\'m ready!');
   client.user.setActivity(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
+
+  CronService.start();
 });
 
 client.on('dispatchFail', (reason, { error }) => {
