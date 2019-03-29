@@ -7,13 +7,18 @@ import { Subscription } from '../models';
 import { Topics, COLORS } from '../util/constants';
 import { client } from '../';
 
-const TEN_MINUTES = '0 */5 * * * *';
+const TEN_MINUTES = '0 */10 * * * *';
 const URL = 'https://beatsaver.com/api/songs/new';
+const MAPS_PER_PAGE = 20;
 
 const MAPPER_INFO = 'MAPPER_INFO';
 
-const onTick = async () => {
-  const res = await fetch(URL);
+const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout));
+
+const onTick = async (start = 0) => {
+  if (start > MAPS_PER_PAGE * 3) return Promise.resolve();
+
+  const res = await fetch(`${URL}/${start}`);
   const { songs } = await res.json();
   const data = R.groupBy(R.prop('uploader'), songs);
   const subs = await Subscription.find({ topic: Topics.MAPPER });
@@ -52,7 +57,11 @@ const onTick = async () => {
     return undefined;
   });
 
-  return Promise.all(R.flatten(promise)).then(R.reject(R.isNil));
+  await Promise.all(R.flatten(promise)).then(R.reject(R.isNil));
+
+  await sleep(500);
+
+  return onTick(start + MAPS_PER_PAGE);
 };
 
 export default new CronJob({
@@ -60,7 +69,7 @@ export default new CronJob({
   onTick: async () => {
     console.log('Scanning new songs...');
     try {
-      await onTick();
+      await onTick(0);
 
       const query = { userId: MAPPER_INFO };
       const modifier = {

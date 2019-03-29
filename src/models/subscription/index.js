@@ -3,7 +3,7 @@ import 'mongoose-type-url';
 
 import { Topics } from '../../util/constants';
 
-const { Schema } = mongoose;
+const { Schema, SchemaTypes } = mongoose;
 
 const options = { timestamps: true };
 
@@ -18,7 +18,7 @@ const SubscriptionSchema = new Schema({
       '{PATH} is not an available type',
     ],
   },
-  value: { type: String, required: true },
+  value: { type: SchemaTypes.Mixed, required: true },
 }, options);
 
 Object.assign(SubscriptionSchema);
