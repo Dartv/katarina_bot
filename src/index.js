@@ -41,7 +41,7 @@ client.on('message', async (message) => {
   const index = Math.floor(Math.random() * messages.length);
 
   if (message.isMentioned(client.user)) {
-    const reply = messages[index];
+    const reply = messages[index] ? messages[index] : '<:CeceClownW:561235965197418498>';
     const emoji = client.emojis.random();
 
     messages.splice(index, 1);
