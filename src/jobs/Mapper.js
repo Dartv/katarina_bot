@@ -7,7 +7,7 @@ import { Subscription } from '../models';
 import { Topics, COLORS } from '../util/constants';
 import { client } from '../';
 
-const TEN_MINUTES = '0 */5 * * * *';
+const TEN_MINUTES = '0 */10 * * * *';
 const URL = 'https://beatsaver.com/api/songs/new';
 const MAPS_PER_PAGE = 20;
 
