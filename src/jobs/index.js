@@ -1,1 +1,1 @@
-export { default as Mapper } from './Mapper';
+export { default as mapper } from './mapper';
