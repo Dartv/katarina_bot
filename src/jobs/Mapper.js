@@ -5,6 +5,7 @@ import { RichEmbed } from 'discord.js';
 
 import { Subscription } from '../models';
 import { Topics, COLORS } from '../util/constants';
+import lenses from '../util/lenses';
 import { client } from '../';
 
 const TEN_MINUTES = '0 */10 * * * *';
@@ -15,14 +16,22 @@ const MAPPER_INFO = 'MAPPER_INFO';
 
 const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
+const lowerFocused = (lens, data) => R.map(R.over(lens, R.toLower), data);
+
 const onTick = async (start = 0) => {
   if (start > MAPS_PER_PAGE * 3) return Promise.resolve();
 
   const res = await fetch(`${URL}/${start}`);
   const { songs } = await res.json();
-  const data = R.groupBy(R.prop('uploader'), songs);
+  const data = R.groupBy(
+    R.view(lenses.uploader),
+    lowerFocused(lenses.uploader, songs),
+  );
   const subs = await Subscription.find({ topic: Topics.MAPPER });
-  const subscriptions = R.groupBy(R.prop('value'), subs);
+  const subscriptions = R.groupBy(
+    R.view(lenses.value),
+    lowerFocused(lenses.value, subs),
+  );
   const mapperInfo = await Subscription.findOne({ userId: MAPPER_INFO });
   const lastFetchedAt = mapperInfo ? mapperInfo.value : new Date().getTime();
   const promise = await Object.keys(data).map((mapper) => {

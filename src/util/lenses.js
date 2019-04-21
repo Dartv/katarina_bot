@@ -41,6 +41,9 @@ const end = lensInvoker(0, 'end');
 const pause = lensInvoker(0, 'pause');
 const resume = lensInvoker(0, 'resume');
 
+const uploader = R.lensProp('uploader');
+const value = R.lensProp('value');
+
 const head = R.lensIndex(0);
 
 const messageAttachments = R.compose(message, attachments);
@@ -97,6 +100,8 @@ export default {
   optional,
   name,
   ref,
+  uploader,
+  value,
   args: Object.assign(args, {
     url: argsUrl,
     ref: argsRef,
