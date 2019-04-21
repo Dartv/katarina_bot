@@ -21,6 +21,7 @@ import eh from './eh';
 import exh from './exh';
 import mappersub from './mappersub';
 import mapperunsub from './mapperunsub';
+import danbooru from './danbooru';
 
 const commands = [
   add,
@@ -45,6 +46,7 @@ const commands = [
   exh,
   mappersub,
   mapperunsub,
+  danbooru,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

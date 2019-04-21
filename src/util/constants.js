@@ -33,6 +33,7 @@ export const COMMAND_TRIGGERS = {
   EH: ['eh'],
   MAPPER_SUB: ['mappersub'],
   MAPPER_UNSUB: ['mapperunsub'],
+  DANBOORU: ['danbooru'],
 };
 
 export const FONTS = {
