@@ -1,12 +1,19 @@
 import { Client } from 'ghastly';
 import YouTube from 'simple-youtube-api';
+import Danbooru from 'danbooru';
 
 import store from './store';
 
 require('dotenv').config({ path: './.env' });
 const { COMMAND_TRIGGERS, BOT_PREFIXES } = require('./util/constants');
 
-const prefix = process.env.BOT_PREFIX;
+const {
+  BOT_PREFIX: prefix,
+  BOT_TOKEN,
+  YOUTUBE_API_KEY,
+  DANBOORU_LOGIN,
+  DANBOORU_API_KEY,
+} = process.env;
 const messages = [];
 
 export const client = new Client({ prefix });
@@ -15,8 +22,9 @@ require('./services/mongo_connect');
 require('./commands').default(client);
 const { CronService } = require('./services/cron');
 
-client.services.instance('music.youtube', new YouTube(process.env.YOUTUBE_API_KEY));
+client.services.instance('music.youtube', new YouTube(YOUTUBE_API_KEY));
 client.services.instance('music.store', store);
+client.services.instance('danbooru', new Danbooru(`${DANBOORU_LOGIN}:${DANBOORU_API_KEY}`));
 
 client.on('ready', () => {
   console.log('I\'m ready!');
@@ -58,4 +66,4 @@ client.on('message', async (message) => {
   messages.push(message.content);
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(BOT_TOKEN);
