@@ -8,7 +8,7 @@ export const handler = async (context) => {
   const { args: { query }, services } = context;
   const booru = services.get('danbooru');
   try {
-    const options = { tags: query.join(' '), random: true, limit: 1 };
+    const options = { tags: query ? query.join(' ') : '', random: true, limit: 1 };
     const posts = await booru.posts(options);
     const post = posts[0];
     const url = booru.url(post.file_url);
