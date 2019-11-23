@@ -43,11 +43,7 @@ export const handler = async (context) => {
     .then(cheerio.load.bind(cheerio))
     .then(getRandomPage)
     .then(page => `${URL}&page=${page}`)
-    .then(fetch, {
-      headers: {
-        cookie: null, // TODO: handle cookies
-      },
-    })
+    .then(fetch)
     .then(tap(console.log))
     .then(getHtml)
     .then(cheerio.load.bind(cheerio))

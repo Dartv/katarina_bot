@@ -47,5 +47,7 @@ module.exports = {
     'class-methods-use-this': 0,
     'no-underscore-dangle': 0,
     'arrow-parens': 0,
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': 'error',
   },
 };

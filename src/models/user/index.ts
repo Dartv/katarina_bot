@@ -23,10 +23,8 @@ const UserSchema = new Schema({
     max: 50,
     default: [],
   },
-  ignoreTags: [{
-    type: String,
-    default: [],
-  }],
+  characters: [SchemaTypes.ObjectId],
+  lastRolledAt: Date,
 }, options);
 
 Object.assign(UserSchema, { statics, methods });

@@ -38,7 +38,7 @@ client.services.instance('music.youtube', new YouTube(YOUTUBE_API_KEY));
 client.services.instance('music.store', store);
 client.services.instance('danbooru', new Danbooru(`${DANBOORU_LOGIN}:${DANBOORU_API_KEY}`));
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log('I\'m ready!');
   client.user.setActivity(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
 });

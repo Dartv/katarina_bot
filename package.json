@@ -6,9 +6,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc",
     "start": "lookenv --path=./env/lookenv.js -- node dist/index.js",
-    "start:watch": "lookenv --path=./env/lookenv.js -- tsc -w",
+    "start:watch": "lookenv --path=./env/lookenv.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "./node_modules/.bin/jest",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx"
   },
@@ -16,9 +17,10 @@
     "lint"
   ],
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.3",
     "cron": "^1.7.0",
     "danbooru": "^3.1.0",
+    "date-fns": "^2.8.1",
     "discord.js": "^11.5.1",
     "dotenv": "^4.0.0",
     "ffmpeg-binaries": "^4.0.0",
@@ -39,8 +41,11 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.7.2",
+    "@types/cheerio": "^0.22.14",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.11",
+    "@types/node-fetch": "^2.5.4",
+    "@types/puppeteer": "^2.0.0",
     "@types/ramda": "^0.26.36",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
@@ -62,7 +67,9 @@
     "jest": "^24.9.0",
     "lookenv": "^1.0.1",
     "pre-commit": "^1.2.2",
+    "puppeteer": "^2.0.0",
     "ts-jest": "^24.2.0",
+    "tsc-watch": "^4.0.0",
     "typescript": "^3.7.2"
   }
 }

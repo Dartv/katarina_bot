@@ -20,6 +20,7 @@ import resume from './resume';
 import eh from './eh';
 import exh from './exh';
 import danbooru from './danbooru';
+import roll from './roll';
 
 const commands = [
   add,
@@ -43,6 +44,7 @@ const commands = [
   eh,
   exh,
   danbooru,
+  roll,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

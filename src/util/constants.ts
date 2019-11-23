@@ -34,6 +34,7 @@ export const COMMAND_TRIGGERS = {
   MAPPER_SUB: ['mappersub'],
   MAPPER_UNSUB: ['mapperunsub'],
   DANBOORU: ['danbooru'],
+  ROLL: ['roll'],
 };
 
 export const FONTS = {
@@ -88,3 +89,11 @@ export const Topics = {
   MAPPER: 1,
   INFO: 2,
 };
+
+export enum CharacterStar {
+  ONE_STAR = 1,
+  TWO_STAR,
+  THREE_STAR,
+  FOUR_STAR,
+  FIVE_STAR,
+}
