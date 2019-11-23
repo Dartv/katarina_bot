@@ -47,14 +47,15 @@ client.on('dispatchFail', (reason, { error }) => {
   if (error) console.error(reason, error);
 });
 
-const BOT_PREFIXES_REGEX = new RegExp(`^[${BOT_PREFIXES.join('')}]`);
+const botPrefixesRegex = new RegExp(`^[${BOT_PREFIXES.join('')}]`);
+const endsWithEmoteRegex = /(<:\w+:\d+>)$/;
 
 client.on('message', async (message) => {
   if (message.author.bot) return;
 
   if (message.content.startsWith(prefix)) return;
 
-  if (BOT_PREFIXES_REGEX.test(message.content)) return;
+  if (botPrefixesRegex.test(message.content)) return;
 
   const index = random(messages.length);
 
@@ -63,7 +64,7 @@ client.on('message', async (message) => {
     const emoji = client.emojis.random();
 
     messages.splice(index, 1);
-    message.reply(`${reply} ${emoji}`);
+    message.reply(`${reply.replace(endsWithEmoteRegex, '')} ${emoji}`);
 
     return;
   }
@@ -72,7 +73,9 @@ client.on('message', async (message) => {
     messages.splice(index, 1);
   }
 
-  messages.push(message.content);
+  if (message.content) {
+    messages.push(message.content);
+  }
 });
 
 client.login(BOT_TOKEN);
