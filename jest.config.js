@@ -1,6 +1,16 @@
 module.exports = {
   transform: {
-    '.*': 'babel-jest',
+    '.*.tsx?$': 'ts-jest',
   },
-  setupTestFrameworkScriptFile: '<rootDir>/src/util/setupTests.js',
+  setupFilesAfterEnv: [
+    '<rootDir>/src/util/setupTests.ts',
+  ],
+  testPathIgnorePatterns: [
+    '<rootDir>/dist/',
+  ],
+  modulePaths: [
+    '<rootDir>/node_modules/',
+  ],
+  testURL: 'http://localhost/',
+  testEnvironment: 'node',
 };

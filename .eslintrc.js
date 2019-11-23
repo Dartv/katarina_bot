@@ -3,13 +3,29 @@ module.exports = {
     jest: true,
     node: true,
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: './',
+  },
   plugins: [
+    '@typescript-eslint',
     'import',
     'promise',
   ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
   extends: [
-    'airbnb',
+    'eslint-config-airbnb-base',
+    'plugin:@typescript-eslint/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
   ],
@@ -30,5 +46,6 @@ module.exports = {
     'import/prefer-default-export': 0,
     'class-methods-use-this': 0,
     'no-underscore-dangle': 0,
+    'arrow-parens': 0,
   },
 };
