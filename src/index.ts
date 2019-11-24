@@ -17,6 +17,7 @@ const {
 } = process.env;
 const CACHED_MESSAGES_PATH = path.resolve(__dirname, '../.cached-messages');
 const MESSAGE_LIMIT = 3000;
+const CECE_CLOWN_EMOTE = '<:CeceClownW:561235965197418498>';
 let messages = [];
 
 try {
@@ -60,12 +61,11 @@ client.on('message', async (message) => {
   const index = random(messages.length);
 
   if (message.isMentioned(client.user)) {
-    const reply = messages[index] ? messages[index] : '<:CeceClownW:561235965197418498>';
+    const reply = messages[index] ? messages[index] : CECE_CLOWN_EMOTE;
     const emoji = client.emojis.random();
 
     messages.splice(index, 1);
-    message.reply(`${reply.replace(endsWithEmoteRegex, '')} ${emoji}`);
-
+    await message.reply(`${reply.replace(endsWithEmoteRegex, '')} ${emoji}`);
     return;
   }
 
