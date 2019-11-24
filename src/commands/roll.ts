@@ -17,8 +17,8 @@ const STAR_EMOJI = '⭐️';
 const unlink = promisify(fs.unlink);
 
 const getStarRating = (popularity: number): CharacterStar => {
-  if (popularity <= 100) return CharacterStar.FIVE_STAR;
-  if (popularity <= 1000) return CharacterStar.FOUR_STAR;
+  if (popularity <= 300) return CharacterStar.FIVE_STAR;
+  if (popularity <= 3000) return CharacterStar.FOUR_STAR;
   if (popularity <= 10000) return CharacterStar.THREE_STAR;
   return CharacterStar.TWO_STAR;
 };
@@ -33,7 +33,7 @@ const checkRollCooldown = async (next, context) => {
 
 const middleware = [
   injectUser(),
-  checkRollCooldown,
+  // checkRollCooldown,
 ];
 
 const handler = async (context): Promise<any> => {
@@ -81,6 +81,7 @@ const handler = async (context): Promise<any> => {
         'display: flex; justify-content: space-between; align-items: center; margin: 0 10px;'
       );
       starsEl.innerText = emoji;
+      starsEl.setAttribute('style', 'color: yellow; font-size: 2em;');
       topBox.appendChild(waifuNameEl);
       topBox.appendChild(starsEl);
       waifuEl.querySelector('.waifu-score-tilted').remove();
@@ -93,13 +94,13 @@ const handler = async (context): Promise<any> => {
       document.body.prepend(el);
     }, STAR_EMOJI.repeat(stars));
     const container = await page.$('#waifu-container');
-    const fileName = `${name}.png`;
+    const fileName = `${slug}.png`;
     const path = `${tmpdir()}/${fileName}`;
     const attachment = new Attachment(path, `${fileName}`);
 
     await container.screenshot({ path });
 
-    await context.message.channel.send('', attachment);
+    await context.message.reply('', attachment);
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {
@@ -111,7 +112,7 @@ const handler = async (context): Promise<any> => {
           series,
           popularity,
         },
-      }, { upsert: true }),
+      }, { upsert: true, new: true }),
       unlink(path),
     ]);
 
