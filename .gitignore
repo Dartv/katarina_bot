@@ -5,3 +5,4 @@ yarn-error.log
 .vscode
 dist
 .cached-messages
+ecosystem.config.js
