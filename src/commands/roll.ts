@@ -7,12 +7,10 @@ import { promisify } from 'util';
 import { isThisHour, differenceInMinutes } from 'date-fns';
 import { tmpdir } from 'os';
 
-import { COMMAND_TRIGGERS, CharacterStar } from '../util';
+import { COMMAND_TRIGGERS, CharacterStar, Emoji } from '../util';
 import { Character, User } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
-
-const STAR_EMOJI = '⭐️';
 
 const unlink = promisify(fs.unlink);
 
@@ -92,7 +90,7 @@ const handler = async (context): Promise<any> => {
       waifuNameEl.insertAdjacentElement('afterend', starsEl);
       el.setAttribute('id', 'waifu-container');
       document.body.prepend(el);
-    }, STAR_EMOJI.repeat(stars));
+    }, Emoji.STAR.repeat(stars));
     const container = await page.$('#waifu-container');
     const fileName = `${slug}.png`;
     const path = `${tmpdir()}/${fileName}`;

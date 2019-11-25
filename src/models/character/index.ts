@@ -19,6 +19,7 @@ const CharacterSchema = new Schema({
     min: Math.min(...stars),
     max: Math.max(...stars),
     required: true,
+    index: true,
   },
   popularity: {
     type: Number,
@@ -40,5 +41,7 @@ const CharacterSchema = new Schema({
 }, options);
 
 Object.assign(CharacterSchema);
+
+CharacterSchema.index({ name: 'text' });
 
 export default mongoose.model('character', CharacterSchema);

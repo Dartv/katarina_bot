@@ -11,7 +11,6 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
     'import',
-    'promise',
   ],
   settings: {
     'import/parsers': {
@@ -28,6 +27,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
   rules: {
     'comma-dangle': ['error', {

@@ -21,6 +21,8 @@ import eh from './eh';
 import exh from './exh';
 import danbooru from './danbooru';
 import roll from './roll';
+import mywaifus from './mywaifus';
+import mywaifu from './mywaifu';
 
 const commands = [
   add,
@@ -45,6 +47,8 @@ const commands = [
   exh,
   danbooru,
   roll,
+  mywaifus,
+  mywaifu,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
