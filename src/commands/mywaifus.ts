@@ -2,6 +2,7 @@ import { Command } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { User } from '../models';
+import { ErrorResponse } from './responses';
 
 const handler = async (context) => {
   try {
@@ -48,7 +49,7 @@ const handler = async (context) => {
 
     return data.map(({ name, count }) => `${name} x${count}`).join(', ');
   } catch (err) {
-    return 'Couldn\'t fetch waifus...';
+    return ErrorResponse('Couldn\'t fetch waifus...', context);
   }
 };
 

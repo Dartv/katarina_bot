@@ -42,4 +42,6 @@ const CharacterSchema = new Schema({
 
 Object.assign(CharacterSchema);
 
+CharacterSchema.index({ name: 'text' });
+
 export default mongoose.model('character', CharacterSchema);

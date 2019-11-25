@@ -35,7 +35,8 @@ export const COMMAND_TRIGGERS = {
   MAPPER_UNSUB: ['mapperunsub'],
   DANBOORU: ['danbooru'],
   ROLL: ['roll'],
-  MYWAIFUS: ['mywaifus', 'mw'],
+  MYWAIFUS: ['mywaifus', 'mws'],
+  MYWAIFU: ['mywaifu', 'mw'],
 };
 
 export const FONTS = {
@@ -97,4 +98,8 @@ export enum CharacterStar {
   THREE_STAR,
   FOUR_STAR,
   FIVE_STAR,
+}
+
+export enum Emoji {
+  STAR = '⭐️',
 }
