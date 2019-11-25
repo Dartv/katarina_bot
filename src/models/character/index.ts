@@ -19,6 +19,7 @@ const CharacterSchema = new Schema({
     min: Math.min(...stars),
     max: Math.max(...stars),
     required: true,
+    index: true,
   },
   popularity: {
     type: Number,

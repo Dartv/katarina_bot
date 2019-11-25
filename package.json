@@ -12,6 +12,7 @@
     "start": "lookenv --path=./env/lookenv.dev.js -- node dist/index.js",
     "start:watch": "lookenv --path=./env/lookenv.dev.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "./node_modules/.bin/jest",
+    "eslint": "./node_modules/.bin/eslint",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx"
   },
   "pre-commit": [
@@ -62,7 +63,6 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "5.1.0",
     "eslint-plugin-node": "^5.1.0",
-    "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^24.9.0",

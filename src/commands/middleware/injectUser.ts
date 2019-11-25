@@ -1,7 +1,8 @@
 import { User } from '../../models';
 import { ErrorResponse } from '../responses';
+import { Middleware } from '../../types';
 
-export default () => async (next, context) => {
+export default (): Middleware => async (next, context) => {
   const { message: { author: { id: discordId } } } = context;
   try {
     let user = await User.findOneByDiscordId(discordId);

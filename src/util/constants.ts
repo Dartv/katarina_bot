@@ -35,6 +35,7 @@ export const COMMAND_TRIGGERS = {
   MAPPER_UNSUB: ['mapperunsub'],
   DANBOORU: ['danbooru'],
   ROLL: ['roll'],
+  MYWAIFUS: ['mywaifus', 'mw'],
 };
 
 export const FONTS = {
