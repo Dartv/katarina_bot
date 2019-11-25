@@ -9,7 +9,7 @@ import { ErrorResponse } from './responses';
 const handler = async (context) => {
   try {
     const { user, args, message } = context;
-    const searchName = args.name.trim();
+    const searchName = args.name.join(' ').trim();
     const { characters } = await User.findById(user.id, { characters: 1 });
     const character = await Character.findOne({
       _id: { $in: characters },
@@ -50,6 +50,7 @@ export default (): Command => ({
     {
       name: 'name',
       description: 'waifu name',
+      repeatable: true,
     },
   ],
 });

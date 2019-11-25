@@ -6,7 +6,7 @@ import { ErrorResponse } from './responses';
 
 const handler = async (context) => {
   try {
-    const { user, args: { stars } } = context;
+    const { user, args: { stars }, message } = context;
     const data = await User.aggregate([
       {
         $match: {
@@ -47,7 +47,8 @@ const handler = async (context) => {
       return 'Empty 🤷‍♀️';
     }
 
-    return data.map(({ name, count }) => `${name} x${count}`).join(', ');
+    const msg = data.map(({ name, count }) => `${name} x${count}`).join(', ');
+    return message.reply(msg);
   } catch (err) {
     return ErrorResponse('Couldn\'t fetch waifus...', context);
   }
