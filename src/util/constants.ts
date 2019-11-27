@@ -37,6 +37,9 @@ export const COMMAND_TRIGGERS = {
   ROLL: ['roll'],
   MYWAIFUS: ['mywaifus', 'mws'],
   MYWAIFU: ['mywaifu', 'mw'],
+  ADDFAV: ['addfav'],
+  DELFAV: ['delfav'],
+  FAVS: ['favs'],
 };
 
 export const FONTS = {
