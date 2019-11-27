@@ -1,7 +1,8 @@
-import { Attachment } from 'discord.js';
+import { RichEmbed } from 'discord.js';
+import { pluck } from 'ramda';
 
 import { Command } from '../types';
-import { COMMAND_TRIGGERS, Emoji } from '../util';
+import { COMMAND_TRIGGERS, Emoji, COLORS } from '../util';
 import { injectUser } from './middleware';
 import { User, Character } from '../models';
 import { ErrorResponse } from './responses';
@@ -25,17 +26,25 @@ const handler = async (context) => {
 
     const {
       id,
-      slug,
       imageUrl,
       stars,
       name,
+      series,
     } = character;
 
     const count = characters.filter(_id => _id.toString() === id).length;
-    const attachment = new Attachment(imageUrl, `${slug}.png`);
-    const msg = `${name} x${count} ${Emoji.STAR.repeat(stars)}`;
+    const embed = new RichEmbed({
+      title: name,
+      image: { url: imageUrl },
+      footer: { text: `You have x${count} of this waifu` },
+      color: COLORS.INFO,
+      fields: [
+        { name: 'Stars', value: Emoji.STAR.repeat(stars) },
+        { name: 'Appears in', value: pluck('title', series as any[]).join(', ') },
+      ],
+    });
 
-    await message.reply(msg, attachment);
+    await message.reply(embed);
     return null;
   } catch (err) {
     console.error(err);
