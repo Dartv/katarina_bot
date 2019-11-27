@@ -24,6 +24,7 @@ const UserSchema = new Schema({
     default: [],
   },
   characters: [SchemaTypes.ObjectId],
+  favorites: [SchemaTypes.ObjectId],
   lastRolledAt: Date,
 }, options);
 

@@ -23,6 +23,9 @@ import danbooru from './danbooru';
 import roll from './roll';
 import mywaifus from './mywaifus';
 import mywaifu from './mywaifu';
+import addfav from './addfav';
+import favs from './favs';
+import delfav from './delfav';
 
 const commands = [
   add,
@@ -49,6 +52,9 @@ const commands = [
   roll,
   mywaifus,
   mywaifu,
+  addfav,
+  favs,
+  delfav,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

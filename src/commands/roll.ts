@@ -115,7 +115,7 @@ const handler = async (context): Promise<any> => {
     ]);
 
     await User.findByIdAndUpdate(context.user.id, {
-      $addToSet: {
+      $push: {
         characters: character._id,
       },
       $set: {

@@ -19,7 +19,8 @@ const handler = async (context) => {
     });
 
     if (!character) {
-      return message.reply(`You have no waifu with name "${searchName}"`);
+      await message.reply(`You have no waifu with name "${searchName}"`);
+      return null;
     }
 
     const {
@@ -34,7 +35,8 @@ const handler = async (context) => {
     const attachment = new Attachment(imageUrl, `${slug}.png`);
     const msg = `${name} x${count} ${Emoji.STAR.repeat(stars)}`;
 
-    return message.reply(msg, attachment);
+    await message.reply(msg, attachment);
+    return null;
   } catch (err) {
     console.error(err);
     return ErrorResponse(`Couldn't fetch waifu ${context.args.name}`, context);

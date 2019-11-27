@@ -1,16 +1,15 @@
 import { Command } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
-import { User } from '../models';
 import { ErrorResponse } from './responses';
 
 const handler = async (context) => {
+  const { user, args: { stars }, message } = context;
   try {
-    const { user, args: { stars = 5 }, message } = context;
-    const data = await user.getCharactersByStars({ stars: Number(stars) });
+    const data = await user.getCharactersByStars({ stars, field: 'favorites' });
 
     if (!data.length) {
-      await message.reply(`No ${stars} star waifus 😢`);
+      await message.reply('No favorite waifus 😢');
       return null;
     }
 
@@ -19,21 +18,21 @@ const handler = async (context) => {
     return null;
   } catch (err) {
     console.error(err);
-    return ErrorResponse('Couldn\'t fetch waifus...', context);
+    return ErrorResponse('Couldn\'t list your favorites', context);
   }
 };
 
 export default (): Command => ({
   middleware: [injectUser()],
   handler,
-  triggers: COMMAND_TRIGGERS.MYWAIFUS,
-  description: 'Displays a list of your collected waifus',
+  triggers: COMMAND_TRIGGERS.FAVS,
+  description: 'Lists your favorite waifus',
   parameters: [
     {
       name: 'stars',
       description: 'stars',
-      defaultValue: 5,
       optional: true,
+      defaultValue: null,
     },
   ],
 });
