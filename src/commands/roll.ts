@@ -6,9 +6,10 @@ import fs from 'fs';
 import { promisify } from 'util';
 import { isThisHour, differenceInMinutes } from 'date-fns';
 import { tmpdir } from 'os';
+import { pluck } from 'ramda';
 
 import { COMMAND_TRIGGERS, CharacterStar, Emoji } from '../util';
-import { Character, User } from '../models';
+import { Character, User, Series } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
 
@@ -19,6 +20,22 @@ const getStarRating = (popularity: number): CharacterStar => {
   if (popularity <= 3000) return CharacterStar.FOUR_STAR;
   if (popularity <= 10000) return CharacterStar.THREE_STAR;
   return CharacterStar.TWO_STAR;
+};
+
+const getCharacterSeries = async (series: { title: string; slug: string }[]): Promise<any> => {
+  const docs = series.map(({ title, slug }) => {
+    const query = { slug };
+    const modifier = {
+      $set: {
+        title,
+        slug,
+      },
+    };
+    const options = { upsert: true, new: true };
+    return Series.findOneAndUpdate(query, modifier, options);
+  });
+
+  return Promise.all(docs);
 };
 
 const checkRollCooldown = async (next, context) => {
@@ -98,7 +115,8 @@ const handler = async (context): Promise<any> => {
 
     await container.screenshot({ path });
 
-    await context.message.reply(name, attachment);
+    const { attachments } = await context.message.reply(name, attachment);
+    const characterSeries = await getCharacterSeries(series);
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {
@@ -107,8 +125,9 @@ const handler = async (context): Promise<any> => {
           stars,
           imageUrl,
           slug,
-          series,
+          series: pluck('_id', characterSeries as any[]),
           popularity,
+          cardImageUrl: attachments.first().url,
         },
       }, { upsert: true, new: true }),
       unlink(path),

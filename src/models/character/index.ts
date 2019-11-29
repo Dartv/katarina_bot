@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
+import { Schema, SchemaTypes, model } from 'mongoose';
 import { isNumber } from 'util';
 
 import { CharacterStar } from '../../util';
-
-const { Schema } = mongoose;
+import Series from '../series';
 
 const options = { timestamps: true };
 
@@ -35,13 +34,15 @@ const CharacterSchema = new Schema({
     required: true,
   },
   series: [{
-    title: String,
-    slug: String,
+    type: SchemaTypes.ObjectId,
+    ref: Series.modelName,
   }],
+  cardImageUrl: {
+    type: String,
+    required: true,
+  },
 }, options);
-
-Object.assign(CharacterSchema);
 
 CharacterSchema.index({ name: 'text' });
 
-export default mongoose.model('character', CharacterSchema);
+export default model('character', CharacterSchema);
