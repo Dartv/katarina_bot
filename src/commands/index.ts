@@ -26,6 +26,7 @@ import mywaifu from './mywaifu';
 import addfav from './addfav';
 import favs from './favs';
 import delfav from './delfav';
+import scrape from './scrape';
 
 const commands = [
   add,
@@ -55,6 +56,7 @@ const commands = [
   addfav,
   favs,
   delfav,
+  scrape,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
