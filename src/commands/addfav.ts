@@ -8,9 +8,8 @@ const handler = async (context) => {
   const { user, args: { name } } = context;
   const waifuName = name.join(' ');
   try {
-    const { characters } = await User.findById(user.id, { characters: 1 });
     const character = await Character.findOne({
-      _id: { $in: characters },
+      _id: { $in: user.characters },
       $text: {
         $search: waifuName,
       },

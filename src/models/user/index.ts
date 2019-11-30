@@ -23,8 +23,14 @@ const UserSchema = new Schema({
     max: 50,
     default: [],
   },
-  characters: [SchemaTypes.ObjectId],
-  favorites: [SchemaTypes.ObjectId],
+  characters: {
+    type: [SchemaTypes.ObjectId],
+    default: [],
+  },
+  favorites: {
+    type: [SchemaTypes.ObjectId],
+    default: [],
+  },
   lastRolledAt: Date,
 }, options);
 
