@@ -8,35 +8,13 @@ import { isThisHour, differenceInMinutes } from 'date-fns';
 import { tmpdir } from 'os';
 import { pluck } from 'ramda';
 
-import { COMMAND_TRIGGERS, CharacterStar, Emoji } from '../util';
+import { COMMAND_TRIGGERS, Emoji } from '../util';
 import { Character, User, Series } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
+import { getCharacterStarRating } from '../models/character/util';
 
 const unlink = promisify(fs.unlink);
-
-const getStarRating = (popularity: number): CharacterStar => {
-  if (popularity <= 500) return CharacterStar.FIVE_STAR;
-  if (popularity <= 3000) return CharacterStar.FOUR_STAR;
-  if (popularity <= 10000) return CharacterStar.THREE_STAR;
-  return CharacterStar.TWO_STAR;
-};
-
-const getCharacterSeries = async (series: { title: string; slug: string }[]): Promise<any> => {
-  const docs = series.map(({ title, slug }) => {
-    const query = { slug };
-    const modifier = {
-      $set: {
-        title,
-        slug,
-      },
-    };
-    const options = { upsert: true, new: true };
-    return Series.findOneAndUpdate(query, modifier, options);
-  });
-
-  return Promise.all(docs);
-};
 
 const checkRollCooldown = async (next, context) => {
   if (isThisHour(context.user.lastRolledAt)) {
@@ -83,7 +61,7 @@ const handler = async (context): Promise<any> => {
     });
     const url = page.url();
     const slug = url.substring(url.lastIndexOf('/') + 1);
-    const stars = getStarRating(popularity);
+    const stars = getCharacterStarRating(popularity);
     await page.evaluate((emoji) => {
       const el = document.createElement('div');
       const waifuEl = document.querySelector('.waifu-core-container');
@@ -116,7 +94,7 @@ const handler = async (context): Promise<any> => {
     await container.screenshot({ path });
 
     const { attachments } = await context.message.reply(name, attachment);
-    const characterSeries = await getCharacterSeries(series);
+    const characterSeries = await Series.getUpdatedSeries(series);
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {

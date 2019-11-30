@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import * as statics from './statics';
+
 const { Schema } = mongoose;
 
 const options = { timestamps: true, collection: 'series' };
@@ -16,7 +18,7 @@ const SeriesSchema = new Schema({
   },
 }, options);
 
-Object.assign(SeriesSchema);
+Object.assign(SeriesSchema, { statics });
 
 SeriesSchema.index({ name: 'text' });
 

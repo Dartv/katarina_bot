@@ -3,6 +3,7 @@ import { isNumber } from 'util';
 
 import { CharacterStar } from '../../util';
 import Series from '../series';
+import * as methods from './methods';
 
 const options = { timestamps: true };
 
@@ -44,5 +45,7 @@ const CharacterSchema = new Schema({
 }, options);
 
 CharacterSchema.index({ name: 'text' });
+
+Object.assign(CharacterSchema, { methods });
 
 export default model('character', CharacterSchema);
