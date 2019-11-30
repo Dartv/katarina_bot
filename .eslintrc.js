@@ -37,7 +37,7 @@ module.exports = {
       exports: 'always-multiline',
       functions: 'ignore',
     }],
-    'max-len': ['error', 100],
+    'max-len': ['error', 120],
     'func-names': 0,
     'import/extensions': 0,
     'no-mixed-operators': 0,
