@@ -4,16 +4,15 @@ import { pluck } from 'ramda';
 import { Command } from '../types';
 import { COMMAND_TRIGGERS, Emoji, COLORS } from '../util';
 import { injectUser } from './middleware';
-import { User, Character } from '../models';
+import { Character } from '../models';
 import { ErrorResponse } from './responses';
 
 const handler = async (context) => {
   try {
     const { user, args, message } = context;
     const searchName = args.name.join(' ').trim();
-    const { characters } = await User.findById(user.id, { characters: 1 });
     const character = await Character.findOne({
-      _id: { $in: characters },
+      _id: { $in: user.characters },
       $text: {
         $search: searchName,
       },
@@ -32,7 +31,7 @@ const handler = async (context) => {
       series,
     } = character;
 
-    const count = characters.filter(_id => _id.toString() === id).length;
+    const count = user.characters.filter(_id => _id.toString() === id).length;
     const embed = new RichEmbed({
       title: name,
       image: { url: imageUrl },

@@ -20,6 +20,6 @@ const SeriesSchema = new Schema({
 
 Object.assign(SeriesSchema, { statics });
 
-SeriesSchema.index({ name: 'text' });
+SeriesSchema.index({ title: 'text' });
 
 export default mongoose.model('series', SeriesSchema);
