@@ -20,7 +20,7 @@ export const middleware = [
   expectRefToBeUnique(R.view(lenses.user.images as any)),
 ];
 
-export const handler = User.addImageLink.bind(User);
+export const handler = (User as any).addImageLink.bind(User);
 
 export default () => ({
   middleware,

@@ -49,5 +49,6 @@ module.exports = {
     'arrow-parens': 0,
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
+    '@typescript-eslint/interface-name-prefix': ['error', { "prefixWithI": "always" }],
   },
 };

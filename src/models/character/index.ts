@@ -1,9 +1,26 @@
-import { Schema, SchemaTypes, model } from 'mongoose';
+import { ObjectId } from 'mongodb';
+import {
+  Schema,
+  SchemaTypes,
+  model,
+  Document,
+  Types,
+} from 'mongoose';
 import { isNumber } from 'util';
 
 import { CharacterStar } from '../../util';
 import Series from '../series';
 import * as methods from './methods';
+
+export interface ICharacter extends Document {
+  name: string;
+  stars: CharacterStar;
+  popularity: number;
+  slug: string;
+  imageUrl: string;
+  series: ObjectId[] | Types.DocumentArray<any>[];
+  cardImageUrl: string;
+}
 
 const options = { timestamps: true };
 
@@ -34,10 +51,13 @@ const CharacterSchema = new Schema({
     type: String,
     required: true,
   },
-  series: [{
-    type: SchemaTypes.ObjectId,
-    ref: Series.modelName,
-  }],
+  series: {
+    type: [{
+      type: SchemaTypes.ObjectId,
+      ref: Series.modelName,
+    }],
+    default: [],
+  },
   cardImageUrl: {
     type: String,
     required: true,
@@ -48,4 +68,4 @@ CharacterSchema.index({ name: 'text' });
 
 Object.assign(CharacterSchema, { methods });
 
-export default model('character', CharacterSchema);
+export default model<ICharacter>('character', CharacterSchema);

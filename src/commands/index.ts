@@ -5,12 +5,11 @@ import remove from './remove';
 import removeAll from './removeAll';
 import art from './art';
 import help from './help';
-import emojify from './emojify';
 import guildAdd from './guildAdd';
 import guildPost from './guildPost';
 import guildList from './guildList';
 import guildRemove from './guildRemove';
-import write from './write';
+// import write from './write';
 import join from './join';
 import play from './play';
 import stop from './stop';
@@ -18,7 +17,7 @@ import skip from './skip';
 import pause from './pause';
 import resume from './resume';
 import eh from './eh';
-import exh from './exh';
+// import exh from './exh';
 import danbooru from './danbooru';
 import roll from './roll';
 import mywaifus from './mywaifus';
@@ -27,6 +26,7 @@ import addfav from './addfav';
 import favs from './favs';
 import delfav from './delfav';
 import scrape from './scrape';
+import versus from './versus';
 
 const commands = [
   add,
@@ -35,12 +35,11 @@ const commands = [
   remove,
   removeAll,
   help,
-  emojify,
   guildAdd,
   guildPost,
   guildList,
   guildRemove,
-  write,
+  // write,
   join,
   play,
   stop,
@@ -48,7 +47,7 @@ const commands = [
   pause,
   resume,
   eh,
-  exh,
+  // exh,
   danbooru,
   roll,
   mywaifus,
@@ -57,6 +56,7 @@ const commands = [
   favs,
   delfav,
   scrape,
+  versus,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

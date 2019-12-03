@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
-import 'mongoose-type-url';
 
 import * as statics from './statics';
 import * as methods from './methods';
 
-const { Schema, SchemaTypes } = mongoose;
+const { Schema } = mongoose;
 
 const options = { timestamps: true };
 
@@ -19,7 +18,7 @@ const GuildSchema = new Schema({
         required: true,
       },
       url: {
-        type: SchemaTypes.Url,
+        type: String,
         maxlength: 2000,
         required: true,
       },

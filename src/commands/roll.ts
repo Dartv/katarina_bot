@@ -94,7 +94,7 @@ const handler = async (context): Promise<any> => {
     await container.screenshot({ path });
 
     const { attachments } = await context.message.reply(name, attachment);
-    const characterSeries = await Series.getUpdatedSeries(series);
+    const characterSeries = await (Series as any).getUpdatedSeries(series);
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {

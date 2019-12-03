@@ -10,7 +10,7 @@ export type CommandParam = {
   defaultValue?: any;
 }
 
-export interface Command {
+export interface ICommand {
   middleware?: Middleware[];
   handler: (context: object) => Promise<any>;
   triggers: string[];
