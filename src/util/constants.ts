@@ -40,6 +40,7 @@ export const COMMAND_TRIGGERS = {
   ADDFAV: ['addfav'],
   DELFAV: ['delfav'],
   FAVS: ['favs'],
+  VERSUS: ['versus'],
 };
 
 export const FONTS = {
