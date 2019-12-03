@@ -22,7 +22,7 @@ export const middleware = [
   expectRefToBeUnique(R.view(lenses.guild.images as any)),
 ];
 
-export const handler = Guild.addImageLink.bind(Guild);
+export const handler = (Guild as any).addImageLink.bind(Guild);
 
 export default () => ({
   middleware,

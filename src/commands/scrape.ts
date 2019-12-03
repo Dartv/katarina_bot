@@ -33,7 +33,7 @@ const handler = async (context): Promise<any> => {
                   slug: el.getAttribute('href').split('/')[2],
                 })),
             );
-            const characterSeries = await Series.getUpdatedSeries(series);
+            const characterSeries = await (Series as any).getUpdatedSeries(series);
             await Character.findByIdAndUpdate(character.id, {
               $set: {
                 series: pluck('_id', characterSeries as any[]),

@@ -1,4 +1,4 @@
-import { Command } from '../types';
+import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
@@ -22,7 +22,7 @@ const handler = async (context) => {
   }
 };
 
-export default (): Command => ({
+export default (): ICommand => ({
   middleware: [injectUser()],
   handler,
   triggers: COMMAND_TRIGGERS.FAVS,

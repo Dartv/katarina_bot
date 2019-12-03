@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import 'mongoose-type-url';
 import * as statics from './statics';
 import * as methods from './methods';
 
@@ -16,7 +15,7 @@ const UserSchema = new Schema({
         maxlength: 40,
       },
       url: {
-        type: SchemaTypes.Url,
+        type: String,
         maxlength: 2000,
       },
     }],

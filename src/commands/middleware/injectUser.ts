@@ -5,7 +5,7 @@ import { Middleware } from '../../types';
 export default (): Middleware => async (next, context) => {
   const { message: { author: { id: discordId } } } = context;
   try {
-    let user = await User.findOneByDiscordId(discordId);
+    let user = await (User as any).findOneByDiscordId(discordId);
 
     if (!user) user = await new User({ discordId }).save();
 

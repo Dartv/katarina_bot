@@ -17,7 +17,7 @@ export const middleware = [
   deleteMessage(),
 ];
 
-export const handler = Guild.removeImageLink.bind(Guild);
+export const handler = (Guild as any).removeImageLink.bind(Guild);
 
 export default () => ({
   middleware,

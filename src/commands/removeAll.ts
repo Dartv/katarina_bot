@@ -4,7 +4,7 @@ import { COMMAND_TRIGGERS } from '../util/constants';
 
 export const middleware = [injectUser(), deleteMessage()];
 
-export const handler = User.removeAllImageLinks.bind(User);
+export const handler = (User as any).removeAllImageLinks.bind(User);
 
 export default () => ({
   middleware,
