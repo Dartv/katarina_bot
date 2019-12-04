@@ -41,6 +41,7 @@ export const COMMAND_TRIGGERS = {
   DELFAV: ['delfav'],
   FAVS: ['favs'],
   VERSUS: ['versus'],
+  WHOIS: ['whois'],
 };
 
 export const FONTS = {
