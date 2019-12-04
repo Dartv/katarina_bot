@@ -13,8 +13,11 @@ interface ICreateCharacterEmbedInput {
   series: ICharacter['series'];
 }
 
-const getRandomCharacters = async (): Promise<ICharacter[]> => {
+const getRandomCharacters = async ({ stars }: { stars: number }): Promise<ICharacter[]> => {
   const characters = await Character.aggregate([
+    {
+      $match: { stars },
+    },
     { $sample: { size: 2 } },
     {
       $lookup: {
@@ -48,9 +51,9 @@ const middleware = [
 ];
 
 const handler = async (context) => {
-  const { dispatch } = context;
+  const { dispatch, args: { stars } } = context;
   try {
-    const characters = await getRandomCharacters();
+    const characters = await getRandomCharacters({ stars: Number(stars) });
     await dispatch('Who is a better waifu?');
     const messages = await Promise.all(
       characters.map(character => dispatch(createCharacterEmbed(character))),
@@ -68,4 +71,12 @@ export default (): ICommand => ({
   handler,
   triggers: COMMAND_TRIGGERS.VERSUS,
   description: 'Waifu versus battle',
+  parameters: [
+    {
+      name: 'stars',
+      description: 'stars',
+      defaultValue: 5,
+      optional: true,
+    },
+  ],
 });
