@@ -1,15 +1,18 @@
-import { RichEmbed } from 'discord.js';
-import { pluck } from 'ramda';
-
 import { ICommand } from '../types';
-import { COMMAND_TRIGGERS, Emoji, COLORS } from '../util';
+import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { Character } from '../models';
 import { ErrorResponse } from './responses';
+import { createCharacterEmbed } from '../models/character/util';
 
 const handler = async (context) => {
   try {
-    const { user, args, message } = context;
+    const {
+      user,
+      args,
+      message,
+      dispatch,
+    } = context;
     const searchName = args.name.join(' ').trim();
     const character = await Character.findOne({
       _id: { $in: user.characters },
@@ -32,19 +35,15 @@ const handler = async (context) => {
     } = character;
 
     const count = user.characters.filter(_id => _id.toString() === id).length;
-    const embed = new RichEmbed({
-      title: name,
-      image: { url: imageUrl },
+    const embed = createCharacterEmbed({
+      name,
+      imageUrl,
+      series,
+      stars,
       footer: { text: `You have x${count} of this waifu` },
-      color: COLORS.INFO,
-      fields: [
-        { name: 'Stars', value: Emoji.STAR.repeat(stars) },
-        { name: 'Appears in', value: pluck('title', series as any[]).join(', ') },
-      ],
     });
 
-    await message.reply(embed);
-    return null;
+    return dispatch(embed);
   } catch (err) {
     console.error(err);
     return ErrorResponse(`Couldn't fetch waifu ${context.args.name}`, context);
