@@ -27,6 +27,7 @@ import favs from './favs';
 import delfav from './delfav';
 import scrape from './scrape';
 import versus from './versus';
+import whois from './whois';
 
 const commands = [
   add,
@@ -57,6 +58,7 @@ const commands = [
   delfav,
   scrape,
   versus,
+  whois,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
