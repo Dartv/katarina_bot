@@ -47,7 +47,6 @@ const handler = async (context) => {
       errors: ['time'],
     };
     try {
-      console.log(character.series);
       const collectedResponse = await channel.awaitMessages(predicate, options)
         .then(messages => messages.first());
 
