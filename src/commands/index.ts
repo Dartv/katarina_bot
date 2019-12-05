@@ -28,6 +28,7 @@ import delfav from './delfav';
 import scrape from './scrape';
 import versus from './versus';
 import whois from './whois';
+import whatseries from './whatseries';
 
 const commands = [
   add,
@@ -59,6 +60,7 @@ const commands = [
   scrape,
   versus,
   whois,
+  whatseries,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

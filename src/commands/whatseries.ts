@@ -1,21 +1,18 @@
-import { compareTwoStrings } from 'string-similarity';
+import { pluck } from 'ramda';
 
 import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import Character from '../models/character';
 import { createCharacterEmbed } from '../models/character/util';
 import { withCooldown } from './middleware';
-
-export const ANSWER_TIME = 15 * 1000;
-export const SIMILARITY_THRESHOLD = 0.8;
-
-export const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, b) > SIMILARITY_THRESHOLD;
+import { ANSWER_TIME, isSimilarEnough } from './whois';
 
 const middleware = [
   withCooldown(ANSWER_TIME),
 ];
 
 const handler = async (context) => {
+  console.log('called');
   const {
     dispatch,
     message: { channel },
@@ -32,14 +29,17 @@ const handler = async (context) => {
     ]);
     const embed = createCharacterEmbed({
       ...character,
-      name: '???',
+      series: [],
     });
     await dispatch(embed);
+    const series = pluck('title', character.series as any[]).map(title => title.trim().toLowerCase());
     const predicate = ({ content }): boolean => {
-      const name = character.name.trim().toLowerCase();
       const guess = content.trim().toLowerCase();
 
-      return isSimilarEnough(name, guess) || name.split(' ').some(part => isSimilarEnough(part, guess));
+      return series.some(serie => (
+        isSimilarEnough(serie, guess)
+        || serie.split(' ').some(part => isSimilarEnough(part, guess))
+      ));
     };
     const options = {
       time: ANSWER_TIME,
@@ -47,14 +47,19 @@ const handler = async (context) => {
       errors: ['time'],
     };
     try {
-      const collectedResponse = await channel.awaitMessages(predicate, options).then(messages => messages.first());
+      console.log(character.series);
+      const collectedResponse = await channel.awaitMessages(predicate, options)
+        .then(messages => messages.first());
 
       if (collectedResponse) {
         clearCooldown();
-        await collectedResponse.reply(`Congratulations! The name was "${character.name}"`);
+        await collectedResponse.reply(
+          'Congratulations! Your guess was correct',
+          createCharacterEmbed(character),
+        );
       }
     } catch (err) {
-      await dispatch(`No correct answers... The name was "${character.name}"`);
+      await channel.send('No correct answers...', createCharacterEmbed(character));
     }
   } catch (err) {
     clearCooldown();
@@ -65,8 +70,8 @@ const handler = async (context) => {
 export default (): ICommand => ({
   middleware,
   handler,
-  triggers: COMMAND_TRIGGERS.WHOIS,
-  description: 'Waifu guessing game',
+  triggers: COMMAND_TRIGGERS.WHATSERIES,
+  description: 'Series guessing game',
   parameters: [
     {
       name: 'stars',
