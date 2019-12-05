@@ -5,15 +5,24 @@ export default (
   COOLDOWN_TIME_IN_MS = 1000,
   message = ERRORS.CMD_CD,
 ) => {
-  let COOLDOWN_AT;
+  let cooldown = false;
 
   return async (next, context) => {
-    if (COOLDOWN_AT && (Date.now() - COOLDOWN_AT) < COOLDOWN_TIME_IN_MS) {
+    if (cooldown) {
       return ErrorResponse(message, context);
     }
 
-    COOLDOWN_AT = Date.now();
+    cooldown = true;
 
-    return next(context);
+    const timer = setTimeout(() => {
+      cooldown = false;
+    }, COOLDOWN_TIME_IN_MS);
+
+    const clearCooldown = (): void => {
+      cooldown = false;
+      clearTimeout(timer);
+    };
+
+    return next({ ...context, clearCooldown });
   };
 };

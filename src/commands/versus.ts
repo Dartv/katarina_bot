@@ -1,4 +1,5 @@
 import { expectUser } from 'ghastly/lib/middleware';
+import { Message } from 'discord.js';
 
 import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
@@ -21,7 +22,7 @@ const handler = async (context) => {
       characters.map(character => dispatch(createCharacterEmbed(character))),
     );
     await Promise.all(
-      messages.map(msg => msg.react('❤️')),
+      messages.map(msg => (msg as Message).react('❤️')),
     );
   } catch (err) {
     console.error(err);
