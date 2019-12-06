@@ -18,6 +18,7 @@ const handler = async (context) => {
         $match: { stars: Number(stars) },
       },
     ]);
+    await dispatch('Who is a better waifu?');
     const messages = await Promise.all(
       characters.map(character => dispatch(createCharacterEmbed(character))),
     );
