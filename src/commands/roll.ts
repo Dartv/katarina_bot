@@ -4,11 +4,11 @@ import { Attachment } from 'discord.js';
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { promisify } from 'util';
-import { isThisHour, differenceInMinutes } from 'date-fns';
+// import { isThisHour, differenceInMinutes } from 'date-fns';
 import { tmpdir } from 'os';
 import { pluck } from 'ramda';
 
-import { COMMAND_TRIGGERS, Emoji } from '../util';
+import { COMMAND_TRIGGERS, Emoji, CharacterStar } from '../util';
 import { Character, User, Series } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
@@ -16,13 +16,13 @@ import { getCharacterStarRating } from '../models/character/util';
 
 const unlink = promisify(fs.unlink);
 
-const checkRollCooldown = async (next, context) => {
-  if (isThisHour(context.user.lastRolledAt)) {
-    const diff = differenceInMinutes(new Date(), context.user.lastRolledAt);
-    return new ErrorResponse(`Your next roll is available in ${60 - diff} minutes`, context);
-  }
-  return next(context);
-};
+// const checkRollCooldown = async (next, context) => {
+//   if (isThisHour(context.user.lastRolledAt)) {
+//     const diff = differenceInMinutes(new Date(), context.user.lastRolledAt);
+//     return new ErrorResponse(`Your next roll is available in ${60 - diff} minutes`, context);
+//   }
+//   return next(context);
+// };
 
 const middleware = [
   injectUser(),
@@ -32,6 +32,22 @@ const middleware = [
 const handler = async (context): Promise<any> => {
   const browser = await puppeteer.launch();
   try {
+    const { message } = context;
+    const { GACHA_ROLE_NAME, GACHA_ROLE_COLOR } = process.env;
+
+    if (!message.guild.roles.has(GACHA_ROLE_NAME)) {
+      await message.guild.createRole({
+        name: GACHA_ROLE_NAME,
+        color: GACHA_ROLE_COLOR,
+      });
+    }
+
+    const gachaRole = message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
+
+    if (!message.member.roles.has(GACHA_ROLE_NAME)) {
+      await message.member.addRole(gachaRole);
+    }
+
     const page = await browser.newPage();
     await page.setCookie({
       name: 'waifutheme',
@@ -93,8 +109,14 @@ const handler = async (context): Promise<any> => {
 
     await container.screenshot({ path });
 
-    const { attachments } = await context.message.reply(name, attachment);
-    const characterSeries = await (Series as any).getUpdatedSeries(series);
+    const mention = stars === CharacterStar.FIVE_STAR ? ` ${gachaRole}` : '';
+    const [
+      { attachments },
+      characterSeries,
+    ] = await Promise.all([
+      message.reply(`${name}${mention}`, attachment),
+      (Series as any).getUpdatedSeries(series),
+    ]);
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {
@@ -133,5 +155,5 @@ export default () => ({
   middleware,
   handler,
   triggers: COMMAND_TRIGGERS.ROLL,
-  description: 'Anime waifu gacha',
+  description: 'Waifu gacha game',
 });
