@@ -31,8 +31,6 @@ export const COMMAND_TRIGGERS = {
   PAUSE: ['pause'],
   RESUME: ['resume'],
   EH: ['eh'],
-  MAPPER_SUB: ['mappersub'],
-  MAPPER_UNSUB: ['mapperunsub'],
   DANBOORU: ['danbooru'],
   ROLL: ['roll'],
   MYWAIFUS: ['mywaifus', 'mws'],
@@ -43,6 +41,7 @@ export const COMMAND_TRIGGERS = {
   VERSUS: ['versus'],
   WHOIS: ['whois', 'wis'],
   WHATSERIES: ['whatseries', 'whs'],
+  STEAL_WAIFU: ['stealwaifu', 'sw'],
 };
 
 export const FONTS = {
