@@ -1,6 +1,6 @@
 /* global document, window */
 
-import { Attachment } from 'discord.js';
+import { Attachment, Message, Role } from 'discord.js';
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { promisify } from 'util';
@@ -14,7 +14,9 @@ import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
 import { getCharacterStarRating } from '../models/character/util';
 
+const { GACHA_ROLE_NAME, GACHA_ROLE_COLOR } = process.env;
 const unlink = promisify(fs.unlink);
+const getGachaRole = (message: Message): Role => message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
 
 // const checkRollCooldown = async (next, context) => {
 //   if (isThisHour(context.user.lastRolledAt)) {
@@ -33,18 +35,18 @@ const handler = async (context): Promise<any> => {
   const browser = await puppeteer.launch();
   try {
     const { message } = context;
-    const { GACHA_ROLE_NAME, GACHA_ROLE_COLOR } = process.env;
+    let gachaRole = getGachaRole(message);
 
-    if (!message.guild.roles.has(GACHA_ROLE_NAME)) {
+    if (!gachaRole) {
       await message.guild.createRole({
         name: GACHA_ROLE_NAME,
         color: GACHA_ROLE_COLOR,
       });
+
+      gachaRole = message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
     }
 
-    const gachaRole = message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
-
-    if (!message.member.roles.has(GACHA_ROLE_NAME)) {
+    if (!message.member.roles.has(gachaRole.id)) {
       await message.member.addRole(gachaRole);
     }
 
