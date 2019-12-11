@@ -29,6 +29,7 @@ import scrape from './scrape';
 import versus from './versus';
 import whois from './whois';
 import whatseries from './whatseries';
+import stealwaifu from './stealwaifu';
 
 const commands = [
   add,
@@ -61,6 +62,7 @@ const commands = [
   versus,
   whois,
   whatseries,
+  stealwaifu,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
