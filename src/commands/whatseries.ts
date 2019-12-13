@@ -12,7 +12,6 @@ const middleware = [
 ];
 
 const handler = async (context) => {
-  console.log('called');
   const {
     dispatch,
     message: { channel },
