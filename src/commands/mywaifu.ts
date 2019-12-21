@@ -19,7 +19,7 @@ const handler = async (context) => {
       $text: {
         $search: searchName,
       },
-    }).populate('series');
+    }, {}, { sort: { stars: -1 } }).populate('series');
 
     if (!character) {
       await message.reply(`You have no waifu with name "${searchName}"`);
