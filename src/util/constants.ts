@@ -43,6 +43,9 @@ export const COMMAND_TRIGGERS = {
   STEAL_WAIFU: ['stealwaifu', 'sw'],
   LOVE: ['love'],
   GAY: ['gay'],
+  PROFILE: ['profile'],
+  SET_WAIFU: ['setwaifu'],
+  SET_QUOTE: ['setquote'],
 };
 
 export const FONTS = {

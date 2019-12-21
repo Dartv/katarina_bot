@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import * as statics from './statics';
 import * as methods from './methods';
+import Character from '../character';
 
 const { Schema, SchemaTypes } = mongoose;
 
@@ -29,8 +30,14 @@ const UserSchema = new Schema({
   favorites: {
     type: [SchemaTypes.ObjectId],
     default: [],
+    max: 20,
   },
   lastRolledAt: Date,
+  waifu: {
+    type: SchemaTypes.ObjectId,
+    ref: Character.modelName,
+  },
+  quote: String,
 }, options);
 
 Object.assign(UserSchema, { statics, methods });

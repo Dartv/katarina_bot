@@ -32,6 +32,9 @@ import whatseries from './whatseries';
 import stealwaifu from './stealwaifu';
 import love from './love';
 import gay from './gay';
+import profile from './profile';
+import setwaifu from './setwaifu';
+import setquote from './setquote';
 
 const commands = [
   add,
@@ -67,6 +70,9 @@ const commands = [
   stealwaifu,
   love,
   gay,
+  profile,
+  setwaifu,
+  setquote,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
