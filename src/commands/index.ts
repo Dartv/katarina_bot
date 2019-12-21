@@ -30,6 +30,8 @@ import versus from './versus';
 import whois from './whois';
 import whatseries from './whatseries';
 import stealwaifu from './stealwaifu';
+import love from './love';
+import gay from './gay';
 
 const commands = [
   add,
@@ -63,6 +65,8 @@ const commands = [
   whois,
   whatseries,
   stealwaifu,
+  love,
+  gay,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

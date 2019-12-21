@@ -41,6 +41,8 @@ export const COMMAND_TRIGGERS = {
   WHOIS: ['whois', 'wis'],
   WHATSERIES: ['whatseries', 'whs'],
   STEAL_WAIFU: ['stealwaifu', 'sw'],
+  LOVE: ['love'],
+  GAY: ['gay'],
 };
 
 export const FONTS = {
