@@ -47,6 +47,7 @@ export const COMMAND_TRIGGERS = {
   SET_WAIFU: ['setwaifu'],
   SET_QUOTE: ['setquote'],
   BUILD_DECK: ['builddeck'],
+  DECK: ['deck'],
 };
 
 export const FONTS = {
@@ -121,7 +122,4 @@ export enum PopularityThreshold {
   FIVE_STAR = 300,
 }
 
-export enum DeckLimit {
-  MIN = 1,
-  MAX = 5
-}
+export const DECK_LIMIT = 5;

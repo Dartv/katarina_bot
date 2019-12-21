@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import { pluck } from 'ramda';
 
 import { ICommand } from '../types';
-import { COMMAND_TRIGGERS, DeckLimit } from '../util';
+import { COMMAND_TRIGGERS, DECK_LIMIT } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
 import { Character } from '../models';
@@ -12,7 +12,7 @@ import { ICharacter } from '../models/character/types';
 const CHOICE_TIME = 15 * 1000;
 
 const chooseCharacter = async (context: { message: Message } & Partial<any>): Promise<Partial<ICharacter>> => {
-  const { user, message: { channel }, dispatch } = context;
+  const { user, message: { channel, author }, dispatch } = context;
   const characters = await Character.random(3, [
     {
       $match: {
@@ -28,14 +28,15 @@ const chooseCharacter = async (context: { message: Message } & Partial<any>): Pr
     imageUrl: null,
   }));
 
-  await Promise.all(embeds.map(embed => dispatch(embed)));
+  const dm = await author.createDM();
+  await Promise.all(embeds.map(embed => dm.sendEmbed(embed)));
   const predicate = ({ content }: Message) => /^[1-3]$/.test(content);
   const options = {
     time: CHOICE_TIME,
     maxMatches: 1,
     errors: ['time'],
   };
-  const collectedMessages = await channel.awaitMessages(predicate, options);
+  const collectedMessages = await dm.awaitMessages(predicate, options);
   const firstCollectedMessage = collectedMessages.first();
   const choice = parseInt(firstCollectedMessage.content, 10);
   return characters.find(({ index }) => index === choice);
@@ -44,11 +45,11 @@ const chooseCharacter = async (context: { message: Message } & Partial<any>): Pr
 const handler = async (context): Promise<any> => {
   const { user } = context;
   try {
-    if (user.characters.length < DeckLimit.MAX) {
+    if (user.characters.length < DECK_LIMIT) {
       return ErrorResponse('You don\'t have enough characters', context);
     }
 
-    const deck: Partial<ICharacter>[] = await new Array(DeckLimit.MAX).fill(chooseCharacter).reduce(
+    const deck: Partial<ICharacter>[] = await new Array(DECK_LIMIT).fill(chooseCharacter).reduce(
       async (prev, next) => [...await prev, await next(context)],
       Promise.resolve([]),
     );
