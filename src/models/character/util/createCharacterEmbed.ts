@@ -16,7 +16,7 @@ export default function createCharacterEmbed({
   name,
   imageUrl,
   stars,
-  series,
+  series = [],
   footer,
   fields = [],
   ...rest

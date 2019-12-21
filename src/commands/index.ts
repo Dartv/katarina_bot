@@ -36,6 +36,7 @@ import profile from './profile';
 import setwaifu from './setwaifu';
 import setquote from './setquote';
 import builddeck from './builddeck';
+import deck from './deck';
 
 const commands = [
   add,
@@ -75,6 +76,7 @@ const commands = [
   setwaifu,
   setquote,
   builddeck,
+  deck,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
