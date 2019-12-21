@@ -1,6 +1,6 @@
 /* global document, window */
 
-import { Attachment, Message, Role } from 'discord.js';
+import { Attachment } from 'discord.js';
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { promisify } from 'util';
@@ -8,15 +8,13 @@ import { promisify } from 'util';
 import { tmpdir } from 'os';
 import { pluck } from 'ramda';
 
-import { COMMAND_TRIGGERS, Emoji, CharacterStar } from '../util';
+import { COMMAND_TRIGGERS, Emoji } from '../util';
 import { Character, User, Series } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
 import { getCharacterStarRating } from '../models/character/util';
 
-const { GACHA_ROLE_NAME, GACHA_ROLE_COLOR } = process.env;
 const unlink = promisify(fs.unlink);
-const getGachaRole = (message: Message): Role => message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
 
 // const checkRollCooldown = async (next, context) => {
 //   if (isThisHour(context.user.lastRolledAt)) {
@@ -35,20 +33,6 @@ const handler = async (context): Promise<any> => {
   const browser = await puppeteer.launch();
   try {
     const { message } = context;
-    let gachaRole = getGachaRole(message);
-
-    if (!gachaRole) {
-      await message.guild.createRole({
-        name: GACHA_ROLE_NAME,
-        color: GACHA_ROLE_COLOR,
-      });
-
-      gachaRole = message.guild.roles.find(({ name }) => name === GACHA_ROLE_NAME);
-    }
-
-    if (!message.member.roles.has(gachaRole.id)) {
-      await message.member.addRole(gachaRole);
-    }
 
     const page = await browser.newPage();
     await page.setCookie({
@@ -111,12 +95,11 @@ const handler = async (context): Promise<any> => {
 
     await container.screenshot({ path });
 
-    const mention = stars === CharacterStar.FIVE_STAR ? ` ${gachaRole}` : '';
     const [
       { attachments },
       characterSeries,
     ] = await Promise.all([
-      message.reply(`${name}${mention}`, attachment),
+      message.reply(name, attachment),
       (Series as any).getUpdatedSeries(series),
     ]);
 
