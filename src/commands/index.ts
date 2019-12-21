@@ -35,6 +35,7 @@ import gay from './gay';
 import profile from './profile';
 import setwaifu from './setwaifu';
 import setquote from './setquote';
+import builddeck from './builddeck';
 
 const commands = [
   add,
@@ -73,6 +74,7 @@ const commands = [
   profile,
   setwaifu,
   setquote,
+  builddeck,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

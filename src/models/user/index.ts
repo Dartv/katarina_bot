@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import * as statics from './statics';
 import * as methods from './methods';
 import Character from '../character';
+import { DeckLimit } from '../../util';
 
 const { Schema, SchemaTypes } = mongoose;
 
@@ -38,6 +39,12 @@ const UserSchema = new Schema({
     ref: Character.modelName,
   },
   quote: String,
+  deck: {
+    type: [SchemaTypes.ObjectId],
+    default: [],
+    min: DeckLimit.MIN,
+    max: DeckLimit.MAX,
+  },
 }, options);
 
 Object.assign(UserSchema, { statics, methods });
