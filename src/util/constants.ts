@@ -13,7 +13,6 @@ export const COLORS = {
 export const COMMAND_TRIGGERS = {
   ADD: ['add', 'a'],
   ART: ['art'],
-  EMOJIFY: ['emojify'],
   HELP: ['help'],
   LIST: ['list'],
   POST: ['post', 'p'],
@@ -107,4 +106,11 @@ export enum CharacterStar {
 
 export enum Emoji {
   STAR = '⭐️',
+}
+
+export enum PopularityThreshold {
+  TWO_STAR = Infinity,
+  THREE_STAR = 10000,
+  FOUR_STAR = 3000,
+  FIVE_STAR = 300,
 }
