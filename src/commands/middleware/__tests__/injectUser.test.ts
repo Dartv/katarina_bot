@@ -22,7 +22,7 @@ describe('injectUser', () => {
 
     expect(user).toBeNull();
 
-    const nextContext = await injectUser()(next, context);
+    const nextContext = await injectUser()(next, context as any);
 
     expect(nextContext.user).toEqual(expect.anything());
     expect(nextContext.user.discordId).toBe(id);
@@ -36,7 +36,7 @@ describe('injectUser', () => {
       },
     });
     const user = await new User({ discordId: id }).save();
-    const nextContext = await injectUser()(next, context);
+    const nextContext = await injectUser()(next, context as any);
     const count = await User.find().count();
 
     expect(count).toBe(1);
@@ -51,7 +51,7 @@ describe('injectUser', () => {
         },
       },
     });
-    const response = await injectUser()(next, context);
+    const response = await injectUser()(next, context as any);
 
     expect(response).toBeInstanceOf(ErrorResponse);
   });

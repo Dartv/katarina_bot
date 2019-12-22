@@ -48,6 +48,8 @@ export const COMMAND_TRIGGERS = {
   SET_QUOTE: ['setquote'],
   BUILD_DECK: ['builddeck'],
   DECK: ['deck'],
+  MARRY: ['marry'],
+  DIVORCE: ['divorce'],
 };
 
 export const FONTS = {
@@ -123,3 +125,8 @@ export enum PopularityThreshold {
 }
 
 export const DECK_LIMIT = 5;
+
+export enum MarriageStatus {
+  PROPOSED = 'PROPOSED',
+  MARRIED = 'MARRIED',
+}

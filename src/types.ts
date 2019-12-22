@@ -1,6 +1,4 @@
-export type Middleware = {
-  (next: (context: any) => any, context: any): Promise<any>;
-}
+import { Message } from 'discord.js';
 
 export type CommandParam = {
   name: string;
@@ -10,9 +8,26 @@ export type CommandParam = {
   defaultValue?: any;
 }
 
+export interface ICommandFormatter {
+  code(content: string): string;
+}
+
+export interface ICommandContext {
+  message: Message;
+  formatter: ICommandFormatter;
+  user?: any;
+  guild?: any;
+}
+
+export type ICommandHandler = (context: ICommandContext & Partial<any>) => Promise<any>;
+
+export type Middleware = {
+  (next: (context: ICommandContext) => any, context: ICommandContext): Promise<any>;
+}
+
 export interface ICommand {
   middleware?: Middleware[];
-  handler: (context: object) => Promise<any>;
+  handler: ICommandHandler;
   triggers: string[];
   description?: string;
   parameters?: [CommandParam];
