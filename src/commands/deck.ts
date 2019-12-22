@@ -7,7 +7,7 @@ import { ErrorResponse } from './responses';
 import { createCharacterEmbed } from '../models/character/util';
 
 const handler = async (context): Promise<any> => {
-  const { user, message, dispatch }: { message: Message } & Partial<any> = context;
+  const { user, message }: { message: Message } & Partial<any> = context;
 
   if (!user.deck.length) {
     return ErrorResponse(
