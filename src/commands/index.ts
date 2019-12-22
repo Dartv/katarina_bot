@@ -38,6 +38,7 @@ import setquote from './setquote';
 import builddeck from './builddeck';
 import deck from './deck';
 import marry from './marry';
+import divorce from './divorce';
 
 const commands = [
   add,
@@ -79,6 +80,7 @@ const commands = [
   builddeck,
   deck,
   marry,
+  divorce,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
