@@ -1,17 +1,22 @@
-import { RichEmbed } from 'discord.js';
+import { RichEmbed, GuildMember } from 'discord.js';
 import { pluck } from 'ramda';
 
 import { ICommand } from '../types';
-import { COMMAND_TRIGGERS, COLORS, Emoji } from '../util';
-import { Character, User } from '../models';
+import {
+  COMMAND_TRIGGERS,
+  COLORS,
+  Emoji,
+  MarriageStatus,
+} from '../util';
+import { Character, User, Marriage } from '../models';
 import { ErrorResponse } from './responses';
-import { injectUser } from './middleware';
+import { injectUser, injectGuild } from './middleware';
 
 const { BOT_PREFIX } = process.env;
 
 const handler = async (context): Promise<any> => {
   try {
-    const { message, dispatch } = context;
+    const { message, dispatch, guild } = context;
     let { user } = context;
     const member = message.mentions.members.first() || context.message.member;
 
@@ -23,22 +28,42 @@ const handler = async (context): Promise<any> => {
       return ErrorResponse(`Couldn't find user ${member.displayName}`, context);
     }
 
-    const characterStats = await Character.aggregate([
-      {
-        $match: {
-          _id: { $in: user.characters },
+    const [characterStats, marriedMember] = await Promise.all([
+      Character.aggregate([
+        {
+          $match: {
+            _id: { $in: user.characters },
+          },
         },
-      },
-      {
-        $group: {
-          _id: '$stars',
-          stars: { $first: '$stars' },
-          count: { $sum: 1 },
+        {
+          $group: {
+            _id: '$stars',
+            stars: { $first: '$stars' },
+            count: { $sum: 1 },
+          },
         },
-      },
-      { $sort: { stars: 1 } },
+        { $sort: { stars: 1 } },
+      ]),
+      (async (): Promise<GuildMember|null> => {
+        const marriage = await Marriage.findOne({
+          guild: guild._id,
+          status: MarriageStatus.MARRIED,
+          $or: [
+            { husband: user._id },
+            { wife: user._id },
+          ],
+        });
+
+        if (!marriage) return null;
+
+        const marriedToId = marriage.husband.equals(user._id) ? marriage.wife : marriage.husband;
+        const marriedTo = await User.findById(marriedToId);
+        const marriedToMember = await message.guild.fetchMember((marriedTo as any).discordId);
+        return marriedToMember;
+      })(),
     ]);
 
+    const marryExample = `${process.env.BOT_PREFIX}${COMMAND_TRIGGERS.MARRY[0]} @user`;
     const embed = new RichEmbed({
       title: `${member.displayName}'s profile`,
       description: user.quote ? `"${user.quote}"` : `Set your quote with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_QUOTE[0]}`,
@@ -49,6 +74,10 @@ const handler = async (context): Promise<any> => {
       fields: [
         { name: 'Waifus owned', value: user.characters.length },
         { name: 'Favorites', value: user.favorites.length },
+        {
+          name: 'Married to',
+          value: marriedMember ? marriedMember.displayName : `Marry someone by typing ${marryExample}`,
+        },
         ...characterStats.map(({ stars, count }) => ({
           name: Emoji.STAR.repeat(stars),
           value: count,
@@ -62,7 +91,7 @@ const handler = async (context): Promise<any> => {
         ] : [
           { name: 'Waifu', value: `Set your waifu with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_WAIFU[0]}` },
         ]),
-      ].map((field, i, fields) => ({ ...field, inline: i !== fields.length - 1 })),
+      ],
     });
 
     await dispatch(embed);
@@ -75,7 +104,7 @@ const handler = async (context): Promise<any> => {
 };
 
 export default (): ICommand => ({
-  middleware: [injectUser()],
+  middleware: [injectUser(), injectGuild()],
   handler,
   triggers: COMMAND_TRIGGERS.PROFILE,
   description: 'Profile of the mentioned user',
