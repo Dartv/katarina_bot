@@ -58,7 +58,7 @@ const handler = async (context) => {
       return ErrorResponse(`${mentionedMember.displayName} doesn't have a local profile`, context);
     }
 
-    if (!mentionedUser.characters.length) {
+    if (mentionedUser.characters.length < 20) {
       return ErrorResponse(`${mentionedMember.displayName} doesn't have enough waifus`, context);
     }
 
