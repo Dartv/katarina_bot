@@ -39,6 +39,7 @@ import builddeck from './builddeck';
 import deck from './deck';
 import marry from './marry';
 import divorce from './divorce';
+import sudoku from './sudoku';
 
 const commands = [
   add,
@@ -81,6 +82,7 @@ const commands = [
   deck,
   marry,
   divorce,
+  sudoku,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

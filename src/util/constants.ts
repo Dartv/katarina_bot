@@ -50,6 +50,7 @@ export const COMMAND_TRIGGERS = {
   DECK: ['deck'],
   MARRY: ['marry'],
   DIVORCE: ['divorce'],
+  SUDOKU: ['sudoku'],
 };
 
 export const FONTS = {
