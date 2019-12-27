@@ -14,6 +14,7 @@ export const handler = async (context) => {
     const url = booru.url(post.file_url);
     return ImageResponse(url, '', context);
   } catch (err) {
+    console.error(err);
     return ErrorResponse('Couldn\'t fetch danbooru image', context);
   }
 };
