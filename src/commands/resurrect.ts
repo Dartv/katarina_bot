@@ -11,7 +11,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   const targetMember = message.mentions.members.first();
 
-  await message.reply(`You want to ressurect ${targetMember.displayName}. To do so kiss ${targetMember.displayName} 💋`);
+  await message.reply(`You want to resurrect ${targetMember.displayName}. To do so kiss ${targetMember.displayName} 💋`);
 
   const predicate = ({ mentions }: Message): boolean => mentions.members.has(targetMember.id);
   const options = {
@@ -22,7 +22,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   try {
     await message.channel.awaitMessages(predicate, options);
-    await message.reply(`You've successfully ressurected ${targetMember.displayName} with the power of love! ❤️`);
+    await message.reply(`You've successfully resurrected ${targetMember.displayName} with the power of love! ❤️`);
     return null;
   } catch (err) {
     return ErrorResponse(`Are you not brave enough to kiss ${targetMember.displayName}? What a pussy!`, context);
@@ -31,6 +31,6 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
 export default (): ICommand => ({
   handler,
-  triggers: COMMAND_TRIGGERS.RESSURECT,
-  description: 'Ressurect someone',
+  triggers: COMMAND_TRIGGERS.RESURRECT,
+  description: 'Resurrect someone',
 });

@@ -51,7 +51,7 @@ export const COMMAND_TRIGGERS = {
   MARRY: ['marry'],
   DIVORCE: ['divorce'],
   SUDOKU: ['sudoku'],
-  RESSURECT: ['ressurect'],
+  RESURRECT: ['resurrect'],
 };
 
 export const FONTS = {
