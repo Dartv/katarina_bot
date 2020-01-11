@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 import * as statics from './statics';
 import * as methods from './methods';
-
-const { Schema } = mongoose;
+import { IGuild, IGuildModel } from './types';
 
 const options = { timestamps: true };
 
@@ -35,4 +34,4 @@ const GuildSchema = new Schema({
 
 Object.assign(GuildSchema, { statics, methods });
 
-export default mongoose.model('guild', GuildSchema);
+export default model<IGuild, IGuildModel>('guild', GuildSchema);
