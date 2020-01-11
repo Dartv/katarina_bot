@@ -13,14 +13,23 @@
     "start:watch": "lookenv --path=./env/lookenv.dev.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "./node_modules/.bin/jest",
     "eslint": "./node_modules/.bin/eslint",
-    "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx"
+    "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:staged": "./node_modules/.bin/lint-staged"
   },
-  "pre-commit": [
-    "lint"
-  ],
+  "lint-staged": {
+    "*.ts": [
+      "yarn lint src --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:staged",
+      "pre-push": "yarn test"
+    }
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "cron": "^1.7.0",
     "danbooru": "^3.1.0",
     "date-fns": "^2.8.1",
     "discord.js": "^11.5.1",
@@ -66,9 +75,10 @@
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "husky": "^4.0.6",
     "jest": "^24.9.0",
+    "lint-staged": "^9.5.0",
     "lookenv": "^1.0.1",
-    "pre-commit": "^1.2.2",
     "puppeteer": "^2.0.0",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.2.0",
