@@ -1,10 +1,9 @@
-import mongoose from 'mongoose';
+import { model, Schema, SchemaTypes } from 'mongoose';
 import * as statics from './statics';
 import * as methods from './methods';
 import Character from '../character';
 import { DECK_LIMIT } from '../../util';
-
-const { Schema, SchemaTypes } = mongoose;
+import { IUser, IUserModel } from './types';
 
 const options = { timestamps: true };
 
@@ -52,4 +51,4 @@ const UserSchema = new Schema({
 
 Object.assign(UserSchema, { statics, methods });
 
-export default mongoose.model('user', UserSchema);
+export default model<IUser, IUserModel>('user', UserSchema);
