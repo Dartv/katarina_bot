@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 import * as statics from './statics';
-
-const { Schema } = mongoose;
+import { ISeriesModel, ISeries } from './types';
 
 const options = { timestamps: true, collection: 'series' };
 
@@ -22,4 +21,4 @@ Object.assign(SeriesSchema, { statics });
 
 SeriesSchema.index({ title: 'text' });
 
-export default mongoose.model('series', SeriesSchema);
+export default model<ISeries, ISeriesModel>('series', SeriesSchema);
