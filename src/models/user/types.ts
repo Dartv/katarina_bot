@@ -1,4 +1,4 @@
-import { Document, Model } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 import { ObjectId } from 'mongodb';
 import { ICharacter } from '../character/types';
 import { ICommandContext } from '../../types';
@@ -16,7 +16,7 @@ export interface IUser extends Document {
   lastRolledAt?: Date;
   waifu?: ObjectId | ICharacter;
   quote?: string;
-  deck: ObjectId | ICharacter[];
+  deck: ObjectId | Types.DocumentArray<ICharacter>;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;

@@ -2,6 +2,7 @@ import { Types, Model, Document } from 'mongoose';
 import { ObjectId } from 'mongodb';
 
 import { CharacterStar } from '../../util';
+import { ISeries } from '../series/types';
 
 export interface ICharacter extends Document {
   name: string;
@@ -9,7 +10,7 @@ export interface ICharacter extends Document {
   popularity: number;
   slug: string;
   imageUrl: string;
-  series: ObjectId[] | Types.DocumentArray<any>[];
+  series: ObjectId[] | Types.DocumentArray<ISeries>;
   cardImageUrl: string;
   getStarRating(): CharacterStar;
 }
