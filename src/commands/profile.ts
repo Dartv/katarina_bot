@@ -1,7 +1,8 @@
 import { RichEmbed, GuildMember } from 'discord.js';
 import { pluck } from 'ramda';
+import { formatDistance } from 'date-fns';
 
-import { ICommand } from '../types';
+import { ICommand, ICommandHandler, ICommandContext } from '../types';
 import {
   COMMAND_TRIGGERS,
   COLORS,
@@ -11,10 +12,19 @@ import {
 import { Character, User, Marriage } from '../models';
 import { ErrorResponse } from './responses';
 import { injectUser, injectGuild } from './middleware';
+import { IMarriage } from '../models/marriage/types';
 
 const { BOT_PREFIX } = process.env;
 
-const handler = async (context): Promise<any> => {
+const getMarriedMember = async (marriage: IMarriage, context: ICommandContext): Promise<GuildMember> => {
+  if (!marriage) return null;
+  const { message, user } = context;
+  const marriedToId = marriage.husband.equals(user._id) ? marriage.wife : marriage.husband;
+  const marriedTo = await User.findById(marriedToId);
+  return message.guild.fetchMember((marriedTo as any).discordId);
+};
+
+const handler: ICommandHandler = async (context): Promise<any> => {
   try {
     const { message, dispatch, guild } = context;
     let { user } = context;
@@ -28,7 +38,7 @@ const handler = async (context): Promise<any> => {
       return ErrorResponse(`Couldn't find user ${member.displayName}`, context);
     }
 
-    const [characterStats, marriedMember] = await Promise.all([
+    const [characterStats, marriage] = await Promise.all([
       Character.aggregate([
         {
           $match: {
@@ -44,25 +54,16 @@ const handler = async (context): Promise<any> => {
         },
         { $sort: { stars: 1 } },
       ]),
-      (async (): Promise<GuildMember|null> => {
-        const marriage = await Marriage.findOne({
-          guild: guild._id,
-          status: MarriageStatus.MARRIED,
-          $or: [
-            { husband: user._id },
-            { wife: user._id },
-          ],
-        });
-
-        if (!marriage) return null;
-
-        const marriedToId = marriage.husband.equals(user._id) ? marriage.wife : marriage.husband;
-        const marriedTo = await User.findById(marriedToId);
-        const marriedToMember = await message.guild.fetchMember((marriedTo as any).discordId);
-        return marriedToMember;
-      })(),
+      Marriage.findOne({
+        guild: guild._id,
+        status: MarriageStatus.MARRIED,
+        $or: [
+          { husband: user._id },
+          { wife: user._id },
+        ],
+      }),
     ]);
-
+    const marriedMember = await getMarriedMember(marriage, context);
     const marryExample = `${process.env.BOT_PREFIX}${COMMAND_TRIGGERS.MARRY[0]} @user`;
     const embed = new RichEmbed({
       title: `${member.displayName}'s profile`,
@@ -78,6 +79,10 @@ const handler = async (context): Promise<any> => {
           name: 'Married to',
           value: marriedMember ? marriedMember.displayName : `Marry someone by typing ${marryExample}`,
         },
+        ...(marriage ? [{
+          name: 'Married for',
+          value: formatDistance(new Date(), marriage.marriedAt),
+        }] : []),
         ...characterStats.map(({ stars, count }) => ({
           name: Emoji.STAR.repeat(stars),
           value: count,
@@ -99,7 +104,7 @@ const handler = async (context): Promise<any> => {
     return null;
   } catch (err) {
     console.error(err);
-    return ErrorResponse('Couldn\'t display your profile', context);
+    return ErrorResponse('Couldn\'t display profile', context);
   }
 };
 
