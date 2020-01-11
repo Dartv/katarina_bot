@@ -4,9 +4,12 @@ import Danbooru from 'danbooru';
 import random from 'random-int';
 import fs from 'fs';
 import path from 'path';
+import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 
 import { COMMAND_TRIGGERS, BOT_PREFIXES } from './util/constants';
 import store from './store';
+import { ICommandContext } from './types';
+import { ErrorResponse } from './commands/responses';
 
 const {
   BOT_PREFIX: prefix,
@@ -44,8 +47,17 @@ client.on('ready', async () => {
   client.user.setActivity(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
 });
 
-client.on('dispatchFail', (reason, { error }) => {
-  if (error) console.error(reason, error);
+client.on('dispatchFail', (reason, context: ICommandContext) => {
+  const { error, command } = context;
+  if (error) {
+    console.error(`Dispatch failed for command ${command}`);
+    console.error(reason, error);
+    const response = ErrorResponse(
+      'Something went wrong...',
+      { ...context, formatter: MarkdownFormatter },
+    );
+    response.respond().catch(console.error);
+  }
 });
 
 const botPrefixesRegex = new RegExp(`^[${BOT_PREFIXES.join('')}]`);

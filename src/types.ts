@@ -17,6 +17,9 @@ export interface ICommandContext {
   formatter: ICommandFormatter;
   user?: any;
   guild?: any;
+  error?: Error;
+  command?: string;
+  dispatch: (...args: any[]) => Promise<any>;
 }
 
 export type ICommandHandler = (context: ICommandContext & Partial<any>) => Promise<any>;
