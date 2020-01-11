@@ -52,6 +52,7 @@ export const COMMAND_TRIGGERS = {
   DIVORCE: ['divorce'],
   SUDOKU: ['sudoku'],
   RESURRECT: ['resurrect'],
+  LIAR: ['liar'],
 };
 
 export const FONTS = {
@@ -112,6 +113,8 @@ export enum CharacterStar {
 
 export enum Emoji {
   STAR = '⭐️',
+  LIAR = '<:pizdabol:558647131334901764>',
+  SPRAVEDLIVO = '<:spravedlivo:586138243855155200>',
 }
 
 export enum PopularityThreshold {

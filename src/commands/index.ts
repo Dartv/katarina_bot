@@ -41,6 +41,7 @@ import marry from './marry';
 import divorce from './divorce';
 import sudoku from './sudoku';
 import resurrect from './resurrect';
+import liar from './liar';
 
 const commands = [
   add,
@@ -85,6 +86,7 @@ const commands = [
   divorce,
   sudoku,
   resurrect,
+  liar,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

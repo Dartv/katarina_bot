@@ -18,7 +18,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "yarn lint src --fix",
+      "yarn eslint --fix",
       "git add"
     ]
   },
