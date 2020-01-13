@@ -42,6 +42,7 @@ import divorce from './divorce';
 import sudoku from './sudoku';
 import resurrect from './resurrect';
 import liar from './liar';
+import dice from './dice';
 
 const commands = [
   add,
@@ -87,6 +88,7 @@ const commands = [
   sudoku,
   resurrect,
   liar,
+  dice,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

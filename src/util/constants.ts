@@ -53,6 +53,7 @@ export const COMMAND_TRIGGERS = {
   SUDOKU: ['sudoku'],
   RESURRECT: ['resurrect'],
   LIAR: ['liar'],
+  DICE: ['dice'],
 };
 
 export const FONTS = {
