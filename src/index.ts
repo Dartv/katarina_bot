@@ -5,6 +5,7 @@ import random from 'random-int';
 import fs from 'fs';
 import path from 'path';
 import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
+import Snoowrap from 'snoowrap';
 
 import { COMMAND_TRIGGERS, BOT_PREFIXES } from './util/constants';
 import store from './store';
@@ -17,6 +18,11 @@ const {
   YOUTUBE_API_KEY,
   DANBOORU_LOGIN,
   DANBOORU_API_KEY,
+  REDDIT_USERNAME,
+  REDDIT_PASSWORD,
+  REDDIT_CLIENT_ID,
+  REDDIT_CLIENT_SECRET,
+  REDDIT_USERAGENT,
 } = process.env;
 const CACHED_MESSAGES_PATH = path.resolve(__dirname, '../.cached-messages');
 const MESSAGE_LIMIT = 3000;
@@ -41,6 +47,16 @@ require('./commands').default(client);
 client.services.instance('music.youtube', new YouTube(YOUTUBE_API_KEY));
 client.services.instance('music.store', store);
 client.services.instance('danbooru', new Danbooru(`${DANBOORU_LOGIN}:${DANBOORU_API_KEY}`));
+client.services.instance(
+  'reddit',
+  new Snoowrap({
+    userAgent: REDDIT_USERAGENT,
+    clientId: REDDIT_CLIENT_ID,
+    clientSecret: REDDIT_CLIENT_SECRET,
+    username: REDDIT_USERNAME,
+    password: REDDIT_PASSWORD,
+  }),
+);
 
 client.on('ready', async () => {
   console.log('I\'m ready!');

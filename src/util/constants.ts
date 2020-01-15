@@ -54,6 +54,7 @@ export const COMMAND_TRIGGERS = {
   RESURRECT: ['resurrect'],
   LIAR: ['liar'],
   DICE: ['dice'],
+  PROTECC: ['protecc'],
 };
 
 export const FONTS = {

@@ -43,6 +43,7 @@ import sudoku from './sudoku';
 import resurrect from './resurrect';
 import liar from './liar';
 import dice from './dice';
+import protecc from './protecc';
 
 const commands = [
   add,
@@ -89,6 +90,7 @@ const commands = [
   resurrect,
   liar,
   dice,
+  protecc,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
