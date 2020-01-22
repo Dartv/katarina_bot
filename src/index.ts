@@ -68,11 +68,13 @@ client.on('dispatchFail', (reason, context: ICommandContext) => {
   if (error) {
     console.error(`Dispatch failed for command ${command}`);
     console.error(reason, error);
-    const response = ErrorResponse(
-      'Something went wrong...',
-      { ...context, formatter: MarkdownFormatter },
-    );
-    response.respond().catch(console.error);
+    if (reason === 'handlerError') {
+      const response = ErrorResponse(
+        'Something went wrong...',
+        { ...context, formatter: MarkdownFormatter },
+      );
+      response.respond().catch(console.error);
+    }
   }
 });
 

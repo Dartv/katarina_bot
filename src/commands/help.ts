@@ -37,8 +37,6 @@ export const handler: ICommandHandler = async ({ commands, message }) => {
   });
 
   await Promise.all(embeds.map(embed => message.author.send(embed)));
-
-  return null;
 };
 
 export default (): ICommand => ({
