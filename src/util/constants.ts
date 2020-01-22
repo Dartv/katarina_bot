@@ -55,6 +55,11 @@ export const COMMAND_TRIGGERS = {
   LIAR: ['liar'],
   DICE: ['dice'],
   PROTECC: ['protecc'],
+  HANDHOLDING: ['handholding'],
+  AWOO: ['awoo'],
+  DISGUST: ['disgust'],
+  SMUG: ['smug'],
+  PANTSU: ['pantsu'],
 };
 
 export const FONTS = {

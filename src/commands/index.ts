@@ -44,6 +44,11 @@ import resurrect from './resurrect';
 import liar from './liar';
 import dice from './dice';
 import protecc from './protecc';
+import handholding from './handholding';
+import awoo from './awoo';
+import disgust from './disgust';
+import smug from './smug';
+import pantsu from './pantsu';
 
 const commands = [
   add,
@@ -91,6 +96,11 @@ const commands = [
   liar,
   dice,
   protecc,
+  handholding,
+  awoo,
+  disgust,
+  smug,
+  pantsu,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
