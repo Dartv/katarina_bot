@@ -1,4 +1,3 @@
-import R from 'ramda';
 import { RichEmbed } from 'discord.js';
 
 import { COLORS, COMMAND_TRIGGERS } from '../util/constants';
@@ -40,7 +39,7 @@ export const handler: ICommandHandler = async ({ commands, message }) => {
 };
 
 export default (): ICommand => ({
-  handler: R.once(handler),
+  handler,
   triggers: COMMAND_TRIGGERS.HELP,
   description: 'Prints all available commands',
 });
