@@ -9,13 +9,17 @@
     "clean": "./node_modules/.bin/rimraf dist",
     "build": "tsc",
     "prebuild": "yarn clean",
-    "start": "lookenv --path=./env/lookenv.prod.js -- node dist/index.js",
+    "start": "node dist/index.js",
     "start:watch": "lookenv --path=./env/lookenv.dev.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "./node_modules/.bin/jest",
     "eslint": "./node_modules/.bin/eslint",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:staged": "./node_modules/.bin/lint-staged",
-    "deploy:production": "pm2 deploy ecosystem.config.js production --force"
+    "deploy:setup": "pm2 deploy ecosystem.config.js production setup",
+    "deploy:update": "pm2 deploy ecosystem.config.js production update",
+    "deploy:revert": "pm2 deploy ecosystem.config.js production revert 1",
+    "deploy:restart": "pm2 deploy ecosystem.config.js production exec \"pm2 restart all\"",
+    "deploy": "pm2 deploy ecosystem.config.js production --force"
   },
   "lint-staged": {
     "*.ts": [

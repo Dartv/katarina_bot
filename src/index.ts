@@ -34,8 +34,6 @@ let messages = [];
 
 connectDB()
   .then(() => {
-    process.send('ready');
-
     const client = new Client({ prefix });
 
     client.services.instance('music.youtube', new YouTube(YOUTUBE_API_KEY));
