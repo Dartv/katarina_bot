@@ -1,13 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
 mongoose.Promise = Promise;
 
-mongoose.connect(process.env.MONGO_URI, {
-  useFindAndModify: false,
+export const connectDB = (): Promise<Mongoose> => mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000,
 });
-
-mongoose.connection
-  .once('open', () => console.log('Connected to mongo instance'))
-  .on('error', (error) => {
-    console.error('An error has occured while trying to connect to mongo instance: ', error);
-  });
