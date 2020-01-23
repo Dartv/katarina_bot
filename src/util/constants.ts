@@ -137,3 +137,8 @@ export enum MarriageStatus {
   PROPOSED = 'PROPOSED',
   MARRIED = 'MARRIED',
 }
+
+export enum Banner {
+  NORMAL = 'normal',
+  LOCAL = 'local',
+}

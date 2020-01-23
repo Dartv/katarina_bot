@@ -33,6 +33,7 @@
     }
   },
   "dependencies": {
+    "@types/ramda": "^0.26.40",
     "cheerio": "^1.0.0-rc.3",
     "danbooru": "^3.1.0",
     "date-fns": "^2.8.1",
@@ -66,7 +67,6 @@
     "@types/node": "^12.12.11",
     "@types/node-fetch": "^2.5.4",
     "@types/puppeteer": "^2.0.0",
-    "@types/ramda": "^0.26.36",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "babel-cli": "^6.26.0",

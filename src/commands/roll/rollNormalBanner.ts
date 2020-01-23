@@ -1,39 +1,24 @@
 /* global document, window */
 
-import { Attachment } from 'discord.js';
 import puppeteer from 'puppeteer';
+import { Message } from 'discord.js';
+import { tmpdir } from 'os';
 import fs from 'fs';
 import { promisify } from 'util';
-// import { isThisHour, differenceInMinutes } from 'date-fns';
-import { tmpdir } from 'os';
 import { pluck } from 'ramda';
 
-import { COMMAND_TRIGGERS, Emoji } from '../util';
-import { Character, User, Series } from '../models';
-import { ErrorResponse } from './responses/ErrorResponse';
-import { injectUser } from './middleware';
-import { getCharacterStarRating } from '../models/character/util';
+import { ICommandHandler } from '../../types';
+import { getCharacterStarRating } from '../../models/character/util';
+import { Emoji } from '../../util';
+import { Series, Character } from '../../models';
+import { ISeries } from '../../models/series/types';
 
 const unlink = promisify(fs.unlink);
 
-// const checkRollCooldown = async (next, context) => {
-//   if (isThisHour(context.user.lastRolledAt)) {
-//     const diff = differenceInMinutes(new Date(), context.user.lastRolledAt);
-//     return new ErrorResponse(`Your next roll is available in ${60 - diff} minutes`, context);
-//   }
-//   return next(context);
-// };
-
-const middleware = [
-  injectUser(),
-  // checkRollCooldown,
-];
-
-const handler = async (context): Promise<any> => {
+export const rollNormalBanner: ICommandHandler = async (context) => {
   const browser = await puppeteer.launch();
   try {
     const { message } = context;
-
     const page = await browser.newPage();
     await page.setCookie({
       name: 'waifutheme',
@@ -91,17 +76,17 @@ const handler = async (context): Promise<any> => {
     const container = await page.$('#waifu-container');
     const fileName = `${slug}.png`;
     const path = `${tmpdir()}/${fileName}`;
-    const attachment = new Attachment(path, `${fileName}`);
 
     await container.screenshot({ path });
 
     const [
-      { attachments },
+      response,
       characterSeries,
     ] = await Promise.all([
-      message.reply(name, attachment),
-      (Series as any).getUpdatedSeries(series),
+      message.reply(name, { files: [path], split: false }),
+      Series.getUpdatedSeries(series as ISeries[]),
     ]);
+    const cardImageUrl = (response as Message).attachments.first().url;
 
     const [character] = await Promise.all([
       Character.findOneAndUpdate({ slug }, {
@@ -110,35 +95,16 @@ const handler = async (context): Promise<any> => {
           stars,
           imageUrl,
           slug,
-          series: pluck('_id', characterSeries as any[]),
           popularity,
-          cardImageUrl: attachments.first().url,
+          cardImageUrl,
+          series: pluck('_id', characterSeries),
         },
       }, { upsert: true, new: true }),
       unlink(path),
     ]);
 
-    await User.findByIdAndUpdate(context.user.id, {
-      $push: {
-        characters: character._id,
-      },
-      $set: {
-        lastRolledAt: new Date(),
-      },
-    });
-
-    return null;
-  } catch (err) {
-    console.error(err);
-    return new ErrorResponse('Couldn\'t roll waifu...', context);
+    return character;
   } finally {
     await browser.close();
   }
 };
-
-export default () => ({
-  middleware,
-  handler,
-  triggers: COMMAND_TRIGGERS.ROLL,
-  description: 'Waifu gacha game',
-});
