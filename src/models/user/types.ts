@@ -17,6 +17,7 @@ export interface IUser extends Document {
   waifu?: ObjectId | ICharacter;
   quote?: string;
   deck: ObjectId | Types.DocumentArray<ICharacter>;
+  visitedAt?: Date;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;
