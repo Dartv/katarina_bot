@@ -3,11 +3,10 @@ import { isSameHour, formatDistance, addHours } from 'date-fns';
 
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
-import { CharacterInfo, Character } from '../models';
 import { ErrorResponse, SuccessResponse } from './responses';
 import { IUser } from '../models/user/types';
 
-export const EXP = 100;
+export const exp = 100;
 
 const checkCooldown: Middleware = async (next, context) => {
   const { user } = context;
@@ -23,39 +22,12 @@ const checkCooldown: Middleware = async (next, context) => {
 const middleware = [injectUser(), checkCooldown];
 
 const handler: ICommandHandler = async (context): Promise<any> => {
-  const { user, args: { slug } } = context;
-  const character = await Character.findOne({
-    slug,
-    _id: { $in: user.characters },
-  });
+  const { args: { slug } } = context;
+  const { user }: { user?: IUser } = context;
 
-  if (!character) {
-    return ErrorResponse('Character not found', context);
-  }
+  const character = await user.visit({ slug, exp }, context);
 
-  let info = await CharacterInfo.findOne({
-    user: user._id,
-    character: character._id,
-  });
-
-  if (!info) {
-    info = new CharacterInfo({
-      user: user._id,
-      character: character._id,
-      exp: EXP,
-    });
-    info.$locals.context = context;
-    await info.save();
-  } else {
-    info.exp += EXP;
-    info.$locals.context = context;
-    await info.save();
-  }
-
-  user.visitedAt = new Date();
-  await user.save();
-
-  return SuccessResponse(`${EXP} exp received`, `You visited ${character.name}`, context);
+  return SuccessResponse(`${exp} exp received`, `You visited ${character.name}`, context);
 };
 
 export default (): ICommand => ({

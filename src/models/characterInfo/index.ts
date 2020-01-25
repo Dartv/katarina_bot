@@ -6,7 +6,6 @@ import {
 } from 'mongoose';
 
 import { ICharacterInfo, ICharacterInfoModel } from './types';
-import User from '../user';
 import { EXPToLVLUp } from '../../util';
 import { createCharacterEmbed } from '../character/util';
 import Character from '../character';
@@ -17,12 +16,12 @@ const CharacterInfoSchema = new Schema({
   user: {
     type: SchemaTypes.ObjectId,
     required: true,
-    ref: User.modelName,
+    ref: 'user',
   },
   character: {
     type: SchemaTypes.ObjectId,
     required: true,
-    ref: User.modelName,
+    ref: 'character',
   },
   level: {
     type: Number,

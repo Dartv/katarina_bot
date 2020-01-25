@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { ICommandContext } from 'ghastly';
 
 import { ICharacter } from '../character/types';
+import * as methods from './methods';
 
 export interface IUserImage {
   ref: string;
@@ -24,6 +25,7 @@ export interface IUser extends Document {
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;
   removeAllImageLinks: () => Promise<IUser>;
   removeImageLink: (image: IUserImage) => Promise<IUser>;
+  visit: typeof methods.visit;
 }
 
 export interface IUserModel extends Model<IUser> {

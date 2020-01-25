@@ -1,7 +1,6 @@
 import { model, Schema, SchemaTypes } from 'mongoose';
 import * as statics from './statics';
 import * as methods from './methods';
-import Character from '../character';
 import { DECK_LIMIT } from '../../util';
 import { IUser, IUserModel } from './types';
 
@@ -36,13 +35,13 @@ const UserSchema = new Schema({
   visitedAt: Date,
   waifu: {
     type: SchemaTypes.ObjectId,
-    ref: Character.modelName,
+    ref: 'character',
   },
   quote: String,
   deck: {
     type: [{
       type: SchemaTypes.ObjectId,
-      ref: Character.modelName,
+      ref: 'character',
     }],
     default: [],
     min: DECK_LIMIT,

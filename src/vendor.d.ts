@@ -27,6 +27,7 @@ declare module 'ghastly' {
     error?: Error;
     command?: string;
     dispatch: (...args: any[]) => Promise<any>;
+    args: { [key: string]: any };
   }
 
   export type ICommandHandler = (context: ICommandContext & Partial<any>) => Promise<any>;

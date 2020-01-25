@@ -7,7 +7,6 @@ import { isNumber } from 'util';
 
 import { ICharacter, ICharacterModel } from './types';
 import { CharacterStar } from '../../util';
-import Series from '../series';
 import * as methods from './methods';
 import * as statics from './statics';
 
@@ -43,7 +42,7 @@ const CharacterSchema = new Schema({
   series: {
     type: [{
       type: SchemaTypes.ObjectId,
-      ref: Series.modelName,
+      ref: 'series',
     }],
     default: [],
   },
