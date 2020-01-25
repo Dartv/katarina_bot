@@ -1,6 +1,6 @@
 import { identity } from 'ramda';
+import { ICommand, ICommandHandler } from 'ghastly';
 
-import { ICommand, ICommandHandler } from '../types';
 import { COMMAND_TRIGGERS, MarriageStatus } from '../util';
 import { injectUser, injectGuild } from './middleware';
 import { ErrorResponse } from './responses';

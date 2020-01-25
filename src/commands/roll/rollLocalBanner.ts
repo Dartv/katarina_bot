@@ -1,4 +1,5 @@
-import { ICommandHandler } from '../../types';
+import { ICommandHandler } from 'ghastly';
+
 import { Character } from '../../models';
 import { createCharacterEmbed } from '../../models/character/util';
 

@@ -1,9 +1,9 @@
 import { RichEmbed } from 'discord.js';
+import { ICommandHandler, ICommand } from 'ghastly';
 
 import { COLORS, COMMAND_TRIGGERS } from '../util/constants';
 import { formatDescription } from '../util';
 import { joinWithArray } from '../util/helpers';
-import { ICommandHandler, ICommand } from '../types';
 
 export const handler: ICommandHandler = async ({ commands, message }) => {
   const embeds = [new RichEmbed()];

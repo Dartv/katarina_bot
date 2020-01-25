@@ -1,13 +1,12 @@
-import { Message } from 'discord.js';
+import { ICommand, ICommandHandler } from 'ghastly';
 
-import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
 import { createCharacterEmbed } from '../models/character/util';
 
-const handler = async (context): Promise<any> => {
-  const { user, message }: { message: Message } & Partial<any> = context;
+const handler: ICommandHandler = async (context): Promise<any> => {
+  const { user, message } = context;
 
   if (!user.deck.length) {
     return ErrorResponse(
@@ -16,21 +15,16 @@ const handler = async (context): Promise<any> => {
     );
   }
 
-  try {
-    const embeds = user.deck.map(character => createCharacterEmbed({
-      ...character.toObject(),
-      imageUrl: null,
-      thumbnail: { url: character.imageUrl },
-    }));
+  const embeds = user.deck.map(character => createCharacterEmbed({
+    ...character.toObject(),
+    imageUrl: null,
+    thumbnail: { url: character.imageUrl },
+  }));
 
-    await message.author.sendMessage('Here\'s your deck');
-    await Promise.all(embeds.map(embed => message.author.sendEmbed(embed)));
+  await message.author.sendMessage('Here\'s your deck');
+  await Promise.all(embeds.map(embed => message.author.sendEmbed(embed)));
 
-    return null;
-  } catch (err) {
-    console.error(err);
-    return ErrorResponse('Couldn\'t show your deck', context);
-  }
+  return null;
 };
 
 export default (): ICommand => ({

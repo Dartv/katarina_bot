@@ -1,6 +1,6 @@
 import { defaultTo } from 'ramda';
+import { ICommand, ICommandHandler } from 'ghastly';
 
-import { ICommand, ICommandHandler } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { Character, CharacterInfo } from '../models';

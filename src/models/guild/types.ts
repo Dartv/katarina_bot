@@ -1,8 +1,8 @@
 import { Document, Model } from 'mongoose';
 import { ObjectId } from 'mongodb';
+import { ICommandContext } from 'ghastly';
 
 import { IUser } from '../user/types';
-import { ICommandContext } from '../../types';
 
 export interface IGuildImage {
   ref: string;

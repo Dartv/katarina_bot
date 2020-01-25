@@ -1,6 +1,6 @@
 import { pluck } from 'ramda';
+import { ICommand } from 'ghastly';
 
-import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import Character from '../models/character';
 import { createCharacterEmbed } from '../models/character/util';

@@ -1,4 +1,4 @@
-import { Client } from 'ghastly';
+import { Client, ICommandContext } from 'ghastly';
 import YouTube from 'simple-youtube-api';
 import Danbooru from 'danbooru';
 import random from 'random-int';
@@ -7,9 +7,9 @@ import path from 'path';
 import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 import Snoowrap from 'snoowrap';
 
+
 import { COMMAND_TRIGGERS, BOT_PREFIXES } from './util/constants';
 import store from './store';
-import { ICommandContext } from './types';
 import { ErrorResponse } from './commands/responses';
 import { connectDB } from './services/mongo_connect';
 import installCommands from './commands';

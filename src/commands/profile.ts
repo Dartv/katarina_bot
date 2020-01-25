@@ -1,8 +1,8 @@
 import { RichEmbed, GuildMember } from 'discord.js';
 import { pluck } from 'ramda';
 import { formatDistance } from 'date-fns';
+import { ICommand, ICommandHandler, ICommandContext } from 'ghastly';
 
-import { ICommand, ICommandHandler, ICommandContext } from '../types';
 import {
   COMMAND_TRIGGERS,
   COLORS,

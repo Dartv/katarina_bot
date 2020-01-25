@@ -1,8 +1,8 @@
 import { User as DiscordUser } from 'discord.js';
+import { Middleware, ICommandContext } from 'ghastly';
 
 import { User } from '../../models';
 import { ErrorResponse } from '../responses';
-import { Middleware, ICommandContext } from '../../types';
 
 type InjectUserConfigFn = (context: ICommandContext) => Promise<{ discordUser: DiscordUser }>;
 

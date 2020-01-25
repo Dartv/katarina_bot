@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
+import { ICommand, ICommandHandler } from 'ghastly';
 
-import { ICommand, ICommandHandler } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { ErrorResponse } from './responses';
 

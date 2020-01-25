@@ -1,7 +1,8 @@
 import { Document, Model, Types } from 'mongoose';
 import { ObjectId } from 'mongodb';
+import { ICommandContext } from 'ghastly';
+
 import { ICharacter } from '../character/types';
-import { ICommandContext } from '../../types';
 
 export interface IUserImage {
   ref: string;

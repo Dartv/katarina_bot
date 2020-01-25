@@ -1,9 +1,9 @@
-import { ICommand } from '../types';
+import { ICommand, ICommandHandler } from 'ghastly';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
 
-const handler = async (context) => {
+const handler: ICommandHandler = async (context) => {
   const { user, args: { stars }, message } = context;
   try {
     const data = await user.getCharactersByStars({ stars, field: 'favorites' });

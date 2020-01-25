@@ -1,7 +1,6 @@
-import { Middleware } from 'ghastly';
+import { Middleware, ICommandHandler, ICommand } from 'ghastly';
 import { isSameHour, formatDistance, addHours } from 'date-fns';
 
-import { ICommand, ICommandHandler } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { CharacterInfo, Character } from '../models';

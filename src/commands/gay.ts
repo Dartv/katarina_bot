@@ -1,8 +1,9 @@
 import random from 'random-int';
-import { ICommand } from '../types';
+import { ICommand, ICommandHandler } from 'ghastly';
+
 import { COMMAND_TRIGGERS } from '../util';
 
-const handler = async (context): Promise<string> => {
+const handler: ICommandHandler = async (context): Promise<string> => {
   const { message: { mentions } } = context;
 
   if (!mentions.members.size) return null;

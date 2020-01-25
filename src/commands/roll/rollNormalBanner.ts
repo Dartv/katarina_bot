@@ -6,8 +6,8 @@ import { tmpdir } from 'os';
 import fs from 'fs';
 import { promisify } from 'util';
 import { pluck } from 'ramda';
+import { ICommandHandler } from 'ghastly';
 
-import { ICommandHandler } from '../../types';
 import { getCharacterStarRating } from '../../models/character/util';
 import { Emoji } from '../../util';
 import { Series, Character } from '../../models';

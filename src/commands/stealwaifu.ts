@@ -2,8 +2,8 @@ import { Message } from 'discord.js';
 import random from 'random-int';
 import { times } from 'ramda';
 import { ObjectId } from 'mongodb';
+import { ICommand } from 'ghastly';
 
-import { ICommand } from '../types';
 import { COMMAND_TRIGGERS, Emoji, CharacterStar } from '../util';
 import { injectUser } from './middleware';
 import { Character, User } from '../models';

@@ -1,5 +1,6 @@
+import { ICommand, ICommandHandler } from 'ghastly';
+
 import { Banner, COMMAND_TRIGGERS } from '../../util';
-import { ICommand, ICommandHandler } from '../../types';
 import { ICharacter } from '../../models/character/types';
 import { User } from '../../models';
 import { injectUser } from '../middleware';

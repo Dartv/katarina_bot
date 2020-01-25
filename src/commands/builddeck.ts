@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { pluck } from 'ramda';
+import { ICommand, ICommandHandler, ICommandContext } from 'ghastly';
 
-import { ICommand } from '../types';
 import { COMMAND_TRIGGERS, DECK_LIMIT } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
@@ -11,8 +11,8 @@ import { ICharacter } from '../models/character/types';
 
 const CHOICE_TIME = 15 * 1000;
 
-const chooseCharacter = async (context: { message: Message } & Partial<any>): Promise<Partial<ICharacter>> => {
-  const { user, message: { channel, author }, dispatch } = context;
+const chooseCharacter = async (context: ICommandContext): Promise<Partial<ICharacter>> => {
+  const { user, message: { author } } = context;
   const characters = await Character.random(3, [
     {
       $match: {
@@ -30,7 +30,7 @@ const chooseCharacter = async (context: { message: Message } & Partial<any>): Pr
 
   const dm = await author.createDM();
   await Promise.all(embeds.map(embed => dm.sendEmbed(embed)));
-  const predicate = ({ content }: Message) => /^[1-3]$/.test(content);
+  const predicate = ({ content }: Message): boolean => /^[1-3]$/.test(content);
   const options = {
     time: CHOICE_TIME,
     maxMatches: 1,
@@ -42,7 +42,7 @@ const chooseCharacter = async (context: { message: Message } & Partial<any>): Pr
   return characters.find(({ index }) => index === choice);
 };
 
-const handler = async (context): Promise<any> => {
+const handler: ICommandHandler = async (context): Promise<any> => {
   const { user } = context;
   try {
     if (user.characters.length < DECK_LIMIT) {

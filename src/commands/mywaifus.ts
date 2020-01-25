@@ -1,6 +1,6 @@
 import { pluck } from 'ramda';
+import { ICommand, ICommandHandler } from 'ghastly';
 
-import { ICommand } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
@@ -14,7 +14,7 @@ const getCharacters = async (context) => {
   return user.getCharactersBySeries(input);
 };
 
-const handler = async (context) => {
+const handler: ICommandHandler = async (context) => {
   try {
     const { message } = context;
     const data = await getCharacters(context);

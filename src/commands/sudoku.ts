@@ -1,4 +1,4 @@
-import { ICommand, ICommandHandler } from '../types';
+import { ICommand, ICommandHandler } from 'ghastly';
 import { COMMAND_TRIGGERS } from '../util';
 
 const handler: ICommandHandler = async (context): Promise<string> => {

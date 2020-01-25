@@ -1,10 +1,10 @@
-import { ICommand } from '../types';
+import { ICommand, ICommandHandler } from 'ghastly';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { User, Character } from '../models';
 import { ErrorResponse, SuccessResponse } from './responses';
 
-const handler = async (context) => {
+const handler: ICommandHandler = async (context) => {
   const { user, args: { name } } = context;
   const waifuName = name.join(' ');
   try {

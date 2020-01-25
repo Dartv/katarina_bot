@@ -1,4 +1,5 @@
-import { ICommand } from '../types';
+import { ICommand } from 'ghastly';
+
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
