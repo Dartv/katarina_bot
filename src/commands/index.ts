@@ -49,6 +49,7 @@ import awoo from './awoo';
 import disgust from './disgust';
 import smug from './smug';
 import pantsu from './pantsu';
+import visit from './visit';
 
 const commands = [
   add,
@@ -101,6 +102,7 @@ const commands = [
   disgust,
   smug,
   pantsu,
+  visit,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

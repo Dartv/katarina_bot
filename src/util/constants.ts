@@ -60,6 +60,7 @@ export const COMMAND_TRIGGERS = {
   DISGUST: ['disgust'],
   SMUG: ['smug'],
   PANTSU: ['pantsu'],
+  VISIT: ['visit'],
 };
 
 export const FONTS = {
@@ -142,3 +143,5 @@ export enum Banner {
   NORMAL = 'normal',
   LOCAL = 'local',
 }
+
+export const EXPToLVLUp = [0, 0, 100, 500, 1000, 3000];

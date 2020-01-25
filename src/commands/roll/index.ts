@@ -10,7 +10,7 @@ const middleware = [
   injectUser(),
 ];
 
-const handler: ICommandHandler = async (context): Promise<any> => {
+const handler: ICommandHandler = async (context): Promise<void> => {
   const { args } = context;
   const banner: Banner = args.banner.trim().toLowerCase();
   let character: ICharacter;
