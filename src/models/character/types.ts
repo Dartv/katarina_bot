@@ -13,6 +13,7 @@ export interface ICharacter extends Document {
   series: ObjectId[] | Types.DocumentArray<ISeries>;
   cardImageUrl: string;
   getStarRating(): CharacterStar;
+  fetchInfo(userId: ObjectId): Promise<ICharacter & any>;
 }
 
 export interface ICharacterModel extends Model<ICharacter> {

@@ -33,6 +33,7 @@ const UserSchema = new Schema({
     max: 20,
   },
   lastRolledAt: Date,
+  visitedAt: Date,
   waifu: {
     type: SchemaTypes.ObjectId,
     ref: Character.modelName,

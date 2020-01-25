@@ -83,7 +83,7 @@ export const rollNormalBanner: ICommandHandler = async (context) => {
       response,
       characterSeries,
     ] = await Promise.all([
-      message.reply(name, { files: [path], split: false }),
+      message.reply(name, { files: [path] }),
       Series.getUpdatedSeries(series as ISeries[]),
     ]);
     const cardImageUrl = (response as Message).attachments.first().url;

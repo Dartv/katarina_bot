@@ -1,11 +1,14 @@
-import { ICommand } from '../types';
+import { defaultTo } from 'ramda';
+
+import { ICommand, ICommandHandler } from '../types';
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
-import { Character } from '../models';
+import { Character, CharacterInfo } from '../models';
 import { ErrorResponse } from './responses';
 import { createCharacterEmbed } from '../models/character/util';
+import { ICharacterInfo } from '../models/characterInfo/types';
 
-const handler = async (context) => {
+const handler: ICommandHandler = async (context) => {
   try {
     const {
       user,
@@ -32,7 +35,13 @@ const handler = async (context) => {
       stars,
       name,
       series,
+      slug,
     } = character;
+
+    const { level, exp }: Partial<ICharacterInfo> = await CharacterInfo.findOne({
+      character: character._id,
+      user: user._id,
+    }).map(defaultTo({}));
 
     const count = user.characters.filter(_id => _id.toString() === id).length;
     const embed = createCharacterEmbed({
@@ -40,7 +49,9 @@ const handler = async (context) => {
       imageUrl,
       series,
       stars,
-      footer: { text: `You have x${count} of this waifu` },
+      level,
+      exp,
+      footer: { text: `You have x${count} of this waifu | ${slug}` },
     });
 
     return dispatch(embed);
