@@ -41,7 +41,7 @@ declare module 'ghastly' {
     handler: ICommandHandler;
     triggers: string[];
     description?: string;
-    parameters?: [CommandParam];
+    parameters?: CommandParam[];
   }
 }
 

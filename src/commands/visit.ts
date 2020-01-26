@@ -1,5 +1,7 @@
 import { Middleware, ICommandHandler, ICommand } from 'ghastly';
-import { isSameHour, formatDistance, addHours } from 'date-fns';
+import {
+  isSameHour, formatDistance, addHours, startOfHour,
+} from 'date-fns';
 
 import { COMMAND_TRIGGERS } from '../util';
 import { injectUser } from './middleware';
@@ -12,7 +14,7 @@ const checkCooldown: Middleware = async (next, context) => {
   const { user } = context;
 
   if (isSameHour((user as IUser).visitedAt, new Date())) {
-    const distance = formatDistance(addHours(new Date(), 1), user.visitedAt);
+    const distance = formatDistance(startOfHour(addHours(user.visitedAt, 1)), user.visitedAt);
     return ErrorResponse(`Command available in ${distance}`, context);
   }
 

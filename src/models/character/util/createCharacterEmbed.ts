@@ -21,8 +21,8 @@ export default function createCharacterEmbed({
   series = [],
   footer,
   fields = [],
-  level = 1,
-  exp = 0,
+  level,
+  exp,
   ...rest
 }: ICreateCharacterEmbedInput): RichEmbed {
   return new RichEmbed({
@@ -33,8 +33,8 @@ export default function createCharacterEmbed({
     fields: [
       { name: 'Stars', value: Emoji.STAR.repeat(stars) },
       { name: 'Appears in', value: pluck('title', series as any[]).join(', ') || '...' },
-      { name: 'Level', value: level.toString(), inline: true },
-      { name: 'Exp', value: `${exp}/${EXPToLVLUp[level + 1]}`, inline: true },
+      ...(level ? [{ name: 'Level', value: level.toString(), inline: true }] : []),
+      ...(exp ? [{ name: 'Exp', value: `${exp}/${EXPToLVLUp[level + 1]}`, inline: true }] : []),
       ...fields,
     ],
     ...rest,

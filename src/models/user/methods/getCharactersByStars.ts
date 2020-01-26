@@ -1,8 +1,18 @@
-export async function getUserCharactersByStars(
-  options: { stars?: number; field?: string },
-): Promise<any[]>;
+export interface IGetCharactersByStarsInput {
+  stars?: number;
+  field?: string;
+  limit?: number;
+  skip?: number;
+}
 
-export default async function getUserCharactersByStars({ stars, field = 'characters' }) {
+export type IGetCharactersByStars = (options: IGetCharactersByStarsInput) => Promise<any[]>;
+
+const getUserCharactersByStars: IGetCharactersByStars = async function getUserCharactersByStars({
+  stars,
+  field = 'characters',
+  limit,
+  skip,
+}) {
   return this.constructor.aggregate([
     {
       $match: {
@@ -24,6 +34,8 @@ export default async function getUserCharactersByStars({ stars, field = 'charact
             },
           },
           { $sort: { stars: -1 } },
+          ...(skip ? [{ $skip: skip }] : []),
+          ...(limit ? [{ $limit: limit }] : []),
         ],
       },
     },
@@ -38,4 +50,6 @@ export default async function getUserCharactersByStars({ stars, field = 'charact
       },
     },
   ]);
-}
+};
+
+export default getUserCharactersByStars;

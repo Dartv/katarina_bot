@@ -6,12 +6,16 @@ import { injectUser } from './middleware';
 import { ErrorResponse } from './responses';
 
 const getCharacters = async (context) => {
-  const { user, args: { input } } = context;
+  const { user, args: { input, page } } = context;
+
+  const limit = 10;
+  const skip = page > 0 ? limit * (page - 1) : 0;
+
   if (Number.isInteger(Number(input))) {
-    return user.getCharactersByStars({ stars: Number(input) });
+    return user.getCharactersByStars({ stars: Number(input), limit, skip });
   }
 
-  return user.getCharactersBySeries(input);
+  return user.getCharactersBySeries(input, { limit, skip });
 };
 
 const handler: ICommandHandler = async (context) => {
@@ -43,6 +47,12 @@ export default (): ICommand => ({
       name: 'input',
       description: 'stars or series title',
       defaultValue: 5,
+      optional: true,
+    },
+    {
+      name: 'page',
+      description: 'page',
+      defaultValue: 1,
       optional: true,
     },
   ],

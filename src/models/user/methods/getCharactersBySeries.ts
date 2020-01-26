@@ -1,13 +1,21 @@
 import { prop, indexBy } from 'ramda';
 
 import { Series, Character } from '../..';
+import { ICharacter } from '../../character/types';
 
-export async function getUserCharactersBySeries(input: string): Promise<any[]>;
+export interface IGetUserCharactersBySeries {
+  (input: string, options?: { limit?: number; skip?: number }): Promise<ICharacter[]>;
+}
 
-export default async function getUserCharactersBySeries(input) {
+const getCharactersBySeries: IGetUserCharactersBySeries = async function getUserCharactersBySeries(
+  input,
+  { limit = 0, skip = 0 } = {},
+) {
   const characters = await Character.find({
     _id: { $in: this.characters },
-  }).select('series name').lean();
+  })
+    .select('series name')
+    .lean();
   const ids = characters.reduce((series, char) => {
     char.series.forEach((s) => {
       series.add(s);
@@ -19,7 +27,13 @@ export default async function getUserCharactersBySeries(input) {
     $text: {
       $search: input,
     },
-  }).select('_id').lean();
+  })
+    .select('_id')
+    .skip(skip)
+    .limit(limit)
+    .lean();
   const seriesById = indexBy(prop('_id'), series);
   return characters.filter(char => char.series.some(s => seriesById[s]));
-}
+};
+
+export default getCharactersBySeries;
