@@ -29,7 +29,7 @@ import scrape from './scrape';
 import versus from './versus';
 import whois from './whois';
 import whatseries from './whatseries';
-import stealwaifu from './stealwaifu';
+// import stealwaifu from './stealwaifu';
 import love from './love';
 import gay from './gay';
 import profile from './profile';
@@ -82,7 +82,7 @@ const commands = [
   versus,
   whois,
   whatseries,
-  stealwaifu,
+  // stealwaifu,
   love,
   gay,
   profile,
