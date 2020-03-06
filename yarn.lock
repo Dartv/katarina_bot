@@ -4327,6 +4327,13 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+lib-r-math.js@^1.0.86:
+  version "1.0.86"
+  resolved "https://registry.yarnpkg.com/lib-r-math.js/-/lib-r-math.js-1.0.86.tgz#ecbc25502f956fc7f5bdce302d138aa05bb42e59"
+  integrity sha512-U582LPZUD1Ceo6OAohrpo2N5M0K0z5slmiTWP6XOk8M/+F/yfm9HjafC9LdAv960SEn8zfIVPE7YVX+n1EOolQ==
+  dependencies:
+    debug "^3.1.0"
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -5482,6 +5489,13 @@ qs@~6.4.0:
 qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
+
+r-script@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/r-script/-/r-script-0.0.4.tgz#b7337d0a36b27691cba0cf1f60a912bbd646abe1"
+  integrity sha512-PNUS0iQGHLSzKCaTI8HZs5pw20GSJVaIhuBEPY3QYoUmf1RXUAnTcof0G6uMp8jGr9Ke2n/rhXVC6B1m/iiWCA==
+  dependencies:
+    underscore "^1.8.3"
 
 ramda@^0.24.1:
   version "0.24.1"
@@ -6683,6 +6697,11 @@ unbzip2-stream@^1.0.9:
   dependencies:
     buffer "^5.2.1"
     through "^2.3.8"
+
+underscore@^1.8.3:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.2.tgz#0c8d6f536d6f378a5af264a72f7bec50feb7cf2f"
+  integrity sha512-D39qtimx0c1fI3ya1Lnhk3E9nONswSKhnffBI0gME9C99fYOkNi04xs8K6pePLhvl1frbDemkaBQ5ikWllR2HQ==
 
 union-value@^1.0.0:
   version "1.0.0"
