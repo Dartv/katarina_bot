@@ -5490,13 +5490,6 @@ qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
 
-r-script@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/r-script/-/r-script-0.0.4.tgz#b7337d0a36b27691cba0cf1f60a912bbd646abe1"
-  integrity sha512-PNUS0iQGHLSzKCaTI8HZs5pw20GSJVaIhuBEPY3QYoUmf1RXUAnTcof0G6uMp8jGr9Ke2n/rhXVC6B1m/iiWCA==
-  dependencies:
-    underscore "^1.8.3"
-
 ramda@^0.24.1:
   version "0.24.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
@@ -6697,11 +6690,6 @@ unbzip2-stream@^1.0.9:
   dependencies:
     buffer "^5.2.1"
     through "^2.3.8"
-
-underscore@^1.8.3:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.2.tgz#0c8d6f536d6f378a5af264a72f7bec50feb7cf2f"
-  integrity sha512-D39qtimx0c1fI3ya1Lnhk3E9nONswSKhnffBI0gME9C99fYOkNi04xs8K6pePLhvl1frbDemkaBQ5ikWllR2HQ==
 
 union-value@^1.0.0:
   version "1.0.0"
