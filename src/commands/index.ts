@@ -50,6 +50,7 @@ import disgust from './disgust';
 import smug from './smug';
 import pantsu from './pantsu';
 import visit from './visit';
+import calcscore from './calcscore';
 
 const commands = [
   add,
@@ -103,6 +104,7 @@ const commands = [
   smug,
   pantsu,
   visit,
+  calcscore,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

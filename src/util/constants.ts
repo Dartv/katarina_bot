@@ -61,6 +61,7 @@ export const COMMAND_TRIGGERS = {
   SMUG: ['smug'],
   PANTSU: ['pantsu'],
   VISIT: ['visit'],
+  CALC_SCORE: ['calcscore', 'cs'],
 };
 
 export const FONTS = {

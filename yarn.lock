@@ -4327,6 +4327,13 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+lib-r-math.js@^1.0.86:
+  version "1.0.86"
+  resolved "https://registry.yarnpkg.com/lib-r-math.js/-/lib-r-math.js-1.0.86.tgz#ecbc25502f956fc7f5bdce302d138aa05bb42e59"
+  integrity sha512-U582LPZUD1Ceo6OAohrpo2N5M0K0z5slmiTWP6XOk8M/+F/yfm9HjafC9LdAv960SEn8zfIVPE7YVX+n1EOolQ==
+  dependencies:
+    debug "^3.1.0"
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
