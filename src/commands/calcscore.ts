@@ -134,8 +134,8 @@ const handler: ICommandHandler = async (context): Promise<any> => {
     return ErrorResponse('Failed to parse beatmap', context);
   }
 
-  const role = (message.member as GuildMember).roles.find((r) => /^\d+k$/g.test(r.name));
-  const pp = parseInt(role.name.replace('k', ''), 10);
+  const role = (message.member as GuildMember).roles.find((r) => /^\d+k\spp$/g.test(r.name));
+  const pp = role ? parseInt(role.name.replace('k', ''), 10) : stars;
   const { hits, misses } = generateHits(notes, stars, pp);
   const accuracy = getAccuracy(hits);
   const accuracyRank = getAccuracyRank(accuracy);
