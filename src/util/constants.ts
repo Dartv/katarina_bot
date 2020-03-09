@@ -62,6 +62,7 @@ export const COMMAND_TRIGGERS = {
   PANTSU: ['pantsu'],
   VISIT: ['visit'],
   CALC_SCORE: ['calcscore', 'cs'],
+  ADD_PLAYER: ['addplayer'],
 };
 
 export const FONTS = {
@@ -207,3 +208,10 @@ export const EXPToLVLUp = [
   171100,
   177000,
 ];
+
+export enum HTTPMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}

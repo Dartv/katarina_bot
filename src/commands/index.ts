@@ -51,6 +51,7 @@ import smug from './smug';
 import pantsu from './pantsu';
 import visit from './visit';
 import calcscore from './calcscore';
+import addplayer from './addplayer';
 
 const commands = [
   add,
@@ -105,6 +106,7 @@ const commands = [
   pantsu,
   visit,
   calcscore,
+  addplayer,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
