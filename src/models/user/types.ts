@@ -10,6 +10,14 @@ export interface IUserImage {
   url: string;
 }
 
+export interface IScoresaberService {
+  playerid: string;
+}
+
+export interface IUserServices {
+  scoresaber?: IScoresaberService;
+}
+
 export interface IUser extends Document {
   discordId: string;
   images: IUserImage[];
@@ -20,6 +28,7 @@ export interface IUser extends Document {
   quote?: string;
   deck: ObjectId | Types.DocumentArray<ICharacter>;
   visitedAt?: Date;
+  services: IUserServices;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;

@@ -47,6 +47,14 @@ const UserSchema = new Schema({
     min: DECK_LIMIT,
     max: DECK_LIMIT,
   },
+  services: {
+    type: {
+      scoresaber: {
+        playerid: String,
+      },
+    },
+    default: {},
+  },
 }, options);
 
 Object.assign(UserSchema, { statics, methods });

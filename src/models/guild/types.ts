@@ -10,10 +10,20 @@ export interface IGuildImage {
   user: ObjectId | IUser;
 }
 
+export interface IScoresaberService {
+  playerids: string;
+}
+
+export interface IUserServices {
+  scoresaber?: IScoresaberService;
+}
+
+
 export interface IGuild extends Document {
   discordId: string;
   prefix?: string;
   images: IGuildImage[];
+  services?: IUserServices;
   addImageLink: (image: IGuildImage) => Promise<IGuild>;
   removeImageLink: (image: IGuildImage) => Promise<IGuild>;
 }
