@@ -30,6 +30,18 @@ const GuildSchema = new Schema({
     max: 200,
     default: [],
   },
+  services: {
+    type: {
+      scoresaber: {
+        type: {
+          playerids: {
+            type: [String],
+          },
+        },
+      },
+    },
+    default: {},
+  },
 }, options);
 
 Object.assign(GuildSchema, { statics, methods });
