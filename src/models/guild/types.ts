@@ -11,7 +11,7 @@ export interface IGuildImage {
 }
 
 export interface IScoresaberService {
-  playerids: string;
+  playerids: string[];
 }
 
 export interface IUserServices {

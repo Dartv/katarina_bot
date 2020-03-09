@@ -35,6 +35,7 @@
   "dependencies": {
     "@types/ramda": "^0.26.40",
     "@types/request-promise-native": "^1.0.17",
+    "agenda": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "danbooru": "^3.1.0",
     "date-fns": "^2.8.1",
@@ -48,6 +49,7 @@
     "mongoose": "^5.7.5",
     "mz": "^2.7.0",
     "node-fetch": "^2.6.0",
+    "p-queue": "^6.3.0",
     "puppeteer": "^2.0.0",
     "ramda": "^0.24.1",
     "random-int": "^1.0.0",

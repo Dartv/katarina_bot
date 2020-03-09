@@ -14,6 +14,7 @@ import { ErrorResponse } from './commands/responses';
 import { connectDB } from './services/mongo_connect';
 import installCommands from './commands';
 import { logger } from './util/logger';
+import initAgenda from './jobs';
 
 const {
   BOT_PREFIX: prefix,
@@ -53,6 +54,7 @@ connectDB()
     client.on('ready', async () => {
       console.log('I\'m ready!');
       client.user.setActivity(`${prefix}${COMMAND_TRIGGERS.HELP[0]}`);
+      initAgenda(client);
     });
 
     client.on('dispatchFail', (reason, context: ICommandContext) => {
