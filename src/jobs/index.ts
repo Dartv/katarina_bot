@@ -9,24 +9,24 @@ const jobs = [
   /* eslint-enable global-require */
 ];
 
-const agenda = new Agenda({
-  mongo: mongoose.connection,
-});
+export default function initAgenda(client: Client): void {
+  const agenda = new Agenda({
+    mongo: mongoose.connection,
+  });
 
-// Restart agenda when mongoose recovers connection
-mongoose.connection.on('reconnected', async () => {
-  logger.info('Restarting agenda...');
-  try {
-    await agenda.stop();
-    await agenda.start();
-    logger.success('Successfully restarted agenda!');
-  } catch (err) {
-    logger.fatal('Failed to restart agenda. Exiting...');
-    process.exit(1);
-  }
-});
+  // Restart agenda when mongoose recovers connection
+  mongoose.connection.on('reconnected', async () => {
+    logger.info('Restarting agenda...');
+    try {
+      await agenda.stop();
+      await agenda.start();
+      logger.success('Successfully restarted agenda!');
+    } catch (err) {
+      logger.fatal('Failed to restart agenda. Exiting...');
+      process.exit(1);
+    }
+  });
 
-export default function initAgenda(client: Client) {
   agenda.on('ready', async () => {
     logger.info('Starting agenda');
     await agenda.start();
