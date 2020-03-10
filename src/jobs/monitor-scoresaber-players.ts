@@ -13,7 +13,8 @@ const CHANNEL_NAME = 'scores🏆';
 export default (agenda, client: Client) => {
   agenda.define(JOB_NAME, async (job, done) => {
     try {
-      const currentDate = new Date(subMinutes(job.attrs.lastRunAt, INTERVAL));
+      console.log(job.attrs.lastRunAt);
+      const lastRunAt = new Date(subMinutes(new Date(job.attrs.lastRunAt), INTERVAL)).getTime();
       const guilds = Guild.find({ 'services.scoresaber.playerids': { $exists: true, $ne: [] } }).cursor();
       await guilds.eachAsync(async ({ discordId, services: { scoresaber: { playerids } } }) => {
         const guild: DiscordGuild = client.guilds.get(discordId);
@@ -24,7 +25,7 @@ export default (agenda, client: Client) => {
             scoresaber.fetchPlayerBasic(playerid),
           ]);
           await Promise.all(scores.reduce((acc, score) => {
-            if (score.pp > 0 && score.rank <= RANK_THRESHOLD && isBefore(new Date(score.timeset), currentDate)) {
+            if (score.pp > 0 && score.rank <= RANK_THRESHOLD && new Date(score.timeset).getTime() > lastRunAt) {
               const channel = guild?.channels.find(({ name }) => name === CHANNEL_NAME);
               if (channel) {
                 const embed = new RichEmbed({
