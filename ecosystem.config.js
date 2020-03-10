@@ -19,7 +19,7 @@ module.exports = {
     production: {
       key: '~/.ssh/katarina.pem',
       user: 'ubuntu',
-      host: '18.184.103.4',
+      host: '18.195.52.12',
       ref: 'origin/master',
       repo: 'git@github.com:Dartv/katarina_bot.git',
       path: '/opt/pm2/katarina',
