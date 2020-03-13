@@ -130,10 +130,8 @@ connectDB()
     });
 
     client.on('messageReactionAdd', (reaction: MessageReaction) => {
-      if (reaction.message.channel.id === '557805526206119939') {
-        if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
-          reaction.message.delete().catch(console.error);
-        }
+      if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
+        reaction.message.delete().catch(console.error);
       }
     });
 
