@@ -131,7 +131,9 @@ connectDB()
 
     client.on('messageReactionAdd', (reaction: MessageReaction) => {
       if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
-        reaction.message.delete().catch(console.error);
+        if (![client.user.id, process.env.SUPER_ADMIN_ID].includes(reaction.message.author.id)) {
+          reaction.message.delete().catch(console.error);
+        }
       }
     });
 
