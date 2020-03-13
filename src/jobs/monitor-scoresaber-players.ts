@@ -1,6 +1,6 @@
 import { Guild as DiscordGuild, TextChannel, RichEmbed } from 'discord.js';
 import { Client } from 'ghastly';
-import { subMinutes, isBefore } from 'date-fns';
+import { subMinutes } from 'date-fns';
 
 import { Guild } from '../models';
 import { ScoresaberAPI } from '../services/scoresaber';
@@ -8,12 +8,12 @@ import { ScoresaberAPI } from '../services/scoresaber';
 const JOB_NAME = 'monitor scoresaber players';
 const INTERVAL = 15;
 const RANK_THRESHOLD = 100;
+const PP_THRESHOLD = 200;
 const CHANNEL_NAME = 'scores🏆';
 
-export default (agenda, client: Client) => {
+export default (agenda, client: Client): void => {
   agenda.define(JOB_NAME, async (job, done) => {
     try {
-      console.log(job.attrs.lastRunAt);
       const lastRunAt = new Date(subMinutes(new Date(job.attrs.lastRunAt), INTERVAL)).getTime();
       const guilds = Guild.find({ 'services.scoresaber.playerids': { $exists: true, $ne: [] } }).cursor();
       await guilds.eachAsync(async ({ discordId, services: { scoresaber: { playerids } } }) => {
@@ -25,7 +25,9 @@ export default (agenda, client: Client) => {
             scoresaber.fetchPlayerBasic(playerid),
           ]);
           await Promise.all(scores.reduce((acc, score) => {
-            if (score.pp > 0 && score.rank <= RANK_THRESHOLD && new Date(score.timeset).getTime() > lastRunAt) {
+            if (
+              score.pp >= PP_THRESHOLD && score.rank <= RANK_THRESHOLD && new Date(score.timeset).getTime() > lastRunAt
+            ) {
               const channel = guild?.channels.find(({ name }) => name === CHANNEL_NAME);
               if (channel) {
                 const embed = new RichEmbed({
