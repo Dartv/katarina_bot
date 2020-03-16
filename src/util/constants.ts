@@ -125,6 +125,7 @@ export enum Emoji {
   STAR = '⭐️',
   LIAR = '<:pizdabol:558647131334901764>',
   SPRAVEDLIVO = '<:spravedlivo:586138243855155200>',
+  COOL_CHAMP = '<:CoolChamp:685274406829817945>',
 }
 
 export enum PopularityThreshold {

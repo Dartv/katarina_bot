@@ -9,7 +9,7 @@ import Snoowrap from 'snoowrap';
 
 
 import { MessageReaction } from 'discord.js';
-import { COMMAND_TRIGGERS, BOT_PREFIXES } from './util/constants';
+import { COMMAND_TRIGGERS, BOT_PREFIXES, Emoji } from './util/constants';
 import store from './store';
 import { ErrorResponse } from './commands/responses';
 import { connectDB } from './services/mongo_connect';
@@ -132,7 +132,14 @@ connectDB()
     client.on('messageReactionAdd', (reaction: MessageReaction) => {
       if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
         if (![client.user.id, process.env.SUPER_ADMIN_ID].includes(reaction.message.author.id)) {
-          reaction.message.delete().catch(console.error);
+          reaction.message
+            .delete()
+            .then(() => {
+              reaction.message.channel.send(
+                `Message from ${reaction.message.member.displayName} was deleted by voting ${Emoji.COOL_CHAMP}`
+              );
+            })
+            .catch(console.error);
         }
       }
     });
