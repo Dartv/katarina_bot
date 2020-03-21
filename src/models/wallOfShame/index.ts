@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { IWallOfShame, IWallOfShameModel } from './types';
 
-const options = { timestamps: true };
+const options = { timestamps: true, collection: 'wallOfShame' };
 
 const WallOfShameSchema: Schema = new Schema({
   guild: {
