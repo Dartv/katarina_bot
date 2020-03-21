@@ -52,6 +52,8 @@ import pantsu from './pantsu';
 import visit from './visit';
 import calcscore from './calcscore';
 import addplayer from './addplayer';
+import cringe from './cringe';
+import wallofshame from './wallofshame';
 
 const commands = [
   add,
@@ -107,6 +109,8 @@ const commands = [
   visit,
   calcscore,
   addplayer,
+  cringe,
+  wallofshame,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

@@ -63,6 +63,8 @@ export const COMMAND_TRIGGERS = {
   VISIT: ['visit'],
   CALC_SCORE: ['calcscore', 'cs'],
   ADD_PLAYER: ['addplayer'],
+  CRINGE: ['cringe'],
+  WALL_OF_SHAME: ['wallofshame'],
 };
 
 export const FONTS = {
