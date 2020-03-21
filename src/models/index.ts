@@ -4,3 +4,4 @@ export { default as Character } from './character';
 export { default as Series } from './series';
 export { default as Marriage } from './marriage';
 export { default as CharacterInfo } from './characterInfo';
+export { default as WallOfShame } from './wallOfShame';

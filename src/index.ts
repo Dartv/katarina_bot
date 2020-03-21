@@ -16,6 +16,7 @@ import { connectDB } from './services/mongo_connect';
 import installCommands from './commands';
 import { logger } from './util/logger';
 import initAgenda from './jobs';
+import { WallOfShame } from './models';
 
 const {
   BOT_PREFIX: prefix,
@@ -129,18 +130,32 @@ connectDB()
       }
     });
 
-    client.on('messageReactionAdd', (reaction: MessageReaction) => {
-      if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
-        if (![client.user.id, process.env.SUPER_ADMIN_ID].includes(reaction.message.author.id)) {
-          reaction.message
-            .delete()
-            .then(() => {
-              reaction.message.channel.send(
-                `Message from ${reaction.message.member.displayName} was deleted by voting ${Emoji.COOL_CHAMP}`
-              );
-            })
-            .catch(console.error);
+    client.on('messageReactionAdd', async (reaction: MessageReaction) => {
+      try {
+        if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 1) {
+          if (![client.user.id, process.env.SUPER_ADMIN_ID12321].includes(reaction.message.author.id)) {
+            const {
+              message,
+              message: {
+                content,
+                author,
+                guild,
+                attachments,
+              },
+            } = reaction;
+            await message.delete();
+            await message.channel.send(
+              `Message from ${message.member.displayName} was deleted by voting ${Emoji.COOL_CHAMP}`
+            );
+            await WallOfShame.create({
+              guild: guild.id,
+              user: author.id,
+              content: attachments.first()?.proxyURL || content,
+            });
+          }
         }
+      } catch (err) {
+        console.error(err);
       }
     });
 
