@@ -132,8 +132,8 @@ connectDB()
 
     client.on('messageReactionAdd', async (reaction: MessageReaction) => {
       try {
-        if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 1) {
-          if (![client.user.id, process.env.SUPER_ADMIN_ID12321].includes(reaction.message.author.id)) {
+        if (reaction.emoji.name === 'WeirdChamp' && reaction.count >= 5) {
+          if (![client.user.id, process.env.SUPER_ADMIN_ID].includes(reaction.message.author.id)) {
             const {
               message,
               message: {
