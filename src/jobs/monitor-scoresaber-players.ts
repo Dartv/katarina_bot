@@ -8,7 +8,7 @@ import { ScoresaberAPI } from '../services/scoresaber';
 const JOB_NAME = 'monitor scoresaber players';
 const INTERVAL = 15;
 const RANK_THRESHOLD = 100;
-const PP_THRESHOLD = 200;
+const PP_THRESHOLD = 300;
 const CHANNEL_NAME = 'scores🏆';
 
 export default (agenda, client: Client): void => {
