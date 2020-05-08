@@ -140,18 +140,19 @@ connectDB()
                 content,
                 author,
                 guild,
-                attachments,
               },
             } = reaction;
             await message.delete();
             await message.channel.send(
               `Message from ${message.member.displayName} was deleted by voting ${Emoji.COOL_CHAMP}`
             );
-            await WallOfShame.create({
-              guild: guild.id,
-              user: author.id,
-              content: attachments.first()?.proxyURL || content,
-            });
+            if (content) {
+              await WallOfShame.create({
+                guild: guild.id,
+                user: author.id,
+                content,
+              });
+            }
           }
         }
       } catch (err) {
