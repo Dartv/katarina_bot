@@ -26,11 +26,17 @@ const handler: ICommandHandler = async (context): Promise<any> => {
       $limit: 10,
     },
   ]);
-
-  const embed = new RichEmbed({ title: 'Wall of Shame' });
-  wall.forEach((result) => {
+  const description = wall.map((result) => {
     const member = context.message.guild.members.get(result._id) || { displayName: 'Member left guild' };
-    embed.addField(member.displayName, `cringe messages: ${result.count}`);
+    return `${member.displayName}: ${result.count}`;
+  }).join('\n');
+
+  const embed = new RichEmbed({
+    title: 'Wall of Shame',
+    description: `Cringe messages:\n${description}`,
+    image: {
+      url: 'https://cdn.discordapp.com/attachments/665974624022167619/708277846052700270/w4fbzh36nex41weircdchamp.png',
+    },
   });
   return embed;
 };
