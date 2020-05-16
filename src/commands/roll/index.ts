@@ -1,14 +1,15 @@
 import { ICommand, ICommandHandler } from 'ghastly';
 
-import { Banner, COMMAND_TRIGGERS } from '../../util';
+import { Banner, COMMAND_TRIGGERS, PriceTable } from '../../util';
 import { ICharacter } from '../../models/character/types';
 import { User } from '../../models';
-import { injectUser } from '../middleware';
+import { injectUser, withPrice } from '../middleware';
 import { rollLocalBanner } from './rollLocalBanner';
 import { rollNormalBanner } from './rollNormalBanner';
 
 const middleware = [
   injectUser(),
+  withPrice(PriceTable.ROLL),
 ];
 
 const handler: ICommandHandler = async (context): Promise<void> => {

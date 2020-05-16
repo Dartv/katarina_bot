@@ -4,8 +4,10 @@ import { times } from 'ramda';
 import { ObjectId } from 'mongodb';
 import { ICommand } from 'ghastly';
 
-import { COMMAND_TRIGGERS, Emoji, CharacterStar } from '../util';
-import { injectUser } from './middleware';
+import {
+  COMMAND_TRIGGERS, Emoji, CharacterStar, PriceTable,
+} from '../util';
+import { injectUser, withPrice } from './middleware';
 import { Character, User } from '../models';
 import { ErrorResponse } from './responses';
 import { ICharacter } from '../models/character/types';
@@ -97,7 +99,7 @@ const handler = async (context) => {
 };
 
 export default (): ICommand => ({
-  middleware: [injectUser()],
+  middleware: [injectUser(), withPrice(PriceTable.STEALWAIFU)],
   handler,
   triggers: COMMAND_TRIGGERS.STEAL_WAIFU,
   description: 'Takes away 3 of your random waifus and steals user\'s random one',

@@ -65,6 +65,9 @@ export const COMMAND_TRIGGERS = {
   ADD_PLAYER: ['addplayer'],
   CRINGE: ['cringe'],
   WALL_OF_SHAME: ['wallofshame'],
+  DAILY: ['daily'],
+  BALANCE: ['balance'],
+  SHOP: ['shop'],
 };
 
 export const FONTS = {
@@ -217,4 +220,12 @@ export enum HTTPMethod {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+}
+
+export enum PriceTable {
+  ROLL = 100,
+  MARRY = 1000,
+  SETQUOTE = 200,
+  SETWAIFU = 500,
+  STEALWAIFU = 100,
 }

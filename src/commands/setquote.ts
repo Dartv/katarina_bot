@@ -1,8 +1,10 @@
 import { ICommand } from 'ghastly';
 
-import { COMMAND_TRIGGERS } from '../util';
-import { injectUser } from './middleware';
+import { COMMAND_TRIGGERS, PriceTable } from '../util';
+import { injectUser, withPrice } from './middleware';
 import { ErrorResponse } from './responses';
+
+const middleware = [injectUser(), withPrice(PriceTable.SETQUOTE)];
 
 const handler = async (context): Promise<any> => {
   const { message, user, args } = context;
@@ -22,7 +24,7 @@ const handler = async (context): Promise<any> => {
 };
 
 export default (): ICommand => ({
-  middleware: [injectUser()],
+  middleware,
   handler,
   triggers: COMMAND_TRIGGERS.SET_QUOTE,
   description: 'Sets your profile quote',
