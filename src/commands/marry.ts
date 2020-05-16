@@ -1,12 +1,12 @@
 import { identity } from 'ramda';
 import { ICommand, ICommandHandler } from 'ghastly';
 
-import { COMMAND_TRIGGERS, MarriageStatus } from '../util';
+import { COMMAND_TRIGGERS, MarriageStatus, PriceTable } from '../util';
 import { injectUser, injectGuild, withPrice } from './middleware';
 import { ErrorResponse } from './responses';
 import { Marriage } from '../models';
 
-const middleware = [injectUser(), injectGuild(), withPrice(1000)];
+const middleware = [injectUser(), injectGuild(), withPrice(PriceTable.MARRY)];
 
 const handler: ICommandHandler = async (context) => {
   const {
