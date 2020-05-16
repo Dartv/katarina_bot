@@ -29,7 +29,7 @@ import scrape from './scrape';
 import versus from './versus';
 import whois from './whois';
 import whatseries from './whatseries';
-// import stealwaifu from './stealwaifu';
+import stealwaifu from './stealwaifu';
 import love from './love';
 import gay from './gay';
 import profile from './profile';
@@ -54,6 +54,8 @@ import calcscore from './calcscore';
 import addplayer from './addplayer';
 import cringe from './cringe';
 import wallofshame from './wallofshame';
+import daily from './daily';
+import balance from './balance';
 
 const commands = [
   add,
@@ -86,7 +88,7 @@ const commands = [
   versus,
   whois,
   whatseries,
-  // stealwaifu,
+  stealwaifu,
   love,
   gay,
   profile,
@@ -111,6 +113,8 @@ const commands = [
   addplayer,
   cringe,
   wallofshame,
+  daily,
+  balance,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

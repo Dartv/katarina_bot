@@ -20,7 +20,7 @@ declare module 'ghastly' {
   }
 
   export interface ICommandContext {
-    message: Message;
+    message: import('discord.js').Message;
     formatter: ICommandFormatter;
     user?: any;
     guild?: any;
@@ -30,7 +30,7 @@ declare module 'ghastly' {
     args: { [key: string]: any };
   }
 
-  export type ICommandHandler = (context: ICommandContext & Partial<any>) => Promise<any>;
+  export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;
 
   export type Middleware = {
     (next: (context: ICommandContext) => any, context: ICommandContext): Promise<any>;

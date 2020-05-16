@@ -55,6 +55,11 @@ const UserSchema = new Schema({
     },
     default: {},
   },
+  currency: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
 }, options);
 
 Object.assign(UserSchema, { statics, methods });

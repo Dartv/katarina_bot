@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-var-requires, global-require */
+
 import Agenda from 'agenda';
 import mongoose from 'mongoose';
 import { Client } from 'ghastly';
-import { logger } from '../util/logger';
 
-const jobs = [
-  /* eslint-disable global-require */
-  require('./monitor-scoresaber-players'),
-  /* eslint-enable global-require */
-];
+import { logger } from '../util/logger';
+import { isProduction } from '../util/environment';
+
+const jobs = [];
+
+if (isProduction()) {
+  jobs.push(require('./monitor-scoresaber-players'));
+}
 
 export default function initAgenda(client: Client): void {
   const agenda = new Agenda({
