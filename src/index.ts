@@ -6,9 +6,8 @@ import fs from 'fs';
 import path from 'path';
 import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 import Snoowrap from 'snoowrap';
+import { MessageReaction, TextChannel } from 'discord.js';
 
-
-import { MessageReaction } from 'discord.js';
 import { COMMAND_TRIGGERS, BOT_PREFIXES, Emoji } from './util/constants';
 import store from './store';
 import { ErrorResponse } from './commands/responses';
@@ -110,7 +109,7 @@ connectDB()
       // We don't want this to run on unrelated packets
       if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return;
       // Grab the channel to check the message from
-      const channel = client.channels.get(packet.d.channel_id);
+      const channel = client.channels.get(packet.d.channel_id) as TextChannel;
       // There's no need to emit if the message is cached, because the event will fire anyway for that
       if (channel.messages.has(packet.d.message_id)) return;
       // Since we have confirmed the message is not cached, let's fetch it

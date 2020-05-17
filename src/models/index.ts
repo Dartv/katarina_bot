@@ -5,3 +5,4 @@ export { default as Series } from './series';
 export { default as Marriage } from './marriage';
 export { default as CharacterInfo } from './characterInfo';
 export { default as WallOfShame } from './wallOfShame';
+export { default as Versus } from './versus';
