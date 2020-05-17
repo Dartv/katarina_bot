@@ -43,3 +43,16 @@ export const autoWrap = breakAt => R.compose(
 );
 
 export const getRandomArrayIndex = R.compose(random, R.dec, R.length);
+
+export const shuffle = <T>(arr: T[]): T[] => {
+  const a = arr.slice();
+
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+
+  return a;
+};
+
+export const sleep = (timeout: number): Promise<void> => new Promise(resolve => setTimeout(resolve, timeout));
