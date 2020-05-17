@@ -3,12 +3,18 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { ErrorResponse } from '../responses';
 import { redis } from '../../services/redis';
+import { extractCommandFromContext } from '../../util/command';
+import { getTimeInSecondsUntilDailyReset } from '../../util/daily';
 
-const withPersonalCooldown = (maxAge: number): Middleware => async (next, context) => {
+const withPersonalCooldown = ({
+  maxAge,
+  daily,
+}: { maxAge?: number; daily?: boolean }): Middleware => async (next, context) => {
   const { user } = context;
+  const command = extractCommandFromContext(context);
 
   if (user) {
-    const key = `user::${user._id}::cooldown::withPersonalCooldown`;
+    const key = `user::${user._id}::cooldown::${command}`;
     const value = await redis.get(key);
 
     if (value === '1') {
@@ -18,7 +24,11 @@ const withPersonalCooldown = (maxAge: number): Middleware => async (next, contex
       return ErrorResponse(`This command is on the cooldown. Try again in ${distance}`, context);
     }
 
-    await redis.setex(key, maxAge / 1000, 1);
+    if (daily) {
+      await redis.setex(key, getTimeInSecondsUntilDailyReset(), 1);
+    } else {
+      await redis.setex(key, maxAge, 1);
+    }
   }
 
   return next(context);

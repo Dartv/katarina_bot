@@ -7,7 +7,7 @@ const CURRENCY = 500;
 
 const middleware = [
   injectUser(),
-  withPersonalCooldown(60 * 60 * 24 * 1000),
+  withPersonalCooldown({ daily: true }),
 ];
 
 const handler: ICommandHandler = async (context): Promise<any> => {
@@ -17,7 +17,9 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   await user.save();
 
-  return message.reply(`You acquired ${CURRENCY} katacoins 💎`);
+  await message.reply(`You acquired ${CURRENCY} katacoins 💎`);
+
+  return null;
 };
 
 export default (): ICommand => ({

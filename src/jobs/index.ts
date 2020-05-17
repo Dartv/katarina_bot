@@ -15,7 +15,7 @@ if (isProduction()) {
 
 export default function initAgenda(client: Client): void {
   const agenda = new Agenda({
-    mongo: mongoose.connection,
+    mongo: mongoose.connection as any,
   });
 
   // Restart agenda when mongoose recovers connection
