@@ -23,7 +23,7 @@ interface IParticipant {
 
 const JOB_NAME = 'waifu royale';
 const CHANNEL_NAME = 'waifu-royale';
-const QUEUE_TIME = 10 * 60 * 60 * 1000;
+const QUEUE_TIME = 600000;
 const INTERVAL_BETWEEN_ROUNDS = 1 * 60 * 1000;
 const CURRENCY = 100;
 
