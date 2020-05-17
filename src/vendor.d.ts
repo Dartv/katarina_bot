@@ -12,6 +12,8 @@ declare module 'ghastly' {
 
     prefix?: string;
 
+    dispatcher: any;
+
     constructor(options: IClientOptions)
   }
 
@@ -36,7 +38,7 @@ declare module 'ghastly' {
     command?: string;
     dispatch: (...args: any[]) => Promise<any>;
     args: { [key: string]: any };
-    client: import('discord.js').Client;
+    client: Client;
   }
 
   export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;
