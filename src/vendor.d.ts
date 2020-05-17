@@ -1,10 +1,18 @@
 /* eslint-disable max-classes-per-file */
 
 declare module 'ghastly' {
-  export class Client {
-    constructor(...args: any[])
+  import { Client as DiscordClient, ClientOptions } from 'discord.js';
 
-    [key: string]: any;
+  export interface IClientOptions extends DiscordClientOptions {
+    prefix?: string;
+  }
+
+  export class Client extends DiscordClient {
+    services: any;
+
+    prefix?: string;
+
+    constructor(options: IClientOptions)
   }
 
   export type CommandParam = {
@@ -28,6 +36,7 @@ declare module 'ghastly' {
     command?: string;
     dispatch: (...args: any[]) => Promise<any>;
     args: { [key: string]: any };
+    client: import('discord.js').Client;
   }
 
   export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;
