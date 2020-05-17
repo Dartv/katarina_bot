@@ -7,7 +7,9 @@ import { Client } from 'ghastly';
 import { logger } from '../util/logger';
 import { isProduction } from '../util/environment';
 
-const jobs = [];
+const jobs = [
+  require('./battle-royale'),
+];
 
 if (isProduction()) {
   jobs.push(require('./monitor-scoresaber-players'));
