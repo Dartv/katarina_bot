@@ -1,5 +1,5 @@
 import { pluck } from 'ramda';
-import { ICommand } from 'ghastly';
+import { ICommand, ICommandHandler } from 'ghastly';
 
 import { COMMAND_TRIGGERS } from '../util';
 import Character from '../models/character';
@@ -11,7 +11,7 @@ const middleware = [
   withCooldown(ANSWER_TIME),
 ];
 
-const handler = async (context) => {
+export const handler: ICommandHandler = async (context) => {
   const {
     dispatch,
     message: { channel },
@@ -31,29 +31,31 @@ const handler = async (context) => {
       series: [],
     });
     await dispatch(embed);
-    const series = pluck('title', character.series as any[]).map(title => title.trim().toLowerCase());
-    const predicate = ({ content }): boolean => {
-      const guess = content.trim().toLowerCase();
-
-      return series.some(serie => (
-        isSimilarEnough(serie, guess)
-        || serie.split(' ').some(part => isSimilarEnough(part, guess))
-      ));
-    };
-    const options = {
-      time: ANSWER_TIME,
-      maxMatches: 1,
-      errors: ['time'],
-    };
+    const series = pluck('title', character.series).map(title => title.trim().toLowerCase());
     try {
-      const collectedResponse = await channel.awaitMessages(predicate, options)
-        .then(messages => messages.first());
+      const collectedResponse = await channel.awaitMessages(
+        ({ content }): boolean => {
+          const guess = content.trim().toLowerCase();
+
+          return series.some(serie => (
+            isSimilarEnough(serie, guess)
+            || serie.split(' ').some(part => isSimilarEnough(part, guess))
+          ));
+        },
+        {
+          time: ANSWER_TIME,
+          maxMatches: 1,
+          errors: ['time'],
+        },
+      ).then(messages => messages.first());
 
       if (collectedResponse) {
         clearCooldown();
         await collectedResponse.reply(
           'Congratulations! Your guess was correct',
-          createCharacterEmbed(character),
+          {
+            embed: createCharacterEmbed(character),
+          },
         );
       }
     } catch (err) {

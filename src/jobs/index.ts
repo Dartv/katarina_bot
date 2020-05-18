@@ -9,6 +9,7 @@ import { isProduction } from '../util/environment';
 
 const jobs = [
   require('./battle-royale'),
+  require('./waifu-quiz'),
 ];
 
 if (isProduction()) {
