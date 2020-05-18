@@ -7,7 +7,7 @@ import { createCharacterEmbed } from '../models/character/util';
 import { withCooldown } from './middleware';
 import { ANSWER_TIME, isSimilarEnough } from './whois';
 
-const BANNED = ['the', 'in', 'at', 'a'];
+const BANNED = ['the', 'in', 'at', 'a', 'of', '&', 'to', 'no'];
 
 const middleware = [
   withCooldown(ANSWER_TIME),
