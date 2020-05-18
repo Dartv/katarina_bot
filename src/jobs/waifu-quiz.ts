@@ -7,7 +7,7 @@ import { User } from '../models';
 
 const JOB_NAME = 'waifu quiz';
 const CHANNEL_NAME = 'waifu-quiz';
-const CURRENCY = 10;
+const CURRENCY = 5;
 
 export default (agenda: Agenda, client: Client) => {
   agenda.define(JOB_NAME, async (job, done) => {
