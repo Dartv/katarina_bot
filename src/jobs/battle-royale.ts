@@ -122,5 +122,5 @@ export default (agenda: Agenda, client: Client) => {
     done();
   });
 
-  agenda.every('1 hour', JOB_NAME);
+  agenda.every('0 * * * *', JOB_NAME);
 };
