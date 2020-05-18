@@ -51,19 +51,22 @@ export const handler: ICommandHandler = async (context) => {
 
       if (collectedResponse) {
         clearCooldown();
-        await collectedResponse.reply(
+        return collectedResponse.reply(
           'Congratulations! Your guess was correct',
           {
             embed: createCharacterEmbed(character),
           },
         );
       }
+
+      return null;
     } catch (err) {
-      await channel.send('No correct answers...', createCharacterEmbed(character));
+      return channel.send('No correct answers...', createCharacterEmbed(character));
     }
   } catch (err) {
     clearCooldown();
     console.error(err);
+    return null;
   }
 };
 
