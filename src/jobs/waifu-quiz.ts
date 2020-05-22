@@ -15,12 +15,17 @@ export default (agenda: Agenda, client: Client) => {
       const promises = client.channels
         .filter((channel: TextChannel) => channel.name === CHANNEL_NAME)
         .map(async (channel: TextChannel) => {
-          const message: Message = await handler({
-            dispatch: channel.send.bind(channel),
-            message: { channel },
-            args: {},
-            clearCooldown: () => null,
-          } as any);
+          const prevMessages = channel.messages.filter((message) => message.author.bot);
+          const [message]: [Message, any] = await Promise.all([
+            handler({
+              dispatch: channel.send.bind(channel),
+              message: { channel },
+              args: {},
+              clearCooldown: () => null,
+            } as any),
+            await channel.bulkDelete(prevMessages),
+          ]);
+
           const member = message.mentions.members.first();
           if (member) {
             const user = await User.findOne({ discordId: member.id });
