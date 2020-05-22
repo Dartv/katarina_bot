@@ -27,6 +27,11 @@ declare module 'ghastly' {
 
   export interface ICommandFormatter {
     code(content: string): string;
+    bold(content: string): string;
+    italic(content: string): string;
+    strikeout(content: string): string;
+    underline(content: string): string;
+    codeBlock(content: string): string;
   }
 
   export interface ICommandContext {
@@ -39,6 +44,7 @@ declare module 'ghastly' {
     dispatch: (...args: any[]) => Promise<any>;
     args: { [key: string]: any };
     client: Client;
+    models?: any;
   }
 
   export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;

@@ -1,19 +1,25 @@
 /* eslint-disable no-await-in-loop */
 
 import Agenda from 'agenda';
-import { Client } from 'ghastly';
+import { Client, ICommandContext } from 'ghastly';
 import {
   TextChannel,
   Message,
   GuildMember,
   RichEmbed,
 } from 'discord.js';
+import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 
 import { User, Character } from '../models';
-import { shuffle, sleep } from '../util';
+import {
+  shuffle, sleep, MissionCode, RewardTable,
+} from '../util';
 import { createCharacterEmbed } from '../models/character/util';
 import { IUser } from '../models/user/types';
 import { ICharacter } from '../models/character/types';
+import { withMission } from '../commands/middleware';
+import { getDailyResetDate } from '../util/daily';
+import { IMission } from '../models/mission/types';
 
 interface IParticipant {
   user: IUser;
@@ -26,6 +32,28 @@ const CHANNEL_NAME = 'waifu-royale';
 const QUEUE_TIME = 600000;
 const INTERVAL_BETWEEN_ROUNDS = 1 * 60 * 1000;
 const CURRENCY = 100;
+
+const completeBattleRoyaleMission = async (user: IUser, message: Message): Promise<void> => {
+  const middleware = withMission(async () => ({
+    code: MissionCode.BATTLE_ROYALE,
+    reward: RewardTable.BATTLE_ROYALE,
+    update: async (mission): Promise<IMission> => {
+      Object.assign(mission, {
+        resetsAt: getDailyResetDate(),
+        completedAt: new Date(),
+      });
+      return mission;
+    },
+  }));
+  const context = {
+    user,
+    message,
+    dispatch: (response) => response.respond(),
+    formatter: MarkdownFormatter,
+  } as ICommandContext;
+
+  await middleware(() => null, context);
+};
 
 const createParticipantEmbed = (participant: IParticipant): RichEmbed => createCharacterEmbed(participant.character)
   .setAuthor(participant.member.displayName, participant.member.user.avatarURL)
@@ -85,6 +113,8 @@ export default (agenda: Agenda, client: Client) => {
                   },
                 },
               ]);
+
+              await completeBattleRoyaleMission(user, message);
 
               return {
                 user,

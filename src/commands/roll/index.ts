@@ -1,15 +1,37 @@
-import { ICommand, ICommandHandler } from 'ghastly';
+import { ICommand, ICommandHandler, Middleware } from 'ghastly';
 
-import { Banner, COMMAND_TRIGGERS, PriceTable } from '../../util';
+import {
+  Banner, COMMAND_TRIGGERS, PriceTable, MissionCode, RewardTable,
+} from '../../util';
 import { ICharacter } from '../../models/character/types';
 import { User } from '../../models';
-import { injectUser, withPrice } from '../middleware';
+import { injectUser, withPrice, withMission } from '../middleware';
 import { rollLocalBanner } from './rollLocalBanner';
 import { rollNormalBanner } from './rollNormalBanner';
+import { getDailyResetDate } from '../../util/daily';
+import { IMission } from '../../models/mission/types';
 
-const middleware = [
+const middleware: Middleware[] = [
   injectUser(),
   withPrice(PriceTable.ROLL),
+  withMission(async () => ({
+    code: MissionCode.ROLL,
+    reward: RewardTable.ROLL,
+    update: async (mission): Promise<IMission> => {
+      Object.assign(mission, {
+        progress: mission.progress + 1,
+        resetsAt: getDailyResetDate(),
+      });
+
+      if (mission.progress >= 3) {
+        Object.assign(mission, {
+          completedAt: new Date(),
+        });
+      }
+
+      return mission;
+    },
+  })),
 ];
 
 const handler: ICommandHandler = async (context): Promise<void> => {
