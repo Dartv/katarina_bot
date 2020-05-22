@@ -15,9 +15,7 @@ export default (agenda: Agenda, client: Client) => {
       const promises = client.channels
         .filter((channel: TextChannel) => channel.name === CHANNEL_NAME)
         .map(async (channel: TextChannel) => {
-          const prevMessages = await channel
-            .fetchMessages({ limit: 100 })
-            .then((messages) => messages.filter((message) => message.author.bot));
+          const prevMessages = await channel.fetchMessages({ limit: 100 });
           const [message]: [Message, any] = await Promise.all([
             handler({
               dispatch: channel.send.bind(channel),
