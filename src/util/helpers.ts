@@ -56,3 +56,5 @@ export const shuffle = <T>(arr: T[]): T[] => {
 };
 
 export const sleep = (timeout: number): Promise<void> => new Promise(resolve => setTimeout(resolve, timeout));
+
+export const capitalize = (str: string): string => str.charAt(0).toUpperCase().concat(str.slice(1));

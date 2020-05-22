@@ -67,7 +67,7 @@ export const COMMAND_TRIGGERS = {
   WALL_OF_SHAME: ['wallofshame'],
   DAILY: ['daily'],
   BALANCE: ['balance'],
-  SHOP: ['shop'],
+  MISSIONS: ['missions'],
 };
 
 export const FONTS = {
@@ -229,3 +229,30 @@ export enum PriceTable {
   SETWAIFU = 500,
   STEALWAIFU = 100,
 }
+
+export enum RewardTable {
+  DAILY = 25,
+  ROLL = 100,
+  BATTLE_ROYALE = 100,
+}
+
+export enum MissionCode {
+  DAILY = 'DAILY',
+  ROLL = 'ROLL',
+  BATTLE_ROYALE = 'BATTLE_ROYALE',
+}
+
+export const Missions = {
+  [MissionCode.DAILY]: {
+    description: 'acquire daily coins',
+    reward: RewardTable.DAILY,
+  },
+  [MissionCode.ROLL]: {
+    description: 'roll three characters',
+    reward: RewardTable.ROLL,
+  },
+  [MissionCode.BATTLE_ROYALE]: {
+    description: 'participate in a waifu royale',
+    reward: RewardTable.BATTLE_ROYALE,
+  },
+};

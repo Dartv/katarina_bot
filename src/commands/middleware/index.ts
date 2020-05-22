@@ -26,3 +26,4 @@ export { default as withCooldown } from './withCooldown';
 export { default as injectContext } from './injectContext';
 export { default as withPersonalCooldown } from './withPersonalCooldown';
 export { default as withPrice } from './withPrice';
+export { default as withMission } from './withMission';

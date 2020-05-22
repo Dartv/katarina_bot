@@ -1,13 +1,27 @@
 import { ICommand, ICommandHandler } from 'ghastly';
 
-import { COMMAND_TRIGGERS } from '../util';
-import { injectUser, withPersonalCooldown } from './middleware';
+import { COMMAND_TRIGGERS, RewardTable, MissionCode } from '../util';
+import { injectUser, withPersonalCooldown, withMission } from './middleware';
+import { IMission } from '../models/mission/types';
+import { getDailyResetDate } from '../util/daily';
 
 const CURRENCY = 500;
 
 const middleware = [
   injectUser(),
   withPersonalCooldown({ daily: true }),
+  withMission(async () => ({
+    code: MissionCode.DAILY,
+    reward: RewardTable.DAILY,
+    update: async (mission): Promise<IMission> => {
+      Object.assign(mission, {
+        resetsAt: getDailyResetDate(),
+        completedAt: new Date(),
+      });
+
+      return mission;
+    },
+  })),
 ];
 
 const handler: ICommandHandler = async (context): Promise<any> => {
@@ -17,7 +31,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   await user.save();
 
-  await message.reply(`You acquired ${CURRENCY} katacoins 💎`);
+  await message.reply(`You acquired ${CURRENCY} katacoins💎`);
 
   return null;
 };

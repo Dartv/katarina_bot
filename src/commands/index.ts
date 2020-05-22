@@ -56,6 +56,7 @@ import cringe from './cringe';
 import wallofshame from './wallofshame';
 import daily from './daily';
 import balance from './balance';
+import missions from './missions';
 
 const commands = [
   add,
@@ -115,6 +116,7 @@ const commands = [
   wallofshame,
   daily,
   balance,
+  missions,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
