@@ -1,7 +1,6 @@
 import { ICommand, ICommandHandler, Middleware } from 'ghastly';
 import {
   Message,
-  Collection,
   GuildMember,
   RichEmbed,
 } from 'discord.js';
@@ -110,10 +109,27 @@ export const createParticipantEmbed = (
   .setThumbnail(participant.character.imageUrl)
   .setImage(null);
 
-
 const handler: ICommandHandler = async (context): Promise<any> => {
-  const { user, message, dispatch } = context;
+  const {
+    user,
+    message,
+    dispatch,
+    args,
+  } = context;
+  const bet = Number(args.bet.trim());
   const member = message.mentions.members.first();
+
+  if (!Number.isInteger(bet)) {
+    return new ErrorResponse(`${args.bet} is not a valid bet`, context);
+  }
+
+  if (!member) {
+    return new ErrorResponse('You need to @mention someone', context);
+  }
+
+  if (bet < 50) {
+    return new ErrorResponse('Minimum bet is 50💎', context);
+  }
 
   if (member.id === user.id) {
     return new ErrorResponse('You can\'t duel yourself!', context);
@@ -123,82 +139,76 @@ const handler: ICommandHandler = async (context): Promise<any> => {
     return new ErrorResponse('You should have at least 10 characters', context);
   }
 
-  if (member) {
-    const opponent = await User.findOne({ discordId: member.id });
+  const opponent = await User.findOne({ discordId: member.id });
 
-    if (!opponent || opponent.characters.length < 10) {
-      return new ErrorResponse(
-        'You should have at least 10 characters',
-        { ...context, message: { ...message, author: member.user } },
-      );
-    }
-
-    await dispatch('Place your bets!');
-
-    let collectedMessages: Collection<string, Message>;
-
-    try {
-      collectedMessages = await message.channel.awaitMessages(
-        ({ content, author }: Message, store: Collection<string, Message>) => {
-          const bet = Number(content.trim());
-
-          if (!Number.isInteger(bet)) return false;
-
-          const player = [user, opponent].find(({ discordId }) => discordId === author.id);
-
-          if (!player || player.currency < bet || bet < 1) return false;
-
-          if (store.some((msg) => msg.author.id === author.id)) return false;
-
-          return true;
-        },
-        {
-          maxMatches: 2,
-          time: 15000,
-          errors: ['time'],
-        }
-      );
-    } catch {
-      return new ErrorResponse('Some player did not make a bet or does not have enough 💎', context);
-    }
-
-    const promises = collectedMessages.map(async (msg) => {
-      const player: IUser = [user, opponent].find(({ discordId }) => discordId === msg.author.id);
-      await msg.author.send('I\'ll give you 5 choices, pick wisely');
-      const character = await chooseCharacter({
-        user: player,
-        message: msg,
-      });
-      return {
-        user: player,
-        character,
-        member: msg.member,
-        message: msg,
-      };
-    });
-
-    const players = await Promise.all(promises);
-
-    await dispatch(createParticipantEmbed(players[0]));
-    await dispatch('VS');
-    await dispatch(createParticipantEmbed(players[1]));
-
-    const [winner, loser] = [...players].sort((p1, p2) => p1.character.popularity - p2.character.popularity);
-    const [winnerBet, loserBet] = [winner, loser].map((player) => Number(player.message.content.trim()));
-    const prize = winnerBet + loserBet;
-
-    winner.user.currency += loserBet;
-    loser.user.currency -= loserBet;
-
-    await Promise.all([
-      winner.user.save(),
-      loser.user.save(),
-    ]);
-
-    return `${winner.member} has beaten ${loser.member} to death and won ${prize}💎`;
+  if (!opponent || opponent.characters.length < 10 || opponent.currency < bet) {
+    return new ErrorResponse(
+      `${member.displayName} doesn't have 10 characters or enough 💎`,
+      context,
+    );
   }
 
-  return null;
+  const participants = [
+    {
+      user,
+      member: message.member,
+      message,
+    },
+  ];
+
+  await dispatch(`${member} accept duel by typing "yes"`);
+
+  try {
+    const collectedMessages = await message.channel.awaitMessages(
+      ({ content, author }: Message) => content.trim().toLowerCase() === 'yes' && author.id === member.id,
+      {
+        maxMatches: 1,
+        time: 20000,
+        errors: ['time'],
+      }
+    );
+    const collectedMessage = collectedMessages.first();
+    participants.push({
+      user: opponent,
+      member: collectedMessage.member,
+      message: collectedMessage,
+    });
+  } catch {
+    return new ErrorResponse(`${member.displayName} didn't accept`, context);
+  }
+
+  const promises = participants.map(async (participant) => {
+    await participant.member.user.send('I\'ll give you 5 choices, pick wisely');
+    const character = await chooseCharacter({
+      user: participant.user,
+      message: participant.message,
+    });
+    return {
+      character,
+      user: participant.user,
+      member: participant.member,
+      message: participant.message,
+    };
+  });
+
+  const players = await Promise.all(promises);
+
+  await dispatch(createParticipantEmbed(players[0]));
+  await dispatch('VS');
+  await dispatch(createParticipantEmbed(players[1]));
+
+  const [winner, loser] = [...players].sort((p1, p2) => p1.character.popularity - p2.character.popularity);
+  const prize = bet * 2;
+
+  winner.user.currency += bet;
+  loser.user.currency -= bet;
+
+  await Promise.all([
+    winner.user.save(),
+    loser.user.save(),
+  ]);
+
+  return `${winner.member} has beaten ${loser.member} to death and won ${prize}💎`;
 };
 
 export default (): ICommand => ({
@@ -208,6 +218,10 @@ export default (): ICommand => ({
     {
       name: 'user',
       description: 'user mention',
+    },
+    {
+      name: 'bet',
+      description: 'bet amount',
     },
   ],
   triggers: COMMAND_TRIGGERS.DUEL,
