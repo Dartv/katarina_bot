@@ -146,7 +146,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
           const player = [user, opponent].find(({ discordId }) => discordId === author.id);
 
-          if (!player || player.currency < bet) return false;
+          if (!player || player.currency < bet || bet < 1) return false;
 
           if (store.some((msg) => msg.author.id === author.id)) return false;
 
