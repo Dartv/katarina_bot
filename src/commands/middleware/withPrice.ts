@@ -15,7 +15,10 @@ const withPrice = (price: number): Middleware => async (next, context) => {
 
   try {
     const collectedMessages = await channel.awaitMessages(
-      ({ content, member }) => member.id === message.member.id && Object.values(Answer).includes(content.toLowerCase()),
+      ({
+        content,
+        member,
+      }) => member?.id === message.member?.id && Object.values(Answer).includes(content.toLowerCase()),
       {
         time: 10000,
         maxMatches: 1,
