@@ -5,27 +5,21 @@ import { Client, ICommandContext } from 'ghastly';
 import {
   TextChannel,
   Message,
-  GuildMember,
-  RichEmbed,
 } from 'discord.js';
 import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 
 import { User, Character } from '../models';
 import {
-  shuffle, sleep, MissionCode, RewardTable,
+  shuffle,
+  sleep,
+  MissionCode,
+  RewardTable,
 } from '../util';
-import { createCharacterEmbed } from '../models/character/util';
 import { IUser } from '../models/user/types';
-import { ICharacter } from '../models/character/types';
 import { withMission } from '../commands/middleware';
 import { getDailyResetDate } from '../util/daily';
 import { IMission } from '../models/mission/types';
-
-interface IParticipant {
-  user: IUser;
-  character: ICharacter;
-  member: GuildMember;
-}
+import { IParticipant, createParticipantEmbed } from '../commands/duel';
 
 const JOB_NAME = 'waifu royale';
 const CHANNEL_NAME = 'waifu-royale';
@@ -54,11 +48,6 @@ const completeBattleRoyaleMission = async (user: IUser, message: Message): Promi
 
   await middleware(() => null, context);
 };
-
-const createParticipantEmbed = (participant: IParticipant): RichEmbed => createCharacterEmbed(participant.character)
-  .setAuthor(participant.member.displayName, participant.member.user.avatarURL)
-  .setThumbnail(participant.character.imageUrl)
-  .setImage(null);
 
 const battleRoyale = async (channel: TextChannel, bracket: IParticipant[]): Promise<IParticipant> => {
   if (bracket.length === 1) return bracket[0];
@@ -120,6 +109,7 @@ export default (agenda: Agenda, client: Client) => {
                 user,
                 character,
                 member: message.member,
+                message,
               };
             }),
           ).then(p => p.filter(Boolean));

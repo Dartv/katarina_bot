@@ -7,7 +7,7 @@ const withMission = (
   config: (context: ICommandContext) => Promise<{
     code: string;
     reward?: number;
-    update: (mission: IMission) => Promise<IMission>;
+    update: (mission: IMission, response: any) => Promise<IMission>;
   }>,
 ): Middleware => async (next, context) => {
   const res = await next(context);
@@ -22,7 +22,7 @@ const withMission = (
 
   if (mission.completedAt) return res;
 
-  mission = await update(mission);
+  mission = await update(mission, res);
 
   await mission.save();
 

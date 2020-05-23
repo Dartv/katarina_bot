@@ -68,6 +68,7 @@ export const COMMAND_TRIGGERS = {
   DAILY: ['daily'],
   BALANCE: ['balance'],
   MISSIONS: ['missions'],
+  DUEL: ['duel'],
 };
 
 export const FONTS = {
@@ -234,12 +235,14 @@ export enum RewardTable {
   DAILY = 25,
   ROLL = 100,
   BATTLE_ROYALE = 100,
+  DUEL = 50,
 }
 
 export enum MissionCode {
   DAILY = 'DAILY',
   ROLL = 'ROLL',
   BATTLE_ROYALE = 'BATTLE_ROYALE',
+  DUEL = 'DUEL',
 }
 
 export const Missions = {
@@ -254,5 +257,9 @@ export const Missions = {
   [MissionCode.BATTLE_ROYALE]: {
     description: 'participate in a waifu royale',
     reward: RewardTable.BATTLE_ROYALE,
+  },
+  [MissionCode.DUEL]: {
+    description: 'fight in a duel',
+    reward: RewardTable.DUEL,
   },
 };
