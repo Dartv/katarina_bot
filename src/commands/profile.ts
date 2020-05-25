@@ -5,7 +5,7 @@ import { ICommand, ICommandHandler, ICommandContext } from 'ghastly';
 
 import {
   COMMAND_TRIGGERS,
-  COLORS,
+  Color,
   Emoji,
   MarriageStatus,
 } from '../util';
@@ -68,7 +68,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
     const embed = new RichEmbed({
       title: `${member.displayName}'s profile`,
       description: user.quote ? `"${user.quote}"` : `Set your quote with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_QUOTE[0]}`,
-      color: COLORS.INFO,
+      color: Color.INFO,
       ...(user.waifu && {
         thumbnail: { url: user.waifu.imageUrl },
       }),
