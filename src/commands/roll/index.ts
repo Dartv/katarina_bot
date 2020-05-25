@@ -1,13 +1,22 @@
-import { ICommand, ICommandHandler, Middleware } from 'ghastly';
+import {
+  ICommand,
+  ICommandHandler,
+  Middleware,
+  ICommandContext,
+} from 'ghastly';
 
 import {
-  Banner, COMMAND_TRIGGERS, PriceTable, MissionCode, RewardTable,
+  COMMAND_TRIGGERS,
+  PriceTable,
+  MissionCode,
+  RewardTable,
+  BannerType,
 } from '../../util';
 import { ICharacter } from '../../models/character/types';
-import { User } from '../../models';
 import { injectUser, withPrice, withMission } from '../middleware';
 import { rollLocalBanner } from './rollLocalBanner';
 import { rollNormalBanner } from './rollNormalBanner';
+import { rollCurrentBanner } from './rollCurrentBanner';
 import { getDailyResetDate } from '../../util/daily';
 import { IMission } from '../../models/mission/types';
 
@@ -34,25 +43,26 @@ const middleware: Middleware[] = [
   })),
 ];
 
-const handler: ICommandHandler = async (context): Promise<void> => {
+const roll = async (context: ICommandContext): Promise<ICharacter> => {
   const { args } = context;
-  const banner: Banner = args.banner.trim().toLowerCase();
-  let character: ICharacter;
-
-  if (banner === Banner.LOCAL) {
-    character = await rollLocalBanner(context);
-  } else {
-    character = await rollNormalBanner(context);
+  const banner: BannerType = args.banner.trim().toLowerCase();
+  switch (banner) {
+    case BannerType.LOCAL:
+      return rollLocalBanner(context);
+    case BannerType.CURRENT:
+      return rollCurrentBanner(context);
+    default:
+      return rollNormalBanner(context);
   }
+};
 
-  await User.findByIdAndUpdate(context.user.id, {
-    $push: {
-      characters: character._id,
-    },
-    $set: {
-      lastRolledAt: new Date(),
-    },
-  });
+const handler: ICommandHandler = async (context): Promise<void> => {
+  const { user } = context;
+  const character = await roll(context);
+
+  user.characters.push(character._id);
+  user.lastRolledAt = new Date();
+  await user.save();
 };
 
 export default (): ICommand => ({
@@ -61,11 +71,11 @@ export default (): ICommand => ({
   parameters: [
     {
       name: 'banner',
-      description: 'banner to roll on',
+      description: `${Object.values(BannerType).join(', ')}`,
       optional: true,
-      defaultValue: Banner.NORMAL,
+      defaultValue: BannerType.NORMAL,
     },
   ],
   triggers: COMMAND_TRIGGERS.ROLL,
-  description: 'Waifu gacha game. Available banners are Normal (default) and Local (has unique characters)',
+  description: 'Waifu gacha game',
 });

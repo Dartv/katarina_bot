@@ -96,6 +96,7 @@ export const COMMAND_TRIGGERS = {
   MISSIONS: ['missions'],
   DUEL: ['duel'],
   SET_BANNER: ['setbanner'],
+  BANNER: ['banner'],
 };
 
 export const FONTS = {

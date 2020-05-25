@@ -58,6 +58,8 @@ import daily from './daily';
 import balance from './balance';
 import missions from './missions';
 import duel from './duel';
+import setbanner from './setbanner';
+import banner from './banner';
 
 const commands = [
   add,
@@ -119,6 +121,8 @@ const commands = [
   balance,
   missions,
   duel,
+  setbanner,
+  banner,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);
