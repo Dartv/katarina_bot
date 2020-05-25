@@ -70,31 +70,35 @@ const handler: ICommandHandler = async (context): Promise<any> => {
       description: user.quote ? `"${user.quote}"` : `Set your quote with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_QUOTE[0]}`,
       color: COLORS.INFO,
       ...(user.waifu && {
-        image: { url: user.waifu.imageUrl },
+        thumbnail: { url: user.waifu.imageUrl },
       }),
       fields: [
-        { name: 'Waifus owned', value: user.characters.length },
-        { name: 'Favorites', value: user.favorites.length },
+        { name: '**Waifus owned**', value: user.characters.length, inline: true },
+        { name: '**Favorites**', value: user.favorites.length, inline: true },
+        { name: '**Waifus guessed**', value: user.correctQuizGuesses, inline: true },
+        { name: '**Katacoins**💎', value: user.currency, inline: true },
         {
-          name: 'Married to',
-          value: marriedMember ? marriedMember.displayName : `Marry someone by typing ${marryExample}`,
+          name: '**Married to**',
+          value: marriedMember ? `${marriedMember}` : `Marry someone by typing ${marryExample}`,
+          inline: !!marriedMember,
         },
         ...(marriage ? [{
-          name: 'Married for',
+          name: '**Married for**',
           value: formatDistance(new Date(), marriage.marriedAt),
+          inline: true,
         }] : []),
         ...characterStats.map(({ stars, count }) => ({
           name: Emoji.STAR.repeat(stars),
           value: count,
         })),
         ...(user.waifu ? [
-          { name: 'Waifu', value: user.waifu.name },
+          { name: '**Waifu**', value: user.waifu.name },
           {
-            name: 'Series',
+            name: '**Series**',
             value: pluck('title', user.waifu.series as any[]).join(', ') || '...',
           },
         ] : [
-          { name: 'Waifu', value: `Set your waifu with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_WAIFU[0]}` },
+          { name: '**Waifu**', value: `Set your waifu with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_WAIFU[0]}` },
         ]),
       ],
     });
