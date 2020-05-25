@@ -3,7 +3,7 @@ import request from 'request';
 
 import { gm } from '../../util';
 import {
-  FONTS, COLORS, DIRECTIONS, TMP_IMAGE_PATH,
+  FONTS, Color, DIRECTIONS, TMP_IMAGE_PATH,
 } from '../../util/constants';
 import { autoWrap } from '../../util/helpers';
 
@@ -13,8 +13,8 @@ const MAX_WIDTH_TO_STROKE = 400;
 
 export default ({
   font = FONTS.ttf(FONTS.HELVETICA),
-  fillColor = COLORS.WHITE,
-  strokeColor = COLORS.BLACK,
+  fillColor = Color.WHITE,
+  strokeColor = Color.BLACK,
 } = {}) => async (next, context) => {
   const { image: { size: { width }, url }, args: { content } } = context;
   const fontSize = calcFontSize(width);

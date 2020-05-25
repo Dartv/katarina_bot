@@ -7,3 +7,4 @@ export { default as CharacterInfo } from './characterInfo';
 export { default as WallOfShame } from './wallOfShame';
 export { default as Versus } from './versus';
 export { default as Mission } from './mission';
+export { default as Banner } from './banner';

@@ -2,7 +2,7 @@ import R from 'ramda';
 import { Response } from 'ghastly/command';
 import { RichEmbed, Attachment, Message } from 'discord.js';
 
-import { COLORS } from '../../util/constants';
+import { Color } from '../../util/constants';
 
 export class ImageResponse extends Response {
   constructor(image, content, { message }) {
@@ -16,7 +16,7 @@ export class ImageResponse extends Response {
       }
 
       embed
-        .setColor(COLORS.INFO)
+        .setColor(Color.INFO)
         .setAuthor(message.author.username, message.author.avatarURL)
         .setDescription(content);
 

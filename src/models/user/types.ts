@@ -31,6 +31,7 @@ export interface IUser extends Document {
   services: IUserServices;
   currency: number;
   correctQuizGuesses: number;
+  rolls: number;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;

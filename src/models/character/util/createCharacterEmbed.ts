@@ -2,7 +2,8 @@ import { RichEmbed } from 'discord.js';
 import { pluck } from 'ramda';
 
 import { ICharacter } from '../types';
-import { COLORS, Emoji, EXPToLVLUp } from '../../../util';
+import { Emoji, EXPToLVLUp } from '../../../util';
+import { getColorByStars } from '../../../util/color';
 
 interface ICreateCharacterEmbedInput extends Partial<RichEmbed> {
   name: ICharacter['name'];
@@ -28,7 +29,7 @@ export default function createCharacterEmbed({
   return new RichEmbed({
     title: name,
     ...(imageUrl && { image: { url: imageUrl } }),
-    color: COLORS.INFO,
+    color: getColorByStars(stars),
     footer,
     fields: [
       { name: 'Stars', value: Emoji.STAR.repeat(stars) },
