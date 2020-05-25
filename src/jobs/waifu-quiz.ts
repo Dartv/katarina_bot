@@ -31,8 +31,9 @@ export default (agenda: Agenda, client: Client) => {
             const user = await User.findOne({ discordId: member.id });
             if (user) {
               user.currency += CURRENCY;
+              user.correctQuizGuesses += 1;
               await user.save();
-              await channel.send(`${member} received ${CURRENCY} katacoins💎`);
+              await channel.send(`${member} received ${CURRENCY}💎`);
             }
           }
         });

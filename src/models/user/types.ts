@@ -30,6 +30,7 @@ export interface IUser extends Document {
   visitedAt?: Date;
   services: IUserServices;
   currency: number;
+  correctQuizGuesses: number;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;

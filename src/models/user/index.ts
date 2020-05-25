@@ -60,6 +60,11 @@ const UserSchema = new Schema({
     default: 0,
     min: 0,
   },
+  correctQuizGuesses: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
 }, options);
 
 Object.assign(UserSchema, { statics, methods });
