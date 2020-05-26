@@ -5,11 +5,11 @@ import { injectUser, withPersonalCooldown, withMission } from './middleware';
 import { IMission } from '../models/mission/types';
 import { getDailyResetDate } from '../util/daily';
 
-const CURRENCY = 0;
+const CURRENCY = 500;
 
 const middleware = [
   injectUser(),
-  // withPersonalCooldown({ daily: true }),
+  withPersonalCooldown({ daily: true }),
   withMission(async () => ({
     code: MissionCode.DAILY,
     reward: RewardTable.DAILY,
