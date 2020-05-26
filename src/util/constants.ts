@@ -267,6 +267,7 @@ export enum RewardTable {
   BATTLE_ROYALE = 100,
   DUEL = 50,
   QUIZ = 50,
+  ALL_COMPLETE = 150,
 }
 
 export enum MissionCode {
@@ -275,6 +276,7 @@ export enum MissionCode {
   BATTLE_ROYALE = 'BATTLE_ROYALE',
   DUEL = 'DUEL',
   QUIZ = 'QUIZ',
+  ALL_COMPLETE = 'ALL_COMPLETE',
 }
 
 export const Missions = {
@@ -297,6 +299,10 @@ export const Missions = {
   [MissionCode.QUIZ]: {
     description: 'guess 5 characters',
     reward: RewardTable.QUIZ,
+  },
+  [MissionCode.ALL_COMPLETE]: {
+    description: 'complete all missions',
+    reward: RewardTable.ALL_COMPLETE,
   },
 };
 

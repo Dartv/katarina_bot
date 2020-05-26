@@ -1,6 +1,7 @@
 import Agenda from 'agenda';
 import { Client } from 'ghastly';
 import { Mission } from '../models';
+import { getDailyResetDate } from '../util/daily';
 
 const JOB_NAME = 'reset missions';
 
@@ -16,6 +17,7 @@ export default (agenda: Agenda, client: Client) => {
         {
           $set: {
             progress: 0,
+            resetsAt: getDailyResetDate(),
           },
           $unset: {
             completedAt: '',
