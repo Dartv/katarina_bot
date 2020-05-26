@@ -307,3 +307,7 @@ export const Missions = {
 };
 
 export const ROLLS_TO_PITY = 150;
+
+export enum EmbedLimit {
+  DESCRIPTION = 2048,
+}

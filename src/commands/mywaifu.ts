@@ -29,29 +29,17 @@ const handler: ICommandHandler = async (context) => {
       return null;
     }
 
-    const {
-      id,
-      imageUrl,
-      stars,
-      name,
-      series,
-      slug,
-    } = character;
-
     const { level, exp }: Partial<ICharacterInfo> = await CharacterInfo.findOne({
       character: character._id,
       user: user._id,
     }).map(defaultTo({}));
 
-    const count = user.characters.filter(_id => _id.toString() === id).length;
+    const count = user.characters.filter(_id => _id.toString() === character.id).length;
     const embed = createCharacterEmbed({
-      name,
-      imageUrl,
-      series,
-      stars,
+      ...character.toObject(),
       level,
       exp,
-      footer: { text: `You have x${count} of this waifu | ${slug}` },
+      footer: { text: `You have x${count} of this waifu | ${character.slug}` },
     });
 
     return dispatch(embed);

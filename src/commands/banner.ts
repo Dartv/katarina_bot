@@ -19,7 +19,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   if (banner?.character instanceof Character) {
     const { character } = banner;
-    await message.channel.send(`${ROLLS_TO_PITY - user.rolls} rolls until ${character.name}`, {
+    await message.channel.send(`${ROLLS_TO_PITY - user.rolls} rolls until guaranteed summon`, {
       embed: createCharacterEmbed(character),
     });
   }

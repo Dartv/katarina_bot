@@ -7,6 +7,7 @@ import { ICharacterInfo } from '../characterInfo/types';
 
 export interface ICharacter extends Document {
   name: string;
+  description?: string;
   stars: CharacterStar;
   popularity: number;
   slug: string;

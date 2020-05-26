@@ -2,7 +2,7 @@ import { RichEmbed } from 'discord.js';
 import { pluck } from 'ramda';
 
 import { ICharacter } from '../types';
-import { Emoji, EXPToLVLUp } from '../../../util';
+import { Emoji, EXPToLVLUp, EmbedLimit } from '../../../util';
 import { getColorByStars } from '../../../util/color';
 
 interface ICreateCharacterEmbedInput extends Partial<RichEmbed> {
@@ -17,6 +17,7 @@ interface ICreateCharacterEmbedInput extends Partial<RichEmbed> {
 
 export default function createCharacterEmbed({
   name,
+  description,
   imageUrl,
   stars,
   series = [],
@@ -28,6 +29,7 @@ export default function createCharacterEmbed({
 }: ICreateCharacterEmbedInput): RichEmbed {
   return new RichEmbed({
     title: name,
+    description: description ? description.slice(0, EmbedLimit.DESCRIPTION - 3).concat('...') : undefined,
     ...(imageUrl && { image: { url: imageUrl } }),
     color: getColorByStars(stars),
     footer,

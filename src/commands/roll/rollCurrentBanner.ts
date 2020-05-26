@@ -1,12 +1,13 @@
-import { ICommandHandler } from 'ghastly';
+import { ICommandContext } from 'ghastly';
 
 import { Character, Banner } from '../../models';
-import { createCharacterEmbed } from '../../models/character/util';
 import { CharacterStar, ROLLS_TO_PITY } from '../../util';
+import { rollNormalBanner } from './rollNormalBanner';
+import { ICharacter } from '../../models/character/types';
 
-export const rollCurrentBanner: ICommandHandler = async (context) => {
-  const { dispatch, user } = context;
-  let [character] = await Character.random(1);
+export const rollCurrentBanner = async (context: ICommandContext): Promise<ICharacter> => {
+  const { user } = context;
+  let character = await rollNormalBanner(context);
 
   if (character.stars === CharacterStar.FIVE_STAR || user.rolls >= ROLLS_TO_PITY - 1) {
     const banner = await Banner
@@ -27,7 +28,5 @@ export const rollCurrentBanner: ICommandHandler = async (context) => {
     user.rolls += 1;
   }
 
-  const embed = createCharacterEmbed(character);
-  await dispatch(embed);
   return character;
 };

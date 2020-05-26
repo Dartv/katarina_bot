@@ -19,6 +19,7 @@ const CharacterSchema = new Schema({
     type: String,
     required: true,
   },
+  description: String,
   stars: {
     type: Number,
     min: Math.min(...stars),
@@ -46,10 +47,7 @@ const CharacterSchema = new Schema({
     }],
     default: [],
   },
-  cardImageUrl: {
-    type: String,
-    required: true,
-  },
+  cardImageUrl: String,
 }, options);
 
 CharacterSchema.index({ name: 'text' });

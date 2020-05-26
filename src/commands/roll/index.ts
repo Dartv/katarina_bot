@@ -19,6 +19,7 @@ import { rollNormalBanner } from './rollNormalBanner';
 import { rollCurrentBanner } from './rollCurrentBanner';
 import { getDailyResetDate } from '../../util/daily';
 import { IMission } from '../../models/mission/types';
+import { createCharacterEmbed } from '../../models/character/util';
 
 const middleware: Middleware[] = [
   injectUser(),
@@ -57,8 +58,10 @@ const roll = async (context: ICommandContext): Promise<ICharacter> => {
 };
 
 const handler: ICommandHandler = async (context): Promise<void> => {
-  const { user } = context;
+  const { user, dispatch } = context;
   const character = await roll(context);
+
+  await dispatch(createCharacterEmbed(character));
 
   user.characters.push(character._id);
   user.lastRolledAt = new Date();
