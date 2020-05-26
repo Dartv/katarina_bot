@@ -1,19 +1,24 @@
 /* global document, window */
 
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import { pluck } from 'ramda';
 import { ICommandHandler } from 'ghastly';
 
 import { getCharacterStarRating } from '../../models/character/util';
-import { Emoji } from '../../util';
 import { Series, Character } from '../../models';
 import { ISeries } from '../../models/series/types';
 import { ICharacter } from '../../models/character/types';
 
+let browser: Browser;
+
 export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> => {
-  const browser = await puppeteer.launch();
+  if (!browser) {
+    browser = await puppeteer.launch();
+  }
+
+  const page = await browser.newPage();
+
   try {
-    const page = await browser.newPage();
     await page.setCookie({
       name: 'waifutheme',
       value: 'dark',
@@ -96,6 +101,6 @@ export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> =
 
     return character;
   } finally {
-    await browser.close();
+    await page.close();
   }
 };
