@@ -27,7 +27,7 @@ const QUEUE_TIME = 600000;
 const INTERVAL_BETWEEN_ROUNDS = 1 * 60 * 1000;
 const CURRENCY = 100;
 
-const completeBattleRoyaleMission = async (user: IUser, message: Message): Promise<void> => {
+const completeBattleRoyaleMission = async (user: IUser, message: Message, client: Client): Promise<void> => {
   const middleware = withMission(async () => ({
     code: MissionCode.BATTLE_ROYALE,
     reward: RewardTable.BATTLE_ROYALE,
@@ -42,7 +42,7 @@ const completeBattleRoyaleMission = async (user: IUser, message: Message): Promi
   const context = {
     user,
     message,
-    dispatch: (response) => response.respond(),
+    dispatch: (response) => client.dispatcher.dispatchResponse(message.channel, response),
     formatter: MarkdownFormatter,
   } as ICommandContext;
 
@@ -103,7 +103,7 @@ export default (agenda: Agenda, client: Client) => {
                 },
               ]);
 
-              await completeBattleRoyaleMission(user, message);
+              await completeBattleRoyaleMission(user, message, client);
 
               return {
                 user,

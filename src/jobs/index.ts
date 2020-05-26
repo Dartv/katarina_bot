@@ -7,12 +7,11 @@ import { Client } from 'ghastly';
 import { logger } from '../util/logger';
 import { isProduction } from '../util/environment';
 
-const jobs = [];
+const jobs = [require('./waifu-quiz')];
 
 if (isProduction()) {
   jobs.push(
     require('./monitor-scoresaber-players'),
-    require('./waifu-quiz'),
     require('./battle-royale'),
     require('./reset-missions'),
   );

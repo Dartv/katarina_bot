@@ -266,6 +266,7 @@ export enum RewardTable {
   ROLL = 100,
   BATTLE_ROYALE = 100,
   DUEL = 50,
+  QUIZ = 50,
 }
 
 export enum MissionCode {
@@ -273,6 +274,7 @@ export enum MissionCode {
   ROLL = 'ROLL',
   BATTLE_ROYALE = 'BATTLE_ROYALE',
   DUEL = 'DUEL',
+  QUIZ = 'QUIZ',
 }
 
 export const Missions = {
@@ -291,6 +293,10 @@ export const Missions = {
   [MissionCode.DUEL]: {
     description: 'fight in a duel',
     reward: RewardTable.DUEL,
+  },
+  [MissionCode.QUIZ]: {
+    description: 'guess 5 characters',
+    reward: RewardTable.QUIZ,
   },
 };
 
