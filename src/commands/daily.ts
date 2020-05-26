@@ -31,7 +31,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
 
   await user.save();
 
-  await message.reply(`You acquired ${CURRENCY} katacoins💎`);
+  await message.reply(`You acquired ${CURRENCY}💎`);
 
   return null;
 };

@@ -10,7 +10,7 @@ const middleware = [
 const handler: ICommandHandler = async (context): Promise<any> => {
   const { user, message } = context;
 
-  return message.reply(`You have ${user.currency} katacoins 💎`);
+  return message.reply(`You have ${user.currency}💎`);
 };
 
 export default (): ICommand => ({

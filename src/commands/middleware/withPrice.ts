@@ -11,7 +11,7 @@ const withPrice = (price: number): Middleware => async (next, context) => {
   const { user, message } = context;
   const { channel } = message;
 
-  await message.reply(`This command costs ${price} katacoins💎. Type "yes" if you want to proceed.`);
+  await message.reply(`This command costs ${price}💎. Type "yes" if you want to proceed.`);
 
   try {
     const collectedMessages = await channel.awaitMessages(
@@ -40,7 +40,7 @@ const withPrice = (price: number): Middleware => async (next, context) => {
       await user.save();
     } catch (err) {
       if (err instanceof Error.ValidationError) {
-        return new ErrorResponse('You don\'t have enough katacoins💎', context);
+        return new ErrorResponse('You don\'t have enough 💎', context);
       }
       throw err;
     }

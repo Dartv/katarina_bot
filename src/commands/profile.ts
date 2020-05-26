@@ -26,7 +26,9 @@ const getMarriedMember = async (marriage: IMarriage, context: ICommandContext): 
 
 const handler: ICommandHandler = async (context): Promise<any> => {
   try {
-    const { message, dispatch, guild } = context;
+    const {
+      message, dispatch, guild, formatter,
+    } = context;
     let { user } = context;
     const member = message.mentions.members.first() || context.message.member;
 
@@ -73,17 +75,33 @@ const handler: ICommandHandler = async (context): Promise<any> => {
         thumbnail: { url: user.waifu.imageUrl },
       }),
       fields: [
-        { name: '**Waifus owned**', value: user.characters.length, inline: true },
-        { name: '**Favorites**', value: user.favorites.length, inline: true },
-        { name: '**Waifus guessed**', value: user.correctQuizGuesses, inline: true },
-        { name: '**Katacoins**💎', value: user.currency, inline: true },
         {
-          name: '**Married to**',
+          name: formatter.bold('Waifus owned'),
+          value: user.characters.length,
+          inline: true,
+        },
+        {
+          name: formatter.bold('Favorites'),
+          value: user.favorites.length,
+          inline: true,
+        },
+        {
+          name: formatter.bold('Waifus guessed'),
+          value: user.correctQuizGuesses,
+          inline: true,
+        },
+        {
+          name: formatter.bold('Katacoins'),
+          value: `${user.currency}💎`,
+          inline: true,
+        },
+        {
+          name: formatter.bold('Married to'),
           value: marriedMember ? `${marriedMember}` : `Marry someone by typing ${marryExample}`,
           inline: !!marriedMember,
         },
         ...(marriage ? [{
-          name: '**Married for**',
+          name: formatter.bold('Married for'),
           value: formatDistance(new Date(), marriage.marriedAt),
           inline: true,
         }] : []),
@@ -92,13 +110,19 @@ const handler: ICommandHandler = async (context): Promise<any> => {
           value: count,
         })),
         ...(user.waifu ? [
-          { name: '**Waifu**', value: user.waifu.name },
           {
-            name: '**Series**',
+            name: formatter.bold('Waifu'),
+            value: user.waifu.name,
+          },
+          {
+            name: formatter.bold('Series'),
             value: pluck('title', user.waifu.series as any[]).join(', ') || '...',
           },
         ] : [
-          { name: '**Waifu**', value: `Set your waifu with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_WAIFU[0]}` },
+          {
+            name: formatter.bold('Waifu'),
+            value: `Set your waifu with ${BOT_PREFIX}${COMMAND_TRIGGERS.SET_WAIFU[0]}`,
+          },
         ]),
       ],
     });

@@ -129,7 +129,7 @@ export default (agenda: Agenda, client: Client) => {
           await channel.send(createParticipantEmbed(winner));
           winner.user.currency += CURRENCY;
           winner.user.save();
-          return channel.send(`${winner.member.user} received ${CURRENCY} katacoins💎`);
+          return channel.send(`${winner.member.user} received ${CURRENCY}💎`);
         });
       await Promise.all(promises);
     } catch (err) {
