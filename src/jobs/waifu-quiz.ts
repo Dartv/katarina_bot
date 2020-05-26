@@ -25,7 +25,7 @@ const completeQuizMission = async (user: IUser, message: Message, client: Client
         progress: mission.progress + 1,
       });
 
-      if (mission.progress >= 1) {
+      if (mission.progress >= 5) {
         Object.assign(mission, {
           completedAt: new Date(),
         });
