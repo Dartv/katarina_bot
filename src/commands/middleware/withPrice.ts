@@ -11,27 +11,29 @@ const withPrice = (price: number): Middleware => async (next, context) => {
   const { user, message } = context;
   const { channel } = message;
 
-  await message.reply(`This command costs ${price}💎. Type "yes" if you want to proceed.`);
+  if (user?.settings?.displayRollPrice) {
+    await message.reply(`This command costs ${price}💎. Type "yes" if you want to proceed.`);
 
-  try {
-    const collectedMessages = await channel.awaitMessages(
-      ({
-        content,
-        member,
-      }) => member?.id === message.member?.id && Object.values(Answer).includes(content.toLowerCase()),
-      {
-        time: 10000,
-        maxMatches: 1,
-        errors: ['time'],
-      },
-    );
-    const collectedMessage = collectedMessages.first();
+    try {
+      const collectedMessages = await channel.awaitMessages(
+        ({
+          content,
+          member,
+        }) => member?.id === message.member?.id && Object.values(Answer).includes(content.toLowerCase()),
+        {
+          time: 10000,
+          maxMatches: 1,
+          errors: ['time'],
+        },
+      );
+      const collectedMessage = collectedMessages.first();
 
-    if (collectedMessage?.content?.toLowerCase() === Answer.NO) {
-      return null;
+      if (collectedMessage?.content?.toLowerCase() === Answer.NO) {
+        return null;
+      }
+    } catch (err) {
+      return new ErrorResponse('No answer. Skipping...', context);
     }
-  } catch (err) {
-    return new ErrorResponse('No answer. Skipping...', context);
   }
 
   if (user) {

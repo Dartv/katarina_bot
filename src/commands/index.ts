@@ -60,6 +60,7 @@ import missions from './missions';
 import duel from './duel';
 import setbanner from './setbanner';
 import banner from './banner';
+import settings from './settings';
 
 const commands = [
   add,
@@ -123,6 +124,7 @@ const commands = [
   duel,
   setbanner,
   banner,
+  settings,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

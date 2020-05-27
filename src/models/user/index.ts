@@ -1,10 +1,12 @@
-import { model, Schema, SchemaTypes } from 'mongoose';
+import {
+  model, Schema, SchemaTypes, SchemaOptions,
+} from 'mongoose';
 import * as statics from './statics';
 import * as methods from './methods';
 import { DECK_LIMIT } from '../../util';
 import { IUser, IUserModel } from './types';
 
-const options = { timestamps: true };
+const options: SchemaOptions = { timestamps: true };
 
 const UserSchema = new Schema({
   discordId: { type: String, required: true, index: true },
@@ -69,6 +71,17 @@ const UserSchema = new Schema({
     type: Number,
     default: 0,
     min: 0,
+  },
+  settings: {
+    type: new Schema({
+      displayRollPrice: {
+        type: Number,
+        min: 0,
+        max: 1,
+        default: 1,
+      },
+    }),
+    default: {},
   },
 }, options);
 

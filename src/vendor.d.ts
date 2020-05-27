@@ -28,8 +28,8 @@ declare module 'ghastly' {
   export interface ICommandContext {
     message: import('discord.js').Message;
     formatter: typeof import('ghastly/lib/utils/MarkdownFormatter');
-    user?: any;
-    guild?: any;
+    user?: import('mongoose').Document<any>;
+    guild?: import('mongoose').Document<any>;
     error?: Error;
     command?: string;
     dispatch: (...args: any[]) => Promise<any>;

@@ -18,6 +18,17 @@ export interface IUserServices {
   scoresaber?: IScoresaberService;
 }
 
+export enum UserSettingName {
+  DISPLAY_ROLL_PRICE = 'displayRollPrice',
+}
+
+export enum UserSetting {
+  OFF = 0,
+  ON = 1,
+}
+
+export type IUserSettings = Record<UserSettingName, UserSetting>;
+
 export interface IUser extends Document {
   discordId: string;
   images: IUserImage[];
@@ -32,6 +43,7 @@ export interface IUser extends Document {
   currency: number;
   correctQuizGuesses: number;
   rolls: number;
+  settings: IUserSettings;
   addImageLink: (image: IUserImage) => Promise<IUser>;
   getCharactersBySeries: (input: string) => Promise<ICharacter[]>;
   getCharactersByStars: (options: { stars?: number; field?: string }) => Promise<any>;
