@@ -1,11 +1,14 @@
 import { Middleware, ICommandContext } from 'ghastly';
 import R from 'ramda';
+import { User } from 'discord.js';
 
 import { Mission } from '../../models';
 import { IMission } from '../../models/mission/types';
 import { SuccessResponse } from '../responses/SuccessResponse';
 import { MissionCode, RewardTable } from '../../util';
 import { getDailyResetDate } from '../../util/daily';
+import { IUser } from '../../models/user/types';
+import { ErrorResponse } from '../responses/ErrorResponse';
 
 const rewardUser = async (reward: number, context: ICommandContext): Promise<void> => {
   const { user, dispatch } = context;
@@ -51,13 +54,22 @@ const withMission = (
   config: (context: ICommandContext) => Promise<{
     code: string;
     reward?: number;
+    user?: IUser;
+    discordUser?: User;
     update: (mission: IMission, response: any) => Promise<IMission>;
   }>,
 ): Middleware => async (next, context) => {
   const res = await next(context);
 
-  const { user } = context;
-  const { code, reward, update } = await config(context);
+  if (res instanceof ErrorResponse) return res;
+
+  const {
+    code,
+    reward,
+    update,
+    user = context.user as IUser,
+    discordUser = context.message.author,
+  } = await config(context);
   let mission = await Mission.findOne({ code, user: user._id });
 
   if (!mission) {
@@ -71,9 +83,14 @@ const withMission = (
   await mission.save();
 
   if (mission.completedAt) {
-    await rewardUser(reward, context);
+    const ctx = { ...context };
 
-    await tryCompleteFinalDailyMission(context);
+    ctx.message.author = discordUser;
+    ctx.user = user;
+
+    await rewardUser(reward, ctx);
+
+    await tryCompleteFinalDailyMission(ctx);
   }
 
   return res;

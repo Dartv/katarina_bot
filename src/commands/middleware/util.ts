@@ -27,3 +27,32 @@ export const createErrorResponse = R.curry((lookup, messageCreator) => R.converg
   R.identity,
 ]));
 export const createErrorResponseFromArgsRef = createErrorResponse(R.view(lenses.args.ref as any));
+
+export const composeMiddleware = (...functions) => {
+  if (functions.length === 1) {
+    return functions[0];
+  }
+
+  return functions.reduceRight((f, next) => (...args) => next(f, ...args));
+};
+
+export function applyMiddleware(...middleware) {
+  middleware.forEach((layer) => {
+    if (typeof layer !== 'function') {
+      throw new TypeError('Expected all provided middleware to be functions.');
+    }
+  });
+
+  return (handler) => {
+    if (typeof handler !== 'function') {
+      // eslint-disable-next-line max-len
+      throw new TypeError('Expected handler to be a function. Middleware can only be applied to functions.');
+    }
+
+    return composeMiddleware(...middleware, handler);
+  };
+}
+
+export const combineMiddleware = <T extends (...args: any[]) => any>(
+  ...middleware: T[]
+) => (next: T, ...args: any[]): T => applyMiddleware(...middleware)(next)(...args);

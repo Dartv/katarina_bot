@@ -1,8 +1,11 @@
-import { ICommand, ICommandHandler, Middleware } from 'ghastly';
+import {
+  ICommand, ICommandHandler, Middleware, ICommandContext,
+} from 'ghastly';
 import {
   Message,
   GuildMember,
   RichEmbed,
+  User as DiscordUser,
 } from 'discord.js';
 
 import { COMMAND_TRIGGERS, RewardTable, MissionCode } from '../util';
@@ -27,21 +30,33 @@ export interface IParticipant {
   message: Message;
 }
 
+const withDuelMission = (
+  config: (context: ICommandContext) => Promise<{ user?: IUser; discordUser?: DiscordUser }>,
+): Middleware => withMission(async (context) => ({
+  ...await config(context),
+  code: MissionCode.DUEL,
+  reward: RewardTable.DUEL,
+  update: async (mission): Promise<IMission> => {
+    Object.assign(mission, {
+      resetsAt: getDailyResetDate(),
+      completedAt: new Date(),
+    });
+
+    return mission;
+  },
+}));
+
 const middleware: Middleware[] = [
   injectUser(),
-  withMission(async () => ({
-    code: MissionCode.DUEL,
-    reward: RewardTable.DUEL,
-    update: async (mission, res): Promise<IMission> => {
-      if (typeof res === 'string') {
-        Object.assign(mission, {
-          resetsAt: getDailyResetDate(),
-          completedAt: new Date(),
-        });
-      }
+  withDuelMission(async (context) => {
+    const member = context.message.mentions.members.first();
+    const user = await User.findOne({ discordId: member.id });
 
-      return mission;
-    },
+    return { user, discordUser: member.user };
+  }),
+  withDuelMission(async (context) => ({
+    user: context.user,
+    discordUser: context.message.author,
   })),
 ];
 
@@ -49,7 +64,7 @@ export const chooseCharacter = async (
   {
     user,
     message,
-    attempt = 1,
+    attempt = 0,
     lastCharacter,
   }: {
     user: IUser;
