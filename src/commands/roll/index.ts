@@ -74,7 +74,7 @@ export default (): ICommand => ({
   parameters: [
     {
       name: 'banner',
-      description: `${Object.values(BannerType).join(', ')}`,
+      description: `${Object.values(BannerType).join('/')}`,
       optional: true,
       defaultValue: BannerType.NORMAL,
     },

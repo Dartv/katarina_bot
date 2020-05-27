@@ -36,6 +36,7 @@ declare module 'ghastly' {
     args: { [key: string]: any };
     client: Client;
     models?: any;
+    commands: { commands: Map<string, ICommand> };
   }
 
   export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;
@@ -45,6 +46,8 @@ declare module 'ghastly' {
   }
 
   export interface ICommand {
+    name?: string;
+    aliases?: string[];
     middleware?: Middleware[];
     handler: ICommandHandler;
     triggers: string[];
