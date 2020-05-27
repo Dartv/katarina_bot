@@ -59,7 +59,16 @@ const roll = async (context: ICommandContext): Promise<ICharacter> => {
 
 const handler: ICommandHandler = async (context): Promise<void> => {
   const { user, dispatch } = context;
-  const character = await roll(context);
+  let character: ICharacter;
+
+  try {
+    character = await roll(context);
+  } catch (err) {
+    user.currency += PriceTable.ROLL;
+    await user.save();
+
+    throw err;
+  }
 
   await dispatch(createCharacterEmbed(character));
 
