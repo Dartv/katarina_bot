@@ -58,7 +58,7 @@ const roll = async (context: ICommandContext): Promise<ICharacter> => {
 };
 
 const handler: ICommandHandler = async (context): Promise<void> => {
-  const { user, dispatch } = context;
+  const { user, message } = context;
   let character: ICharacter;
 
   try {
@@ -70,7 +70,7 @@ const handler: ICommandHandler = async (context): Promise<void> => {
     throw err;
   }
 
-  await dispatch(createCharacterEmbed(character));
+  await message.reply(createCharacterEmbed(character));
 
   user.characters.push(character._id);
   user.lastRolledAt = new Date();
