@@ -89,7 +89,7 @@ export const chooseCharacter = async (
 
   await message.author.send(
     'Do you want to pick this character? Type "yes" or "no"',
-    { embed: createCharacterEmbed(character) },
+    { embed: createCharacterEmbed(character.toObject()) },
   );
 
   let answer: Answer;
