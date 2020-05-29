@@ -13,7 +13,7 @@ import { getDailyResetDate } from '../util/daily';
 
 const JOB_NAME = 'waifu quiz';
 const CHANNEL_NAME = 'waifu-quiz';
-const CURRENCY = 5;
+const CURRENCY = 10;
 
 const completeQuizMission = async (user: IUser, message: Message, client: Client): Promise<void> => {
   const middleware = withMission(async () => ({
