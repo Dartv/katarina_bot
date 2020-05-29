@@ -29,7 +29,7 @@ export const handler: ICommandHandler = async (context) => {
       },
     ]);
     const embed = createCharacterEmbed({
-      ...character,
+      ...character.toObject(),
       series: [],
     });
     await dispatch(embed);

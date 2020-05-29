@@ -31,7 +31,7 @@ const handler = async (context) => {
       },
     ]);
     const embed = createCharacterEmbed({
-      ...character,
+      ...character.toObject(),
       name: '???',
     });
     await dispatch(embed);

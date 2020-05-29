@@ -42,7 +42,7 @@ CharacterInfoSchema.pre<ICharacterInfo>('save', async function () {
       const character = await Character.findOne({ _id: this.character }).populate('series').lean();
       if (character) {
         const embed = createCharacterEmbed({
-          ...character,
+          ...character.toObject(),
           level: this.level,
           exp: this.exp,
         });

@@ -22,7 +22,7 @@ const chooseCharacter = async (context: ICommandContext): Promise<Partial<IChara
   ]).then(chars => chars.map((char, i) => ({ ...char, index: i + 1 })));
 
   const embeds = characters.map((character) => createCharacterEmbed({
-    ...character,
+    ...character.toObject(),
     footer: { text: `Type ${character.index} to select this character` },
     thumbnail: { url: character.imageUrl },
     imageUrl: null,
