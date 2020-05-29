@@ -72,14 +72,12 @@ export const getCharacterStarRating = (popularity: number): CharacterStar => {
   return CharacterStar.TWO_STAR;
 };
 
-export const getCharacterAdditionalStars = (stars: number, copies: number): CharacterStar => {
-  switch (copies) {
-    case AwakeningStage.FIRST:
-      return 1;
-    case AwakeningStage.SECOND:
-      return 2;
-    case AwakeningStage.THIRD:
-    default:
-      return stars >= AwakeningStage.THIRD ? 3 : 0;
-  }
+export const getCharacterAdditionalStars = (copies: number): CharacterStar => {
+  if (copies >= AwakeningStage.THIRD) return 3;
+
+  if (copies >= AwakeningStage.SECOND) return 2;
+
+  if (copies >= AwakeningStage.FIRST) return 1;
+
+  return 0;
 };
