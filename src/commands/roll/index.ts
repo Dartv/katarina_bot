@@ -72,7 +72,7 @@ const handler: ICommandHandler = async (context): Promise<void> => {
 
   character.awaken(user);
 
-  await message.reply(createCharacterEmbed(character));
+  await message.reply(createCharacterEmbed(character.toObject()));
 
   user.characters.push(character._id);
   user.lastRolledAt = new Date();

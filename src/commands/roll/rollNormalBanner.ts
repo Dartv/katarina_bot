@@ -80,24 +80,21 @@ export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> =
     // }, Emoji.STAR.repeat(stars));
 
     const characterSeries = await Series.getUpdatedSeries(series as ISeries[]);
-
-    const [character] = await Promise.all([
-      Character.findOneAndUpdate(
-        { slug },
-        {
-          $set: {
-            name,
-            description,
-            stars,
-            imageUrl,
-            slug,
-            popularity,
-            series: pluck('_id', characterSeries),
-          },
+    const character = await Character.findOneAndUpdate(
+      { slug },
+      {
+        $set: {
+          name,
+          description,
+          stars,
+          imageUrl,
+          slug,
+          popularity,
+          series: pluck('_id', characterSeries),
         },
-        { upsert: true, new: true },
-      ).populate('series'),
-    ]);
+      },
+      { upsert: true, new: true },
+    ).populate('series');
 
     return character;
   } finally {
