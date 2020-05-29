@@ -70,6 +70,8 @@ const handler: ICommandHandler = async (context): Promise<void> => {
     throw err;
   }
 
+  character.awaken(user);
+
   await message.reply(createCharacterEmbed(character));
 
   user.characters.push(character._id);

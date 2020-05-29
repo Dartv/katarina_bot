@@ -159,6 +159,8 @@ export enum CharacterStar {
 
 export enum Emoji {
   STAR = '⭐️',
+  STAR2 = '★',
+  STAR_EMPTY = '☆',
   LIAR = '<:pizdabol:558647131334901764>',
   SPRAVEDLIVO = '<:spravedlivo:586138243855155200>',
   COOL_CHAMP = '<:CoolChamp:685274406829817945>',
@@ -311,4 +313,10 @@ export const ROLLS_TO_PITY = 150;
 
 export enum EmbedLimit {
   DESCRIPTION = 2048,
+}
+
+export enum AwakeningStage {
+  FIRST = 3,
+  SECOND = 5,
+  THIRD = 10,
 }

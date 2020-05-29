@@ -19,6 +19,8 @@ const handler = async (context): Promise<any> => {
       },
     }, {}, { sort: { stars: -1 } }).populate('series');
 
+    character.awaken(user);
+
     if (!character) {
       return ErrorResponse(`You have no waifu with name "${name}"`, context);
     }

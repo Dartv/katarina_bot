@@ -58,7 +58,7 @@ const battleRoyale = async (channel: TextChannel, bracket: IParticipant[]): Prom
   await channel.send('VS');
   await channel.send(createParticipantEmbed(p2));
   await sleep(10000);
-  const [winner] = [p1, p2].sort((a, b) => a.character.popularity - b.character.popularity);
+  const [winner] = [p1, p2].sort((a, b) => a.character.fight(b.character) ? 1 : -1);
   await channel.send('The winner is...', { embed: createParticipantEmbed(winner) });
   await sleep(INTERVAL_BETWEEN_ROUNDS);
   return battleRoyale(channel, [winner, ...rest]);
@@ -102,6 +102,8 @@ export default (agenda: Agenda, client: Client) => {
                   },
                 },
               ]);
+
+              character.awaken(user);
 
               await completeBattleRoyaleMission(user, message, client);
 

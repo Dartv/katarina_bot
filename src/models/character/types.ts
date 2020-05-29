@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 import { CharacterStar } from '../../util';
 import { ISeries } from '../series/types';
 import { ICharacterInfo } from '../characterInfo/types';
+import { IUser } from '../user/types';
 
 export interface ICharacter extends Document {
   name: string;
@@ -17,6 +18,8 @@ export interface ICharacter extends Document {
   info?: ICharacterInfo;
   getStarRating(): CharacterStar;
   fetchInfo(userId: ObjectId): Promise<ICharacter>;
+  awaken(this: ICharacter, user: IUser): ICharacter;
+  fight(this: ICharacter, character: ICharacter): boolean;
 }
 
 export interface ICharacterModel extends Model<ICharacter> {
