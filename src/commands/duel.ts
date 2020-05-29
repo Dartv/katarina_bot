@@ -216,7 +216,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
   await dispatch(createParticipantEmbed(players[1]));
 
   const [winner, loser] = [...players].sort(
-    (p1, p2) => p1.character.fight(p2.character) ? 1 : -1
+    (p1, p2) => p1.character.fight(p2.character) ? -1 : 1
   );
   const prize = bet * 2;
 
