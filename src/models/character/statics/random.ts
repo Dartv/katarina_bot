@@ -1,7 +1,8 @@
 import { ICharacter } from '../types';
+import { Character } from '../..';
 
 export default async function getRandomCharacters(n: number, pipeline: object[] = []): Promise<ICharacter[]> {
-  return this.aggregate([
+  const characters = await this.aggregate([
     ...pipeline,
     { $sample: { size: n } },
     {
@@ -13,4 +14,7 @@ export default async function getRandomCharacters(n: number, pipeline: object[] 
       },
     },
   ]);
+  return Promise.all(
+    characters.map((character: ICharacter) => new Character(character).populate('series').execPopulate()),
+  );
 }

@@ -52,6 +52,16 @@ const CharacterSchema = new Schema({
 
 CharacterSchema.index({ name: 'text' });
 
+CharacterSchema.set('toObject', {
+  transform(character, ret) {
+    const { additionalStars } = character.$locals;
+    return {
+      ...ret,
+      ...(additionalStars && { additionalStars }),
+    };
+  },
+});
+
 Object.assign(CharacterSchema, { methods, statics });
 
 export default model<ICharacter, ICharacterModel>('character', CharacterSchema);

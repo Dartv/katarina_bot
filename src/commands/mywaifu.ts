@@ -24,6 +24,8 @@ const handler: ICommandHandler = async (context) => {
       },
     }, {}, { sort: { stars: -1 } }).populate('series');
 
+    character.awaken(user);
+
     if (!character) {
       await message.reply(`You have no waifu with name "${searchName}"`);
       return null;
