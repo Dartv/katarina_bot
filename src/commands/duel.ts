@@ -122,7 +122,7 @@ export const chooseCharacter = async (
 
 export const createParticipantEmbed = (
   participant: IParticipant,
-): RichEmbed => createCharacterEmbed(participant.character)
+): RichEmbed => createCharacterEmbed(participant.character.toObject())
   .setAuthor(participant.member.displayName, participant.member.user.avatarURL)
   .setThumbnail(participant.character.imageUrl)
   .setImage(null);
