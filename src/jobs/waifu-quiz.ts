@@ -50,16 +50,12 @@ export default (agenda: Agenda, client: Client) => {
       const promises = client.channels
         .filter((channel: TextChannel) => channel.name === CHANNEL_NAME)
         .map(async (channel: TextChannel) => {
-          const prevMessages = await channel.fetchMessages({ limit: 49 });
-          const [message]: [Message, any] = await Promise.all([
-            handler({
-              dispatch: channel.send.bind(channel),
-              message: { channel },
-              args: {},
-              clearCooldown: () => null,
-            } as any),
-            await channel.bulkDelete(prevMessages),
-          ]);
+          const message = await handler({
+            dispatch: channel.send.bind(channel),
+            message: { channel },
+            args: {},
+            clearCooldown: () => null,
+          } as any);
 
           const member = message.mentions.members.first();
           if (member) {
