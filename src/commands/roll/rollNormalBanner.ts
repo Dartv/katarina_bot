@@ -8,12 +8,25 @@ import { getCharacterStarRating } from '../../models/character/util';
 import { Series, Character } from '../../models';
 import { ISeries } from '../../models/series/types';
 import { ICharacter } from '../../models/character/types';
+import { logger } from '../../util/logger';
+import { isDev } from '../../util/environment';
 
 let browser: Browser;
 
+const setup = async () => {
+  browser = await puppeteer.launch({
+    args: ['--disable-gpu', '--no-sandbox'],
+    handleSIGHUP: true,
+    handleSIGINT: true,
+    handleSIGTERM: true,
+  });
+
+  logger.info(`Started Puppeteer with pid ${browser.process().pid}`);
+};
+
 export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> => {
   if (!browser) {
-    browser = await puppeteer.launch();
+    await setup();
   }
 
   const page = await browser.newPage();
@@ -25,9 +38,10 @@ export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> =
       domain: '.mywaifulist.moe',
     });
     await page.goto(
-      'https://mywaifulist.moe/random',
+      // 'https://mywaifulist.moe/random',
+      'https://mywaifulist.moe/waifu/seoni',
       {
-        waitUntil: ['networkidle0', 'networkidle2', 'domcontentloaded', 'load'],
+        waitUntil: ['networkidle0', 'networkidle2'],
       },
     );
     await page.waitFor('.waifu-core-container');
@@ -99,5 +113,8 @@ export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> =
     return character;
   } finally {
     await page.close();
+    if (isDev()) {
+      await browser.close();
+    }
   }
 };

@@ -41,8 +41,8 @@ declare module 'ghastly' {
 
   export type ICommandHandler = (context: Partial<any> & ICommandContext) => Promise<any>;
 
-  export type Middleware = {
-    (next: (context: ICommandContext) => any, context: ICommandContext): Promise<any>;
+  export type Middleware<T = any> = {
+    (next: (context: ICommandContext) => any, context: ICommandContext): Promise<T>;
   }
 
   export interface ICommand {

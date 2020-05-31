@@ -50,6 +50,7 @@ export interface IUser extends Document {
   removeAllImageLinks: () => Promise<IUser>;
   removeImageLink: (image: IUserImage) => Promise<IUser>;
   visit: typeof methods.visit;
+  reward: typeof methods.reward;
 }
 
 export interface IUserModel extends Model<IUser> {

@@ -4,6 +4,8 @@ import {
   Middleware,
   ICommandContext,
 } from 'ghastly';
+import R from 'ramda';
+import { Types } from 'mongoose';
 
 import {
   COMMAND_TRIGGERS,
@@ -11,6 +13,7 @@ import {
   MissionCode,
   RewardTable,
   BannerType,
+  AchievementCode,
 } from '../../util';
 import { ICharacter } from '../../models/character/types';
 import { injectUser, withPrice, withMission } from '../middleware';
@@ -20,10 +23,65 @@ import { rollCurrentBanner } from './rollCurrentBanner';
 import { getDailyResetDate } from '../../util/daily';
 import { IMission } from '../../models/mission/types';
 import { createCharacterEmbed } from '../../models/character/util';
+import { Achievement, Character } from '../../models';
+
+const calculateReward = (n: number): number => Math.ceil(
+  Number.MAX_SAFE_INTEGER / (1 + 200000000000000 * Math.exp(-0.05 * n)) / 10
+) * 10;
+
+const withFullSeriesAchievement = (): Middleware => async (next, context) => {
+  const res = await next(context);
+  const { user } = context;
+  const lastCharacterId = R.last(user.characters);
+  const character = await Character.findOne({ _id: lastCharacterId });
+  const characters = await Character.find({
+    series: {
+      $in: character.series,
+    },
+  }).select('_id series');
+  const hasCompletedSeries = characters.every(({ _id }) => user.characters.includes(_id));
+
+  if (hasCompletedSeries) {
+    const uniqueSeriesIds: Types.ObjectId[] = [...character.series].reduce((acc, seriesId) => {
+      if (acc.some((id) => id.equals(seriesId))) {
+        return acc;
+      }
+
+      return acc.concat(seriesId);
+    }, []);
+
+    const promises: Promise<void>[] = uniqueSeriesIds.map(async (seriesId) => {
+      let achievement = await Achievement.findOne({
+        code: AchievementCode.SERIES_SET,
+        user: user._id,
+        'meta.series': seriesId,
+      });
+
+      if (!achievement) {
+        achievement = await new Achievement({
+          code: AchievementCode.SERIES_SET,
+          user: user._id,
+          completedAt: new Date(),
+          meta: {
+            series: seriesId,
+          },
+        }).save();
+        const charactersInSeries = characters.filter(({ series }) => series.includes(seriesId as any));
+        const reward = calculateReward(charactersInSeries.length);
+        await user.reward(reward, 'Achievement completed', context);
+      }
+    });
+
+    await Promise.all(promises);
+  }
+
+  return res;
+};
 
 const middleware: Middleware[] = [
   injectUser(),
   withPrice(PriceTable.ROLL),
+  withFullSeriesAchievement(),
   withMission(async () => ({
     code: MissionCode.ROLL,
     reward: RewardTable.ROLL,
