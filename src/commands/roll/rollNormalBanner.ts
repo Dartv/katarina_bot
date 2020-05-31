@@ -38,8 +38,7 @@ export const rollNormalBanner: ICommandHandler = async (): Promise<ICharacter> =
       domain: '.mywaifulist.moe',
     });
     await page.goto(
-      // 'https://mywaifulist.moe/random',
-      'https://mywaifulist.moe/waifu/seoni',
+      'https://mywaifulist.moe/random',
       {
         waitUntil: ['networkidle0', 'networkidle2'],
       },
