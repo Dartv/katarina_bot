@@ -6,7 +6,7 @@ import { injectUser } from './middleware';
 import { Mission } from '../models';
 
 const handler: ICommandHandler = async (context) => {
-  const { user, formatter } = context;
+  const { user, message, formatter } = context;
   const missionsByCode = await Mission.find({ user: user._id }).then(R.indexBy(R.prop('code')));
   const missions = Object.keys(Missions).map((code) => {
     const existingMission = missionsByCode[code];
@@ -21,7 +21,7 @@ const handler: ICommandHandler = async (context) => {
     return mockMission;
   });
 
-  return [
+  const reply = [
     formatter.bold('Missions:'),
     ...missions.map(({ code, completedAt }) => {
       const { reward, description } = Missions[code];
@@ -29,6 +29,8 @@ const handler: ICommandHandler = async (context) => {
       return completedAt ? formatter.strikeout(text) : text;
     }),
   ].join('\n');
+
+  await message.reply(reply);
 };
 
 export default (): ICommand => ({

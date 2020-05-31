@@ -4,25 +4,16 @@ import { User } from 'discord.js';
 
 import { Mission } from '../../models';
 import { IMission } from '../../models/mission/types';
-import { SuccessResponse } from '../responses/SuccessResponse';
 import { MissionCode, RewardTable } from '../../util';
 import { getDailyResetDate } from '../../util/daily';
 import { IUser } from '../../models/user/types';
 import { ErrorResponse } from '../responses/ErrorResponse';
 
 const rewardUser = async (reward: number, context: ICommandContext): Promise<void> => {
-  const { user, dispatch } = context;
+  const { user } = context;
 
   if (reward) {
-    user.currency += reward;
-    await user.save();
-
-    const response = new SuccessResponse(
-      'Mission completed',
-      `You received ${reward}💎`,
-      context,
-    );
-    await dispatch(response);
+    await user.reward(reward, 'Mission completed', context);
   }
 };
 

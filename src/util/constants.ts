@@ -320,3 +320,7 @@ export enum AwakeningStage {
   SECOND = 5,
   THIRD = 10,
 }
+
+export enum AchievementCode {
+  SERIES_SET = 'SERIES_SET',
+}

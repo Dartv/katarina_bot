@@ -51,6 +51,8 @@ const CharacterSchema = new Schema({
 }, options);
 
 CharacterSchema.index({ name: 'text' });
+CharacterSchema.index({ series: 1 });
+CharacterSchema.index({ stars: 1 });
 
 CharacterSchema.set('toObject', {
   transform(character, ret) {
