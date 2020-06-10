@@ -153,8 +153,8 @@ const handler: ICommandHandler = async (context): Promise<any> => {
     return new ErrorResponse('You can\'t duel yourself!', context);
   }
 
-  if (user.characters.length < 10) {
-    return new ErrorResponse('You should have at least 10 characters', context);
+  if (user.characters.length < 10 || user.currency < bet) {
+    return new ErrorResponse(`You should have at least 10 characters and ${bet}💎`, context);
   }
 
   const opponent = await User.findOne({ discordId: member.id });
