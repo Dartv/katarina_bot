@@ -98,6 +98,7 @@ export const COMMAND_TRIGGERS = {
   SET_BANNER: ['setbanner'],
   BANNER: ['banner'],
   SETTINGS: ['settings'],
+  GIVE: ['give'],
 };
 
 export const FONTS = {
