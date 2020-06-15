@@ -8,11 +8,11 @@ import { getDailyResetDate } from '../util/daily';
 import { User } from '../models';
 import { createContext } from '../util/command';
 
-const CHANNEL_NAME = 'waifu-wars';
+const CHANNEL_NAME = 'waifu-wars👊';
 
 export const VersusMissionPlugin = async (client: Client): Promise<void> => {
   const middleware = withMission(async () => ({
-    // silent: true,
+    silent: true,
     code: MissionCode.VERSUS_DAILY,
     reward: RewardTable.VERSUS_DAILY,
     update: async (mission): Promise<IMission> => {
@@ -28,14 +28,9 @@ export const VersusMissionPlugin = async (client: Client): Promise<void> => {
     const { message } = reaction;
     const { channel } = message;
 
-    console.log('====CHANNEL====');
-    console.log(reaction.emoji.name, channel);
-
     if (channel instanceof TextChannel) {
       if (channel.name === CHANNEL_NAME && reaction.emoji.name === '❤️') {
         const user = await User.findOneByDiscordId(author.id);
-        console.log('===USER===');
-        console.log(user);
         if (user) {
           message.author = author;
           const context = createContext({
