@@ -9,15 +9,15 @@ import { getDailyResetDate } from '../../util/daily';
 import { IUser } from '../../models/user/types';
 import { ErrorResponse } from '../responses/ErrorResponse';
 
-const rewardUser = async (reward: number, context: ICommandContext): Promise<void> => {
+const rewardUser = async (reward: number, context: ICommandContext, silent?: boolean): Promise<void> => {
   const { user } = context;
 
-  if (reward) {
+  if (reward && !silent) {
     await user.reward(reward, 'Mission completed', context);
   }
 };
 
-const tryCompleteFinalDailyMission = async (context: ICommandContext): Promise<void> => {
+const tryCompleteFinalDailyMission = async (context: ICommandContext, silent?: boolean): Promise<void> => {
   const { user } = context;
   const code = MissionCode.ALL_COMPLETE;
   const codes = R.without([code], Object.values(MissionCode));
@@ -36,7 +36,9 @@ const tryCompleteFinalDailyMission = async (context: ICommandContext): Promise<v
 
       await mission.save();
 
-      await rewardUser(RewardTable.ALL_COMPLETE, context);
+      if (!silent) {
+        await rewardUser(RewardTable.ALL_COMPLETE, context, silent);
+      }
     }
   }
 };
@@ -48,6 +50,7 @@ const withMission = (
     user?: IUser;
     discordUser?: User;
     update: (mission: IMission, response: any) => Promise<IMission>;
+    silent?: boolean;
   }>,
 ): Middleware => async (next, context) => {
   const res = await next(context);
@@ -60,6 +63,7 @@ const withMission = (
     update,
     user = context.user as IUser,
     discordUser = context.message.author,
+    silent = false,
   } = await config(context);
   let mission = await Mission.findOne({ code, user: user._id });
 
@@ -79,9 +83,9 @@ const withMission = (
     ctx.message.author = discordUser;
     ctx.user = user;
 
-    await rewardUser(reward, ctx);
+    await rewardUser(reward, ctx, silent);
 
-    await tryCompleteFinalDailyMission(ctx);
+    await tryCompleteFinalDailyMission(ctx, silent);
   }
 
   return res;

@@ -12,6 +12,7 @@ const CHANNEL_NAME = 'waifu-wars';
 
 export const VersusMissionPlugin = async (client: Client): Promise<void> => {
   const middleware = withMission(async () => ({
+    // silent: true,
     code: MissionCode.VERSUS_DAILY,
     reward: RewardTable.VERSUS_DAILY,
     update: async (mission): Promise<IMission> => {
@@ -30,12 +31,15 @@ export const VersusMissionPlugin = async (client: Client): Promise<void> => {
     if (channel instanceof TextChannel) {
       if (channel.name === CHANNEL_NAME && reaction.emoji.name === '❤️') {
         const user = await User.findOneByDiscordId(author.id);
-        const context = createContext({
-          user,
-          message,
-          client,
-        });
-        await middleware(() => null, context);
+        if (user) {
+          message.author = author;
+          const context = createContext({
+            user,
+            message,
+            client,
+          });
+          await middleware(() => null, context);
+        }
       }
     }
   });
