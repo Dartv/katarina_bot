@@ -24,6 +24,7 @@ import { getDailyResetDate } from '../../util/daily';
 import { IMission } from '../../models/mission/types';
 import { createCharacterEmbed } from '../../models/character/util';
 import { Achievement, Character } from '../../models';
+import { logger } from '../../util/logger';
 
 const calculateReward = (n: number): number => Math.ceil(
   Number.MAX_SAFE_INTEGER / (1 + 200000000000000 * Math.exp(-0.05 * n)) / 10
@@ -31,49 +32,54 @@ const calculateReward = (n: number): number => Math.ceil(
 
 const withFullSeriesAchievement = (): Middleware => async (next, context) => {
   const res = await next(context);
-  const { user } = context;
-  const lastCharacterId = R.last(user.characters);
-  const character = await Character.findOne({ _id: lastCharacterId });
-  const characters = await Character.find({
-    series: {
-      $in: character.series,
-    },
-  }).select('_id series');
-  const hasCompletedSeries = characters.every(({ _id }) => user.characters.includes(_id));
 
-  if (hasCompletedSeries) {
-    const uniqueSeriesIds: Types.ObjectId[] = [...character.series].reduce((acc, seriesId) => {
-      if (acc.some((id) => id.equals(seriesId))) {
-        return acc;
-      }
+  const achievementHandler = async (): Promise<void> => {
+    const { user } = context;
+    const lastCharacterId = R.last(user.characters);
+    const character = await Character.findOne({ _id: lastCharacterId });
+    const characters = await Character.find({
+      series: {
+        $in: character.series,
+      },
+    }).select('_id series');
+    const hasCompletedSeries = characters.every(({ _id }) => user.characters.includes(_id));
 
-      return acc.concat(seriesId);
-    }, []);
+    if (hasCompletedSeries) {
+      const uniqueSeriesIds: Types.ObjectId[] = [...character.series].reduce((acc, seriesId) => {
+        if (acc.some((id) => id.equals(seriesId))) {
+          return acc;
+        }
 
-    const promises: Promise<void>[] = uniqueSeriesIds.map(async (seriesId) => {
-      let achievement = await Achievement.findOne({
-        code: AchievementCode.SERIES_SET,
-        user: user._id,
-        'meta.series': seriesId,
-      });
+        return acc.concat(seriesId);
+      }, []);
 
-      if (!achievement) {
-        achievement = await new Achievement({
+      const promises: Promise<void>[] = uniqueSeriesIds.map(async (seriesId) => {
+        let achievement = await Achievement.findOne({
           code: AchievementCode.SERIES_SET,
           user: user._id,
-          completedAt: new Date(),
-          meta: {
-            series: seriesId,
-          },
-        }).save();
-        const charactersInSeries = characters.filter(({ series }) => series.includes(seriesId as any));
-        const reward = calculateReward(charactersInSeries.length);
-        await user.reward(reward, 'Achievement completed', context);
-      }
-    });
+          'meta.series': seriesId,
+        });
 
-    await Promise.all(promises);
-  }
+        if (!achievement) {
+          achievement = await new Achievement({
+            code: AchievementCode.SERIES_SET,
+            user: user._id,
+            completedAt: new Date(),
+            meta: {
+              series: seriesId,
+            },
+          }).save();
+          const charactersInSeries = characters.filter(({ series }) => series.includes(seriesId as any));
+          const reward = calculateReward(charactersInSeries.length);
+          await user.reward(reward, 'Achievement completed', context);
+        }
+      });
+
+      await Promise.all(promises);
+    }
+  };
+
+  achievementHandler().catch(logger.error);
 
   return res;
 };
