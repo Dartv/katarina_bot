@@ -56,7 +56,7 @@ export default (agenda: Agenda, client: Client) => {
             clearCooldown: () => null,
           } as any);
 
-          const member = message.mentions.members.first();
+          const member = message?.mentions?.members?.first();
           if (member) {
             const user = await User.findOne({ discordId: member.id });
             if (user) {
