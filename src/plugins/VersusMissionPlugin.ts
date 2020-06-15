@@ -28,9 +28,14 @@ export const VersusMissionPlugin = async (client: Client): Promise<void> => {
     const { message } = reaction;
     const { channel } = message;
 
+    console.log('====CHANNEL====');
+    console.log(reaction.emoji.name, channel);
+
     if (channel instanceof TextChannel) {
       if (channel.name === CHANNEL_NAME && reaction.emoji.name === '❤️') {
         const user = await User.findOneByDiscordId(author.id);
+        console.log('===USER===');
+        console.log(user);
         if (user) {
           message.author = author;
           const context = createContext({
