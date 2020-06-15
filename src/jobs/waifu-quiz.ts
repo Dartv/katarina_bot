@@ -1,7 +1,6 @@
 import Agenda from 'agenda';
-import { Client, ICommandContext } from 'ghastly';
+import { Client } from 'ghastly';
 import { TextChannel, Message } from 'discord.js';
-import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 
 import { handler } from '../commands/whatseries';
 import { User } from '../models';
@@ -10,6 +9,7 @@ import { withMission } from '../commands/middleware';
 import { MissionCode, RewardTable } from '../util';
 import { IMission } from '../models/mission/types';
 import { getDailyResetDate } from '../util/daily';
+import { createContext } from '../util/command';
 
 const JOB_NAME = 'waifu quiz';
 const CHANNEL_NAME = 'waifu-quiz';
@@ -34,12 +34,11 @@ const completeQuizMission = async (user: IUser, message: Message, client: Client
       return mission;
     },
   }));
-  const context = {
+  const context = createContext({
     user,
     message,
-    dispatch: (response) => client.dispatcher.dispatchResponse(message.channel, response),
-    formatter: MarkdownFormatter,
-  } as ICommandContext;
+    client,
+  });
 
   await middleware(() => null, context);
 };

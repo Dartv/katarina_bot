@@ -272,6 +272,7 @@ export enum RewardTable {
   DUEL = 50,
   QUIZ = 50,
   ALL_COMPLETE = 150,
+  VERSUS_DAILY = 50,
 }
 
 export enum MissionCode {
@@ -280,6 +281,7 @@ export enum MissionCode {
   BATTLE_ROYALE = 'BATTLE_ROYALE',
   DUEL = 'DUEL',
   QUIZ = 'QUIZ',
+  VERSUS_DAILY = 'VERSUS_DAILY',
   ALL_COMPLETE = 'ALL_COMPLETE',
 }
 
@@ -303,6 +305,10 @@ export const Missions = {
   [MissionCode.QUIZ]: {
     description: 'guess 5 characters',
     reward: RewardTable.QUIZ,
+  },
+  [MissionCode.VERSUS_DAILY]: {
+    description: 'vote in Waifu Wars',
+    reward: RewardTable.VERSUS_DAILY,
   },
   [MissionCode.ALL_COMPLETE]: {
     description: 'complete all missions',

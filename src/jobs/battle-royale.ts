@@ -1,12 +1,11 @@
 /* eslint-disable no-await-in-loop */
 
 import Agenda from 'agenda';
-import { Client, ICommandContext } from 'ghastly';
+import { Client } from 'ghastly';
 import {
   TextChannel,
   Message,
 } from 'discord.js';
-import MarkdownFormatter from 'ghastly/lib/utils/MarkdownFormatter';
 
 import { User, Character } from '../models';
 import {
@@ -20,6 +19,8 @@ import { withMission } from '../commands/middleware';
 import { getDailyResetDate } from '../util/daily';
 import { IMission } from '../models/mission/types';
 import { IParticipant, createParticipantEmbed } from '../commands/duel';
+import { logger } from '../util/logger';
+import { createContext } from '../util/command';
 
 const JOB_NAME = 'waifu royale';
 const CHANNEL_NAME = 'waifu-royale';
@@ -39,12 +40,11 @@ const completeBattleRoyaleMission = async (user: IUser, message: Message, client
       return mission;
     },
   }));
-  const context = {
+  const context = createContext({
     user,
     message,
-    dispatch: (response) => client.dispatcher.dispatchResponse(message.channel, response),
-    formatter: MarkdownFormatter,
-  } as ICommandContext;
+    client,
+  });
 
   await middleware(() => null, context);
 };
@@ -105,7 +105,7 @@ export default (agenda: Agenda, client: Client) => {
 
               character.awaken(user);
 
-              await completeBattleRoyaleMission(user, message, client);
+              completeBattleRoyaleMission(user, message, client).catch(logger.error);
 
               return {
                 user,

@@ -11,6 +11,7 @@ const withPrice = (price: number): Middleware => async (next, context) => {
   const { user, message } = context;
   const { channel } = message;
 
+  // TODO: do this only for "roll" command
   if (user?.settings?.displayRollPrice) {
     await message.reply(`This command costs ${price}💎. Type "yes" if you want to proceed.`);
 
