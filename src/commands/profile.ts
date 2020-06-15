@@ -9,7 +9,9 @@ import {
   Emoji,
   MarriageStatus,
 } from '../util';
-import { Character, User, Marriage } from '../models';
+import {
+  Character, User, Marriage, Achievement,
+} from '../models';
 import { ErrorResponse } from './responses';
 import { injectUser, injectGuild } from './middleware';
 import { IMarriage } from '../models/marriage/types';
@@ -40,7 +42,7 @@ const handler: ICommandHandler = async (context): Promise<any> => {
       return ErrorResponse(`Couldn't find user ${member.displayName}`, context);
     }
 
-    const [characterStats, marriage] = await Promise.all([
+    const [characterStats, marriage, achievementsCompleted] = await Promise.all([
       Character.aggregate([
         {
           $match: {
@@ -63,6 +65,10 @@ const handler: ICommandHandler = async (context): Promise<any> => {
           { husband: user._id },
           { wife: user._id },
         ],
+      }),
+      Achievement.countDocuments({
+        completedAt: { $exists: true },
+        user: user._id,
       }),
     ]);
     const marriedMember = await getMarriedMember(marriage, context);
@@ -93,6 +99,11 @@ const handler: ICommandHandler = async (context): Promise<any> => {
         {
           name: formatter.bold('Katacoins'),
           value: `${user.currency}💎`,
+          inline: true,
+        },
+        {
+          name: formatter.bold('Achievements'),
+          value: achievementsCompleted,
           inline: true,
         },
         {
