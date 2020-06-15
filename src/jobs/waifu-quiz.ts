@@ -50,7 +50,7 @@ export default (agenda: Agenda, client: Client) => {
         .filter((channel: TextChannel) => channel.name === CHANNEL_NAME)
         .map(async (channel: TextChannel) => {
           const message = await handler({
-            dispatch: channel.send.bind(channel),
+            dispatch: (response) => client.dispatcher.dispatchResponse(channel, response),
             message: { channel },
             args: {},
             clearCooldown: () => null,
