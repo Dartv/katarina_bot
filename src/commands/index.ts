@@ -62,6 +62,7 @@ import setbanner from './setbanner';
 import banner from './banner';
 import settings from './settings';
 import give from './give';
+import attack from './attack';
 
 const commands = [
   add,
@@ -127,6 +128,7 @@ const commands = [
   banner,
   settings,
   give,
+  attack,
 ];
 
 if (process.env.IMAGE_ART_DIR) commands.push(art);

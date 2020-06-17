@@ -5,7 +5,7 @@ export default () => async (next, context) => {
   const { message: { guild: { id: discordId } } } = context;
 
   try {
-    let guild = await (Guild as any).findOneByDiscordId(discordId);
+    let guild = await Guild.findOneByDiscordId(discordId);
 
     if (!guild) guild = await new Guild({ discordId }).save();
 
