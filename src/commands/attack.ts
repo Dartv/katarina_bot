@@ -31,7 +31,7 @@ const middleware: Middleware[] = [
   }),
 ];
 
-const attackWorldBoss = async (context: ICommandContext): Promise<void> => {
+const attackWorldBoss = async (context: ICommandContext): Promise<any> => {
   const {
     user,
     guild,
