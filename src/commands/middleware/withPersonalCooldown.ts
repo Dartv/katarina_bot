@@ -7,7 +7,7 @@ import { extractCommandFromContext } from '../../util/command';
 import { getTimeInSecondsUntilDailyReset } from '../../util/daily';
 
 const withPersonalCooldown = ({
-  maxAge,
+  maxAge, // seconds
   daily,
 }: { maxAge?: number; daily?: boolean }): Middleware => async (next, context) => {
   const { user } = context;

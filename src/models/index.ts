@@ -9,3 +9,4 @@ export { default as Versus } from './versus';
 export { default as Mission } from './mission';
 export { default as Banner } from './banner';
 export { default as Achievement } from './achievement';
+export { default as WorldBoss } from './world-boss';

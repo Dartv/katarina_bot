@@ -15,6 +15,7 @@ if (isProduction()) {
     require('./battle-royale'),
     require('./reset-missions'),
     require('./waifu-quiz'),
+    require('./world-boss'),
   );
 }
 

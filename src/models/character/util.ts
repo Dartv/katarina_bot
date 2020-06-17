@@ -54,10 +54,14 @@ export const createCharacterEmbed = ({
       name: 'Stars',
       value: renderStars(stars, additionalStars),
     },
-    {
-      name: 'Appears in',
-      value: pluck('title', series as any[]).join(', ') || '...',
-    },
+    ...(
+      series.length
+        ? [{
+          name: 'Appears in',
+          value: pluck('title', series).join(', ') || '...',
+        }]
+        : []
+    ),
     ...(level ? [{ name: 'Level', value: level.toString(), inline: true }] : []),
     ...(exp ? [{ name: 'Exp', value: `${exp}/${EXPToLVLUp[level + 1]}`, inline: true }] : []),
     ...fields,
