@@ -21,10 +21,12 @@ export default async function injure(this: IWorldBoss, damage: number, user: IUs
       user: user._id,
       joinedAt: new Date(),
     };
-    const hpScale = Math.max(calculateHpScale(), this.maxHp ? 0 : 50);
+    const hpScale = Math.max(calculateHpScale(), this.maxHp ? 0 : 150);
 
-    this.hp += hpScale;
-    this.maxHp += hpScale;
+    if (this.participants.size > 3 || !this.maxHp) {
+      this.hp += hpScale;
+      this.maxHp += hpScale;
+    }
     this.participants.set(userId, participant);
   }
 

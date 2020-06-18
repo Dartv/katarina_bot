@@ -334,7 +334,7 @@ export enum AchievementCode {
   SERIES_SET = 'SERIES_SET',
 }
 
-export const WORLD_BOSS_SCALE_FACTOR = 50;
+export const WORLD_BOSS_SCALE_FACTOR = 35;
 
 export const DamageByStar: Record<CharacterStar, number> = {
   [CharacterStar.ONE_STAR]: 0,
