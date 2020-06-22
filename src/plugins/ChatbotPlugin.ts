@@ -20,6 +20,10 @@ export const ChatbotPlugin = (client: Client) => {
 
     if (botPrefixesRegex.test(message.content)) return;
 
+    if (message.guild === null) return;
+
+    if (message.content.split(' ').length < 2) return;
+
     const index = random(messages.length);
 
     if (message.isMentioned(client.user)) {
