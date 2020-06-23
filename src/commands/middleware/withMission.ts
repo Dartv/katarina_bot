@@ -12,8 +12,13 @@ import { ErrorResponse } from '../responses/ErrorResponse';
 const rewardUser = async (reward: number, context: ICommandContext, silent?: boolean): Promise<void> => {
   const { user } = context;
 
-  if (reward && !silent) {
-    await user.reward(reward, 'Mission completed', context);
+  if (reward) {
+    if (silent) {
+      user.currency += reward;
+      await user.save();
+    } else {
+      await user.reward(reward, 'Mission completed', context);
+    }
   }
 };
 
