@@ -1,15 +1,32 @@
 import { ICommand, ICommandHandler } from 'ghastly';
 
 import { expectUser } from 'ghastly/lib/middleware';
-import { COMMAND_TRIGGERS } from '../util';
+import { COMMAND_TRIGGERS, CharacterStar } from '../util';
 import { Banner, Character, User } from '../models';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { injectUser } from './middleware';
 import { createCharacterEmbed } from '../models/character/util';
+import { ICharacter } from '../models/character/types';
+
+const getCharacterBySlug = async (slug: string): Promise<ICharacter> => {
+  if (slug === 'random') {
+    const [character] = await Character.random(1, [
+      {
+        $match: {
+          stars: CharacterStar.FIVE_STAR,
+        },
+      },
+    ]);
+
+    return character;
+  }
+
+  return Character.findOne({ slug }).populate('series');
+};
 
 const handler: ICommandHandler = async (context): Promise<any> => {
   const { user, message, args: { slug } } = context;
-  const character = await Character.findOne({ slug }).populate('series');
+  const character = await getCharacterBySlug(slug);
 
   if (!character) {
     return new ErrorResponse(`character ${slug} doesn't exist`, context);
