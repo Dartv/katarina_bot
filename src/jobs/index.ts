@@ -14,7 +14,7 @@ if (isProduction()) {
     require('./monitor-scoresaber-players'),
     require('./battle-royale'),
     require('./reset-missions'),
-    require('./waifu-quiz'),
+    // require('./waifu-quiz'),
     require('./world-boss'),
   );
 }
