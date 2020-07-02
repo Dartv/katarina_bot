@@ -1,1 +1,6 @@
 dist
+node_modules
+env
+ecosystem.config.js
+jest.config.js
+.vscode

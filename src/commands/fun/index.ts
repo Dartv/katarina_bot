@@ -1,0 +1,1 @@
+export { GayCommand } from './gay';

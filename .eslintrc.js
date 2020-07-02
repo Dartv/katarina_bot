@@ -49,7 +49,13 @@ module.exports = {
     'arrow-parens': 0,
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
-    '@typescript-eslint/interface-name-prefix': ['error', { "prefixWithI": "always" }],
     'import/no-cycle': 0,
+    'lines-between-class-members': 0,
+    'object-curly-newline': ['error', {
+      'ObjectExpression': 'always',
+      'ObjectPattern': { 'multiline': true },
+      'ImportDeclaration': 'never',
+      'ExportDeclaration': { 'multiline': true, 'minProperties': 3 }
+    }],
   },
 };
