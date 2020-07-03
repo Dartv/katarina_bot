@@ -1,6 +1,8 @@
 import { connectDB } from './services/mongo';
 import { Client } from './services/client';
 import { logger } from './services/logger';
+import { ErrorResponse } from './commands/responses';
+import { Trigger } from './utils/constants';
 
 const {
   BOT_PREFIX,
@@ -28,10 +30,17 @@ connectDB()
       client.logger.warn(warn);
     });
 
-    client.on('parseArgumentsError', (error, commandName) => {
-      const command = client.commands.get(commandName);
+    client.on('parseArgumentsError', (error, commandName, message) => {
+      client.dispatcher.dispatchCommand(Trigger.HELP[0], commandName, message);
+    });
 
-      console.log(command);
+    client.on('dispatchError', (error, context) => {
+      const { command } = context;
+      client.logger.error(`Dispatch failed for command "${command.name}"`);
+      client.logger.error(error);
+      new ErrorResponse(context)
+        .respond()
+        .catch(client.logger.error);
     });
 
     client.login(BOT_TOKEN);

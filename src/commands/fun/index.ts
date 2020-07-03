@@ -1,1 +1,1 @@
-export { GayCommand } from './gay';
+export { GayCommand } from './GayCommand';

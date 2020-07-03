@@ -1,7 +1,12 @@
-import { CommandConfigurator, CommandHandler, ParameterType, Context } from 'diskat';
+import {
+  CommandConfigurator,
+  CommandHandler,
+  ParameterType,
+  Context,
+} from 'diskat';
 import { GuildMember } from 'discord.js';
 
-import { Trigger } from '../../utils/constants';
+import { Trigger, CommandGroupName } from '../../utils/constants';
 import { randomInt } from '../../utils/common';
 
 export interface GayCommandContext extends Context {
@@ -20,9 +25,15 @@ export const GayCommand: CommandConfigurator = () => ({
   parameters: [
     {
       name: 'member',
+      description: 'user to test',
       type: ParameterType.MEMBER,
     },
   ],
   description: 'How gay is someone?',
-  group: 'fun',
+  group: CommandGroupName.FUN,
+  meta: {
+    examples: [
+      '@user',
+    ],
+  },
 });

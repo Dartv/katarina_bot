@@ -23,8 +23,8 @@ module.exports = {
     },
   },
   extends: [
-    'eslint-config-airbnb-base',
     'plugin:@typescript-eslint/recommended',
+    'eslint-config-airbnb-base',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
@@ -51,11 +51,5 @@ module.exports = {
     '@typescript-eslint/no-useless-constructor': 'error',
     'import/no-cycle': 0,
     'lines-between-class-members': 0,
-    'object-curly-newline': ['error', {
-      'ObjectExpression': 'always',
-      'ObjectPattern': { 'multiline': true },
-      'ImportDeclaration': 'never',
-      'ExportDeclaration': { 'multiline': true, 'minProperties': 3 }
-    }],
   },
 };
