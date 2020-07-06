@@ -33,7 +33,7 @@ LoveCommand.config = {
       type: ParameterType.MEMBER,
     },
   ],
-  description: 'How much love is there between you and someone else?',
+  description: 'Test how much love is there between you and a person?',
   group: CommandGroupName.FUN,
 };
 
