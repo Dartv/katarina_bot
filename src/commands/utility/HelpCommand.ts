@@ -79,7 +79,7 @@ const HelpCommand: Command<HelpCommandContext> = async (context) => {
   client.commands.groups.forEach((group) => {
     const cmds = group.commands.map(
       ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
-    ).join(', ');
+    ).join('\n');
     embed.addField(
       formatter.underline(group.name),
       cmds,
