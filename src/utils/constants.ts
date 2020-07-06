@@ -4,6 +4,7 @@ export const Trigger = {
   LOVE: ['love'],
   DICE: ['dice'],
   LIAR: ['liar'],
+  SUDOKU: ['sudoku'],
 };
 
 export enum CommandGroupName {
