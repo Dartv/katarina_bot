@@ -1,27 +1,21 @@
 import {
-  CommandConfigurator,
-  CommandHandler,
   Command,
   ParameterDefinition,
   MarkdownFormatter,
   ParameterType,
   TypeResolver,
+  CommandObject,
 } from 'diskat';
 import { MessageEmbed, Constants } from 'discord.js';
 import Fuse from 'fuse.js';
 
 import type { Context } from '../../types';
 import { Trigger, CommandGroupName } from '../../utils/constants';
-
-interface DetailedCommand extends Command {
-  meta: {
-    examples: string[];
-  }
-}
+import { getExamplesByCommand } from '../../utils/examples';
 
 interface HelpCommandContext extends Context {
   args: {
-    command: DetailedCommand;
+    command: CommandObject<HelpCommandContext, unknown>;
   };
 }
 
@@ -31,7 +25,10 @@ const formatParameter = (parameter: ParameterDefinition): string => {
   return text.replace(text, parameter.optional ? `[${text}]` : text);
 };
 
-const formatDescription = (command: DetailedCommand, context: HelpCommandContext): string => {
+const formatDescription = (
+  command: CommandObject<HelpCommandContext, unknown>,
+  context: HelpCommandContext,
+): string => {
   const {
     formatter,
     client: {
@@ -40,13 +37,9 @@ const formatDescription = (command: DetailedCommand, context: HelpCommandContext
       },
     },
   } = context;
-  const {
-    parameters = [],
-    meta: {
-      examples = [],
-    },
-  } = command;
+  const { name, parameters = [] } = command;
   const description: string[] = [];
+  const examples = getExamplesByCommand(name, context.client);
 
   if (parameters.length) {
     const usage = parameters.map(formatParameter).join(' ');
@@ -61,7 +54,7 @@ const formatDescription = (command: DetailedCommand, context: HelpCommandContext
   return description.join('\n');
 };
 
-const handler: CommandHandler<HelpCommandContext, MessageEmbed> = async (context) => {
+const HelpCommand: Command<HelpCommandContext, MessageEmbed> = async (context) => {
   const {
     formatter,
     client,
@@ -96,8 +89,7 @@ const handler: CommandHandler<HelpCommandContext, MessageEmbed> = async (context
   return embed;
 };
 
-export const HelpCommand: CommandConfigurator = (client) => ({
-  handler,
+HelpCommand.config = {
   triggers: Trigger.HELP,
   description: 'Help',
   group: CommandGroupName.UTILITY,
@@ -106,8 +98,8 @@ export const HelpCommand: CommandConfigurator = (client) => ({
       name: 'command',
       description: 'command name',
       type: TypeResolver.catch(
-        async (value: string, message) => {
-          const fuse = new Fuse(Array.from(client.commands.commands.values()), {
+        async (value: string, message, client) => {
+          const fuse = new Fuse(Array.from(client.commands.values()), {
             keys: ['name'],
           });
           const [match] = fuse.search(value);
@@ -126,10 +118,6 @@ export const HelpCommand: CommandConfigurator = (client) => ({
       optional: true,
     },
   ],
-  meta: {
-    examples: [
-      '',
-      client.commands.commands.random().name,
-    ],
-  },
-});
+};
+
+export default HelpCommand;

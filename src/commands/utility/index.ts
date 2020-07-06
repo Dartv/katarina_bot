@@ -1,1 +1,1 @@
-export { HelpCommand } from './HelpCommand';
+export { default as HelpCommand } from './HelpCommand';

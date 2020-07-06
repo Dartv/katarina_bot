@@ -1,11 +1,10 @@
 import {
-  CommandConfigurator,
-  CommandHandler,
   ParameterType,
-  Context,
+  Command,
 } from 'diskat';
 import { GuildMember } from 'discord.js';
 
+import type { Context } from '../../types';
 import { Trigger, CommandGroupName } from '../../utils/constants';
 import { randomInt } from '../../utils/common';
 
@@ -15,12 +14,11 @@ export interface GayCommandContext extends Context {
   };
 }
 
-export const handler: CommandHandler<GayCommandContext, string> = async ({ args: { member } }) => (
+const GayCommand: Command<GayCommandContext, string> = async ({ args: { member } }) => (
   `${member.displayName} is ${randomInt(0, 100)}% gay 🏳️‍🌈`
 );
 
-export const GayCommand: CommandConfigurator = () => ({
-  handler,
+GayCommand.config = {
   triggers: Trigger.GAY,
   parameters: [
     {
@@ -31,9 +29,6 @@ export const GayCommand: CommandConfigurator = () => ({
   ],
   description: 'How gay is someone?',
   group: CommandGroupName.FUN,
-  meta: {
-    examples: [
-      '@user',
-    ],
-  },
-});
+};
+
+export default GayCommand;
