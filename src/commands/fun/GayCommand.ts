@@ -14,7 +14,7 @@ export interface GayCommandContext extends Context {
   };
 }
 
-const GayCommand: Command<GayCommandContext, string> = async ({ args: { member } }) => (
+const GayCommand: Command<GayCommandContext> = async ({ args: { member } }) => (
   `${member.displayName} is ${randomInt(0, 100)}% gay 🏳️‍🌈`
 );
 

@@ -54,7 +54,7 @@ const formatDescription = (
   return description.join('\n');
 };
 
-const HelpCommand: Command<HelpCommandContext, MessageEmbed> = async (context) => {
+const HelpCommand: Command<HelpCommandContext> = async (context) => {
   const {
     formatter,
     client,
