@@ -12,6 +12,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return ['@user'];
     case Trigger.LOVE[0]:
       return ['@user'];
+    case Trigger.DICE[0]:
+      return ['20'];
     default:
       return [];
   }
