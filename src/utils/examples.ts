@@ -14,6 +14,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return ['@user'];
     case Trigger.DICE[0]:
       return ['20'];
+    case Trigger.LIAR[0]:
+      return ['@user'];
     default:
       return [];
   }

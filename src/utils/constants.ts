@@ -3,6 +3,7 @@ export const Trigger = {
   GAY: ['gay'],
   LOVE: ['love'],
   DICE: ['dice'],
+  LIAR: ['liar'],
 };
 
 export enum CommandGroupName {
