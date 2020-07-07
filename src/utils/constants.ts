@@ -7,9 +7,11 @@ export const Trigger = {
   DICE: ['dice'],
   LIAR: ['liar'],
   SUDOKU: ['sudoku'],
+  ROLL: ['roll'],
 };
 
 export enum CommandGroupName {
+  GACHA = 'Gacha',
   FUN = 'Fun',
   UTILITY = 'Utility',
 }
@@ -40,4 +42,18 @@ export enum MissionCode {
 
 export enum AchievementCode {
   SERIES_SET = 'SERIES_SET',
+}
+
+export enum BannerType {
+  NORMAL = 'normal',
+  LOCAL = 'local',
+}
+
+export enum UserSettingName {
+  DISPLAY_ROLL_PRICE = 'displayrollprice',
+}
+
+export enum UserSetting {
+  OFF = 0,
+  ON = 1,
 }
