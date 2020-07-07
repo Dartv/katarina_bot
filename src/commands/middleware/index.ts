@@ -1,0 +1,1 @@
+export { injectUser } from './injectUser';
