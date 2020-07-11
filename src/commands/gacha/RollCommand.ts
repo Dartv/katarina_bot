@@ -5,7 +5,7 @@ import {
   expectGuild,
 } from 'diskat';
 
-import { Trigger, BannerType } from '../../utils/constants';
+import { Trigger, BannerType, CommandGroupName } from '../../utils/constants';
 import { RollCommandContext, CharacterDocument } from '../../types';
 import { injectUser } from '../middleware';
 import { rollLocalCharacter, rollExternalCharacter } from '../../utils/roll';
@@ -38,6 +38,7 @@ const RollCommand: Command<RollCommandContext> = async (context) => {
 
 RollCommand.config = {
   triggers: Trigger.ROLL,
+  description: 'Roll your dream waifu',
   parameters: [
     {
       name: 'banner',
@@ -58,6 +59,7 @@ RollCommand.config = {
     expectGuild(),
     injectUser(),
   ],
+  group: CommandGroupName.GACHA,
 };
 
 export default RollCommand;

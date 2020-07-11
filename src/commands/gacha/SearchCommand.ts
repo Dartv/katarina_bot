@@ -7,6 +7,7 @@ import {
   PopularityThreshold,
   CharacterStar,
   AwakeningStage,
+  CommandGroupName,
 } from '../../utils/constants';
 import {
   Context,
@@ -208,6 +209,7 @@ const SearchCommand: Command<SearchCommandContext> = async (context) => {
 
 SearchCommand.config = {
   triggers: Trigger.SEARCH,
+  description: 'Search for characters',
   parameters: [
     {
       name: 'searchTerm',
@@ -221,6 +223,7 @@ SearchCommand.config = {
     expectGuild(),
     injectUser(),
   ],
+  group: CommandGroupName.GACHA,
 };
 
 export default SearchCommand;

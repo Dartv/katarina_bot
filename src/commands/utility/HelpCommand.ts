@@ -71,12 +71,18 @@ const HelpCommand: Command<HelpCommandContext> = async (context) => {
     return embed;
   }
 
+  const embedDescription = [
+    'Almost every command has subcommands and options.\n'
+    + `Type ${formatter.code(`${client.dispatcher.prefix}${Trigger.HELP[0]} <command name>`)} to get more details.`,
+  ].join('');
   const embed = new MessageEmbed({
     title: 'List of Commands',
+    description: embedDescription,
     color: Constants.Colors.BLUE,
   });
 
-  client.commands.groups.forEach((group) => {
+  Object.values(CommandGroupName).forEach((groupName) => {
+    const group = client.commands.groups.get(groupName);
     const cmds = group.commands.map(
       ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
     ).join('\n');
