@@ -1,12 +1,13 @@
 import {
   SchemaOptions,
   Schema,
-  SchemaTypes,
   model,
+  Types,
 } from 'mongoose';
 
 import type { UserDocument, UserModel } from '../../types';
 import { ModelName, DefaultUserSettings } from '../../utils/constants';
+import { UserCharacters } from './UserCharacters';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -17,23 +18,16 @@ export const UserSchema = new Schema({
   },
   username: String,
   discriminator: String,
-  characters: {
-    type: [{
-      type: SchemaTypes.ObjectId,
-      ref: ModelName.USER_CHARACTER,
-    }],
-    default: [],
-  },
   favorites: {
     type: [{
-      type: SchemaTypes.ObjectId,
+      type: Types.ObjectId,
       ref: ModelName.CHARACTER,
     }],
     default: [],
   },
   lastRolledAt: Date,
   waifu: {
-    type: SchemaTypes.ObjectId,
+    type: Types.ObjectId,
     ref: ModelName.CHARACTER,
   },
   quote: String,
@@ -61,5 +55,14 @@ export const UserSchema = new Schema({
 }, options);
 
 UserSchema.index({ discordId: 1 });
+
+UserSchema.virtual('characters').get(function (this: UserDocument) {
+  this.$locals._characters = this.$locals._characters || new UserCharacters(this);
+  return this.$locals._characters;
+});
+
+UserSchema.pre('save', async function (this: UserDocument) {
+  await this.characters.save();
+});
 
 export const User = model<UserDocument, UserModel>(ModelName.USER, UserSchema);

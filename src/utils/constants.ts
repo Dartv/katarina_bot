@@ -57,3 +57,35 @@ export enum UserSetting {
   OFF = 0,
   ON = 1,
 }
+
+export enum CharacterStar {
+  ONE_STAR = 1,
+  TWO_STAR,
+  THREE_STAR,
+  FOUR_STAR,
+  FIVE_STAR,
+  SIX_STAR,
+}
+
+export enum PopularityThreshold {
+  TWO_STAR = Infinity,
+  THREE_STAR = 10000,
+  FOUR_STAR = 3000,
+  FIVE_STAR = 300,
+}
+
+export enum AwakeningStage {
+  FIRST = 3,
+  SECOND = 5,
+  THIRD = 10,
+}
+
+export enum DiscordLimit {
+  EMBED_DESCRIPTION = 2048,
+}
+
+export enum Emoji {
+  STAR_DEFAULT = '⭐️',
+  STAR_FULL = '★',
+  STAR_EMPTY = '☆',
+}

@@ -1,6 +1,9 @@
 import { Types, Model, Document } from 'mongoose';
+import { MessageEmbed } from 'discord.js';
 
 import type { UserSettingName, UserSetting } from '../utils/constants';
+import type { UserCharacters } from '../models/User/UserCharacters';
+import { CharacterEmbedOptions } from './common';
 
 export type UserSettings = Record<UserSettingName, UserSetting>;
 
@@ -21,15 +24,25 @@ export interface UserBase extends DocumentBase {
   correctQuizGuesses: number;
   rolls: number;
   settings: UserSettings;
-  characters: Types.ObjectId[] | Types.DocumentArray<UserCharacterDocument>;
 }
-export interface UserDocument extends Document, UserBase {}
+export interface UserDocument extends Document, UserBase {
+  _id: Types.ObjectId;
+  characters: UserCharacters;
+}
 export type UserModel = Model<UserDocument>;
 
 export interface UserCharacterBase extends DocumentBase {
   character: Types.ObjectId | CharacterDocument;
+  user: Types.ObjectId | UserDocument;
+  count: number;
 }
-export interface UserCharacterDocument extends Document, UserCharacterBase {}
+export interface UserCharacterDocument extends Document, UserCharacterBase {
+  _id: Types.ObjectId;
+  stars: number;
+  additionalStars: number;
+  baseStars: number;
+  createEmbed: (this: UserCharacterDocument, options?: CharacterEmbedOptions) => MessageEmbed;
+}
 export type UserCharacterModel = Model<UserCharacterDocument>;
 
 export interface CharacterBase extends DocumentBase {
@@ -38,18 +51,22 @@ export interface CharacterBase extends DocumentBase {
   popularity: number;
   slug: string;
   imageUrl: string;
-  series: Types.ObjectId[];
+  series: Types.ObjectId[] | Types.DocumentArray<SeriesDocument>;
 }
-export interface CharacterDocument extends Document, CharacterBase {}
+export interface CharacterDocument extends Document, CharacterBase {
+  _id: Types.ObjectId;
+}
 export interface CharacterModel extends Model<CharacterDocument> {
-  random(n: number, pipeline: Record<string, unknown>[]): Promise<CharacterDocument[]>;
+  random(this: CharacterModel, n: number, pipeline?: Record<string, unknown>[]): Promise<CharacterDocument[]>;
 }
 
 export interface SeriesBase extends DocumentBase {
   title: string;
   slug: string;
 }
-export interface SeriesDocument extends Document, SeriesBase {}
+export interface SeriesDocument extends Document, SeriesBase {
+  _id: Types.ObjectId;
+}
 export type SeriesModel = Model<SeriesDocument>;
 
 export interface AchievementBase extends DocumentBase {
@@ -59,13 +76,17 @@ export interface AchievementBase extends DocumentBase {
   progress: number;
   meta: Record<string, unknown>;
 }
-export interface AchievementDocument extends Document, AchievementBase {}
+export interface AchievementDocument extends Document, AchievementBase {
+  _id: Types.ObjectId;
+}
 export type AchievementModel = Model<AchievementDocument>;
 
 export interface GuildBase extends DocumentBase {
   discordId: string;
 }
-export interface GuildDocument extends Document, GuildBase {}
+export interface GuildDocument extends Document, GuildBase {
+  _id: Types.ObjectId;
+}
 export type GuildModel = Model<GuildDocument>;
 
 export interface MissionBase extends DocumentBase {
@@ -76,5 +97,7 @@ export interface MissionBase extends DocumentBase {
   code: string;
   meta: Record<string, unknown>;
 }
-export interface MissionDocument extends Document, MissionBase {}
+export interface MissionDocument extends Document, MissionBase {
+  _id: Types.ObjectId;
+}
 export type MissionModel = Model<MissionDocument>;
