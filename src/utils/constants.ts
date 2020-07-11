@@ -8,6 +8,7 @@ export const Trigger = {
   LIAR: ['liar'],
   SUDOKU: ['sudoku'],
   ROLL: ['roll'],
+  SEARCH: ['search'],
 };
 
 export enum CommandGroupName {

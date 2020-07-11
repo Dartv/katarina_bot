@@ -8,6 +8,7 @@ import {
 } from './constants';
 import { CharacterEmbedOptions } from '../types';
 import { resolveEmbedDescription } from './discord-common';
+import { clamp } from './common';
 
 const { Colors } = Constants;
 
@@ -16,6 +17,20 @@ export const getCharacterStarRating = (popularity: number): CharacterStar => {
   if (popularity <= PopularityThreshold.FOUR_STAR) return CharacterStar.FOUR_STAR;
   if (popularity <= PopularityThreshold.THREE_STAR) return CharacterStar.THREE_STAR;
   return CharacterStar.TWO_STAR;
+};
+
+export const getPopularityRangeByStarRating = (stars: CharacterStar): [number, number] => {
+  switch (clamp(CharacterStar.TWO_STAR, CharacterStar.FIVE_STAR, stars)) {
+    case CharacterStar.FIVE_STAR:
+      return [PopularityThreshold.FIVE_STAR, -Infinity];
+    case CharacterStar.FOUR_STAR:
+      return [PopularityThreshold.FIVE_STAR, PopularityThreshold.FOUR_STAR];
+    case CharacterStar.THREE_STAR:
+      return [PopularityThreshold.FOUR_STAR, PopularityThreshold.THREE_STAR];
+    case CharacterStar.TWO_STAR:
+    default:
+      return [PopularityThreshold.THREE_STAR, PopularityThreshold.TWO_STAR];
+  }
 };
 
 export const getCharacterAdditionalStars = (copies: number): CharacterStar => {
@@ -89,3 +104,9 @@ export const createCharacterEmbed = (options: CharacterEmbedOptions): MessageEmb
 
   return embed;
 };
+
+export const adjustStars = (stars: number): CharacterStar => clamp(
+  CharacterStar.TWO_STAR,
+  CharacterStar.SIX_STAR,
+  stars,
+);

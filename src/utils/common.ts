@@ -14,3 +14,19 @@ export const once = <T>(fn: (...args: unknown[]) => T): (...args: unknown[]) => 
     return result;
   };
 };
+
+export const clamp = (min: number, max: number, value: number): number => {
+  if (min > max) {
+    throw new Error('min must not be greater than max');
+  }
+
+  if (value < min) {
+    return min;
+  }
+
+  if (value > max) {
+    return max;
+  }
+
+  return value;
+};

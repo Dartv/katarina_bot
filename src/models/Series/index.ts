@@ -17,5 +17,6 @@ const SeriesSchema = new Schema({
 }, options);
 
 SeriesSchema.index({ slug: 1 }, { unique: true });
+SeriesSchema.index({ title: 'text' });
 
 export const Series = model<SeriesDocument, SeriesModel>(ModelName.SERIES, SeriesSchema);

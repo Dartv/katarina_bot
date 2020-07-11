@@ -19,7 +19,7 @@ connectDB()
     client.on('ready', () => {
       client.logger.info(`I'm ready as ${client.user.tag} ${client.user.id}`);
 
-      client.user.setActivity(`${client.dispatcher.prefix}`);
+      client.user.setActivity(`${client.dispatcher.prefix}${client.commands.get('help').name}`);
     });
 
     client.on('error', (err) => {

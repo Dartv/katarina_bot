@@ -18,6 +18,17 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return ['@user'];
     case Trigger.SUDOKU[0]:
       return [''];
+    case Trigger.ROLL[0]:
+      return [
+        '',
+        'local',
+      ];
+    case Trigger.SEARCH[0]:
+      return [
+        '',
+        'John Doe',
+        'John Doe --series "Animal Crossing" --stars 5 --page 2',
+      ];
     default:
       return [];
   }
