@@ -36,7 +36,9 @@ const BannerCommand: Command<BannerCommandContext> = async (context): Promise<an
 
 BannerCommand.config = {
   triggers: Trigger.BANNER,
-  middleware: [injectUser()],
+  middleware: [
+    injectUser(),
+  ],
   description: 'Show current event banner',
 };
 

@@ -1,4 +1,4 @@
-import { Command, expectGuild } from 'diskat';
+import { Command } from 'diskat';
 import parseArgs, { Arguments } from 'yargs-parser';
 import { MessageEmbed, Constants } from 'discord.js';
 
@@ -220,7 +220,6 @@ SearchCommand.config = {
     },
   ],
   middleware: [
-    expectGuild(),
     injectUser(),
   ],
   group: CommandGroupName.GACHA,

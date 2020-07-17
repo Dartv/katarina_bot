@@ -2,7 +2,6 @@ import {
   Command,
   TypeResolver,
   ParameterType,
-  expectGuild,
 } from 'diskat';
 
 import { Trigger, BannerType, CommandGroupName } from '../../utils/constants';
@@ -66,7 +65,6 @@ RollCommand.config = {
     },
   ],
   middleware: [
-    expectGuild(),
     injectUser(),
   ],
   group: CommandGroupName.GACHA,
