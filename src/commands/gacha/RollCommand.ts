@@ -8,13 +8,16 @@ import {
 import { Trigger, BannerType, CommandGroupName } from '../../utils/constants';
 import { RollCommandContext, CharacterDocument } from '../../types';
 import { injectUser } from '../middleware';
-import { rollLocalCharacter, rollExternalCharacter } from '../../utils/roll';
+import { rollLocalCharacter, rollExternalCharacter, rollBannerCharacter } from '../../utils/roll';
+import { UserRoll } from '../../models';
 
 const roll = async (context: RollCommandContext): Promise<CharacterDocument> => {
-  const { args: { banner } } = context;
+  const { args: { banner }, user } = context;
   switch (banner) {
     case BannerType.LOCAL:
       return rollLocalCharacter();
+    case BannerType.CURRENT:
+      return rollBannerCharacter(user._id);
     case BannerType.NORMAL:
     default:
       return rollExternalCharacter();
@@ -22,16 +25,23 @@ const roll = async (context: RollCommandContext): Promise<CharacterDocument> => 
 };
 
 const RollCommand: Command<RollCommandContext> = async (context) => {
-  const { user, message } = context;
+  const { user, message, args: { banner } } = context;
 
   const character = await roll(context);
   const userCharacter = await user.characters.add(character);
 
-  await message.reply('', { embed: userCharacter.createEmbed() });
-
   user.lastRolledAt = new Date();
 
-  await user.save();
+  await Promise.all([
+    new UserRoll({
+      drop: character._id,
+      user: user._id,
+      banner,
+    }).save(),
+    user.save(),
+  ]);
+
+  await message.reply('', { embed: userCharacter.createEmbed() });
 
   return null;
 };

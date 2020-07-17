@@ -81,16 +81,19 @@ const HelpCommand: Command<HelpCommandContext> = async (context) => {
     color: Constants.Colors.BLUE,
   });
 
-  Object.values(CommandGroupName).forEach((groupName) => {
-    const group = client.commands.groups.get(groupName);
-    const cmds = group.commands.map(
-      ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
-    ).join('\n');
-    embed.addField(
-      formatter.underline(group.name),
-      cmds,
-    );
-  });
+  Object
+    .values(CommandGroupName)
+    .filter(groupName => groupName !== CommandGroupName.ADMIN)
+    .forEach((groupName) => {
+      const group = client.commands.groups.get(groupName);
+      const cmds = group.commands.map(
+        ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
+      ).join('\n');
+      embed.addField(
+        formatter.underline(group.name),
+        cmds,
+      );
+    });
 
   return embed;
 };

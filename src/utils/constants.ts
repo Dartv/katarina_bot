@@ -9,12 +9,15 @@ export const Trigger = {
   SUDOKU: ['sudoku'],
   ROLL: ['roll'],
   SEARCH: ['search'],
+  SET_BANNER: ['setbanner'],
+  BANNER: ['banner'],
 };
 
 export enum CommandGroupName {
   GACHA = 'Gacha',
   FUN = 'Fun',
   UTILITY = 'Utility',
+  ADMIN = 'Admin',
 }
 
 export enum ModelName {
@@ -25,6 +28,8 @@ export enum ModelName {
   GUILD = 'guild',
   ACHIEVEMENT = 'achievement',
   MISSION = 'mission',
+  BANNER = 'banner',
+  USER_ROLL = 'userRoll',
 }
 
 export const DefaultUserSettings: UserSettings = {
@@ -48,6 +53,7 @@ export enum AchievementCode {
 export enum BannerType {
   NORMAL = 'normal',
   LOCAL = 'local',
+  CURRENT = 'current',
 }
 
 export enum UserSettingName {
@@ -90,3 +96,5 @@ export enum Emoji {
   STAR_FULL = '★',
   STAR_EMPTY = '☆',
 }
+
+export const PITY_ROLLS = 100;

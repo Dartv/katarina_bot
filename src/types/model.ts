@@ -1,7 +1,7 @@
 import { Types, Model, Document } from 'mongoose';
 import { MessageEmbed } from 'discord.js';
 
-import type { UserSettingName, UserSetting } from '../utils/constants';
+import type { UserSettingName, UserSetting, BannerType } from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
 import { CharacterEmbedOptions } from './common';
 
@@ -22,7 +22,6 @@ export interface UserBase extends DocumentBase {
   quote?: string;
   currency: number;
   correctQuizGuesses: number;
-  rolls: number;
   settings: UserSettings;
 }
 export interface UserDocument extends Document, UserBase {
@@ -101,3 +100,24 @@ export interface MissionDocument extends Document, MissionBase {
   _id: Types.ObjectId;
 }
 export type MissionModel = Model<MissionDocument>;
+
+export interface BannerBase extends DocumentBase {
+  featured: CharacterDocument | Types.ObjectId;
+  endedAt: Date;
+}
+export interface BannerDocument extends Document, BannerBase {
+  _id: Types.ObjectId;
+}
+export interface BannerModel extends Model<BannerDocument> {
+  fetchLatest: (this: BannerModel) => Promise<BannerDocument>;
+}
+
+export interface UserRollBase extends DocumentBase {
+  drop: CharacterDocument | Types.ObjectId;
+  user: UserDocument | Types.ObjectId;
+  banner: BannerDocument | Types.ObjectId | BannerType;
+}
+export interface UserRollDocument extends Document, UserRollBase {
+  _id: Types.ObjectId;
+}
+export type UserRollModel = Model<UserRollDocument>;

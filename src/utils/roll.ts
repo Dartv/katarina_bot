@@ -1,11 +1,18 @@
 /* global document, window */
 
 import puppeteer, { Browser } from 'puppeteer';
+import { Types } from 'mongoose';
 
 import { CharacterDocument, SeriesDocument } from '../types';
-import { Character, Series } from '../models';
+import {
+  Character,
+  Series,
+  Banner,
+  UserRoll,
+} from '../models';
 import { logger } from '../services/logger';
 import { isDev } from './environment';
+import { PITY_ROLLS, PopularityThreshold } from './constants';
 
 let browser: Browser;
 
@@ -130,4 +137,41 @@ export const rollExternalCharacter = async (): Promise<CharacterDocument> => {
       await browser.close();
     }
   }
+};
+
+export const rollBannerCharacter = async (userId: Types.ObjectId): Promise<CharacterDocument> => {
+  const banner = await Banner
+    .findOne({
+      endedAt: { $exists: false },
+    })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: 'featured',
+      populate: {
+        path: 'series',
+      },
+    });
+
+  if (banner.endedAt) {
+    throw new Error('Could not roll on an ended banner');
+  }
+
+  const [rolls, character] = await Promise.all([
+    UserRoll.countDocuments({
+      user: userId,
+      banner: banner._id,
+    }),
+    rollExternalCharacter(),
+  ]);
+
+  if (character.popularity <= PopularityThreshold.FIVE_STAR || rolls >= PITY_ROLLS - 1) {
+    await UserRoll.deleteMany({
+      user: userId,
+      banner: banner._id,
+    });
+
+    return banner.featured as CharacterDocument;
+  }
+
+  return character;
 };

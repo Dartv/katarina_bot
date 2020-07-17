@@ -1,9 +1,9 @@
 import { Context, Response } from 'diskat';
-import { MessageEmbed, Constants } from 'discord.js';
+import { MessageEmbed, Constants, Message } from 'discord.js';
 
 const DEFAULT_ERROR_MESSAGE = 'Ooops... Something went wrong!';
 
-export class ErrorResponse extends Response {
+export class ErrorResponse extends Response<Message> {
   constructor({ message, formatter }: Context, error = DEFAULT_ERROR_MESSAGE) {
     super(async () => {
       const embed = new MessageEmbed();

@@ -11,6 +11,7 @@
     "prebuild": "npm run clean",
     "start": "node dist/index.js",
     "dev": "lookenv --path=./env/lookenv.dev.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
+    "dev-db": "mongod --dbpath ~/data/db",
     "eslint": "./node_modules/.bin/eslint",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:staged": "./node_modules/.bin/lint-staged",
@@ -34,6 +35,7 @@
   },
   "dependencies": {
     "agenda": "^3.1.0",
+    "date-fns": "^2.15.0",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "fuse.js": "^6.4.0",
