@@ -42,6 +42,10 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [
         'kaori-miyazono-your-lie-in-april',
       ];
+    case Trigger.SET_QUOTE[0]:
+      return [
+        'People die when they are killed',
+      ];
     default:
       return [];
   }

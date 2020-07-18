@@ -14,6 +14,7 @@ export const Trigger = {
   BALANCE: ['balance'],
   FAV: ['fav'],
   SET_WAIFU: ['setwaifu'],
+  SET_QUOTE: ['setquote'],
 };
 
 export enum CommandGroupName {
