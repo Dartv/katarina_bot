@@ -1,7 +1,7 @@
 import { Command } from 'diskat';
 
 import { Context, UserDocument } from '../../types';
-import { Trigger } from '../../utils/constants';
+import { Trigger, CommandGroupName } from '../../utils/constants';
 import { injectUser } from '../middleware';
 
 interface BalanceCommandContext extends Context {
@@ -20,6 +20,7 @@ BalanceCommand.config = {
     injectUser(),
   ],
   description: 'View your balance',
+  group: CommandGroupName.GACHA,
 };
 
 export default BalanceCommand;

@@ -1,7 +1,7 @@
 import { Command } from 'diskat';
 import { formatDistanceStrict, addWeeks } from 'date-fns';
 
-import { Trigger, PITY_ROLLS } from '../../utils/constants';
+import { Trigger, PITY_ROLLS, CommandGroupName } from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { Banner, UserRoll } from '../../models';
 import { createCharacterEmbed } from '../../utils/character';
@@ -40,6 +40,7 @@ BannerCommand.config = {
     injectUser(),
   ],
   description: 'Show current event banner',
+  group: CommandGroupName.GACHA,
 };
 
 export default BannerCommand;

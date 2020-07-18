@@ -27,7 +27,16 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [
         '',
         'John Doe',
-        'John Doe --series "Animal Crossing" --stars 5 --page 2',
+        'John Doe --series "Animal Crossing" --stars 5 --page 2 --favorites',
+      ];
+    case Trigger.BANNER[0]:
+      return [''];
+    case Trigger.BALANCE[0]:
+      return [''];
+    case Trigger.FAV[0]:
+      return [
+        'add aya-nanase',
+        'remove aya-nanase',
       ];
     default:
       return [];

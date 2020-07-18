@@ -17,7 +17,7 @@ export interface UserBase extends DocumentBase {
   discordId: string;
   username: string;
   discriminator: string;
-  favorites: Types.ObjectId[] | Types.DocumentArray<CharacterDocument>;
+  favorites: Types.ObjectId[] | CharacterDocument[];
   lastRolledAt?: Date;
   waifu?: Types.ObjectId;
   quote?: string;
@@ -28,6 +28,7 @@ export interface UserBase extends DocumentBase {
 export interface UserDocument extends Document, UserBase {
   _id: Types.ObjectId;
   characters: UserCharacters;
+  favorites: Types.Array<Types.ObjectId> | Types.DocumentArray<CharacterDocument>;
   searchCharacters: (this: UserDocument, options: UserSearchCharactersOptions) => Promise<Array<
     & UserCharacterBase
     & Pick<UserCharacterDocument, 'stars' | 'baseStars' | 'additionalStars'>
@@ -43,6 +44,7 @@ export interface UserSearchCharactersOptions {
   stars?: number;
   limit?: number;
   skip?: number;
+  ids?: Types.ObjectId[];
 }
 
 export interface UserCharacterBase extends DocumentBase {

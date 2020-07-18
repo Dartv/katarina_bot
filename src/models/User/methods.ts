@@ -26,13 +26,13 @@ export const searchCharacters: UserDocument['searchCharacters'] = async function
     seriesIds = series.map(({ _id }) => _id);
   }
 
-  if (options.name || options.series) {
-    const owned = await UserCharacter.distinct('character', {
+  if (options.name || options.series || options.ids) {
+    const ids = options.ids || await UserCharacter.distinct('character', {
       user: this._id,
     });
     const characters = await Character
       .find({
-        _id: { $in: owned },
+        _id: { $in: ids },
         ...(options.series && { series: { $in: seriesIds } }),
         ...(options.name && {
           $text: {
@@ -61,7 +61,7 @@ export const searchCharacters: UserDocument['searchCharacters'] = async function
     {
       $unwind: '$character',
     },
-    ...((options.name || options.series) ? [
+    ...((options.name || options.series || options.ids) ? [
       {
         $match: {
           'character._id': { $in: characterIds },

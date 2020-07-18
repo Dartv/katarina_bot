@@ -1,6 +1,7 @@
 import { Command } from 'diskat';
 import parseArgs, { Arguments } from 'yargs-parser';
 import { MessageEmbed, Constants } from 'discord.js';
+import { Types } from 'mongoose';
 
 import {
   Trigger,
@@ -25,6 +26,7 @@ export interface SearchCommandArguments extends Arguments {
   series?: string;
   page?: number;
   stars?: number;
+  favorites?: boolean;
 }
 
 const LIMIT_PER_PAGE = 10;
@@ -48,6 +50,7 @@ const SearchCommand: Command<SearchCommandContext> = async (context) => {
     stars: argv.stars,
     skip: LIMIT_PER_PAGE * (page - 1),
     limit: LIMIT_PER_PAGE,
+    ids: argv.favorites ? user.favorites as Types.ObjectId[] : undefined,
   });
 
   if (!userCharacters.length) {
@@ -59,7 +62,7 @@ const SearchCommand: Command<SearchCommandContext> = async (context) => {
     const embed = createCharacterEmbed({
       ...userCharacter.character,
       ...userCharacter,
-    }).setFooter(`You have x${userCharacter.count} of this character`);
+    }).setFooter(`You have x${userCharacter.count} of this character | ${userCharacter.character.slug}`);
     return message.reply('', { embed });
   }
 

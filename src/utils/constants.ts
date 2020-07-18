@@ -12,6 +12,7 @@ export const Trigger = {
   SET_BANNER: ['setbanner'],
   BANNER: ['banner'],
   BALANCE: ['balance'],
+  FAV: ['fav'],
 };
 
 export enum CommandGroupName {
