@@ -60,6 +60,11 @@ export interface UserCharacterDocument extends Document, UserCharacterBase {
   createEmbed: (this: UserCharacterDocument, options?: CharacterEmbedOptions) => MessageEmbed;
 }
 export type UserCharacterModel = Model<UserCharacterDocument>;
+export interface UserCharacterPopulated extends UserCharacterDocument {
+  character: CharacterDocument & {
+    series: Types.DocumentArray<SeriesDocument>;
+  };
+}
 
 export interface CharacterBase extends DocumentBase {
   name: string;

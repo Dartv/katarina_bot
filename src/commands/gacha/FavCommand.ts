@@ -1,46 +1,33 @@
 import { Command, TypeResolver, ParameterType } from 'diskat';
 
-import { Context, UserDocument } from '../../types';
+import { Context, UserDocument, WithUserCharacterMiddlewareContext } from '../../types';
 import { Trigger, CommandGroupName } from '../../utils/constants';
-import { injectUser } from '../middleware';
-import { UserCharacter, Character } from '../../models';
-import { ErrorResponse, SuccessResponse } from '../responses';
+import { injectUser, withUserCharacter } from '../middleware';
+import { SuccessResponse } from '../responses';
 
 export enum FavCommandOption {
   ADD = 'add',
   DEL = 'remove',
 }
 
-export interface FavCommandContext extends Context {
+export interface FavCommandContextBase extends Context {
   user: UserDocument;
   args: {
     option: FavCommandOption;
     slug: string;
   };
 }
+export type FavCommandContext = FavCommandContextBase & WithUserCharacterMiddlewareContext;
 
 const FavCommand: Command<FavCommandContext> = async (context): Promise<any> => {
   const {
     args: {
       option,
-      slug,
     },
     user,
+    userCharacter,
   } = context;
-  const character = await Character.findOne({ slug });
-
-  if (!character) {
-    return new ErrorResponse(context, `Character "${slug}" does not exist`);
-  }
-
-  const userCharacter = await UserCharacter.findOne({
-    character: character._id,
-    user: user._id,
-  });
-
-  if (!userCharacter) {
-    return new ErrorResponse(context, `Could not find "${slug}" among your characters`);
-  }
+  const { character } = userCharacter;
 
   switch (option) {
     case FavCommandOption.ADD: {
@@ -66,6 +53,10 @@ FavCommand.config = {
   triggers: Trigger.FAV,
   middleware: [
     injectUser(),
+    withUserCharacter(async ({ user, args: { slug } }: FavCommandContextBase) => ({
+      slug,
+      user,
+    })),
   ],
   parameters: [
     {

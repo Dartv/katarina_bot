@@ -13,6 +13,7 @@ export const Trigger = {
   BANNER: ['banner'],
   BALANCE: ['balance'],
   FAV: ['fav'],
+  SET_WAIFU: ['setwaifu'],
 };
 
 export enum CommandGroupName {

@@ -38,6 +38,10 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
         'add aya-nanase',
         'remove aya-nanase',
       ];
+    case Trigger.SET_WAIFU[0]:
+      return [
+        'kaori-miyazono-your-lie-in-april',
+      ];
     default:
       return [];
   }
