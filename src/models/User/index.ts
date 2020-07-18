@@ -8,6 +8,7 @@ import {
 import type { UserDocument, UserModel } from '../../types';
 import { ModelName, DefaultUserSettings } from '../../utils/constants';
 import { UserCharacters } from './UserCharacters';
+import * as methods from './methods';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -60,6 +61,8 @@ UserSchema.virtual('characters').get(function (this: UserDocument) {
   this.$locals._characters = this.$locals._characters || new UserCharacters(this);
   return this.$locals._characters;
 });
+
+Object.assign(UserSchema, { methods });
 
 UserSchema.pre('save', async function (this: UserDocument) {
   await this.characters.save();

@@ -8,6 +8,7 @@ import { CharacterEmbedOptions } from './common';
 export type UserSettings = Record<UserSettingName, UserSetting>;
 
 export interface DocumentBase {
+  _id: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,8 +28,22 @@ export interface UserBase extends DocumentBase {
 export interface UserDocument extends Document, UserBase {
   _id: Types.ObjectId;
   characters: UserCharacters;
+  searchCharacters: (this: UserDocument, options: UserSearchCharactersOptions) => Promise<Array<
+    & UserCharacterBase
+    & Pick<UserCharacterDocument, 'stars' | 'baseStars' | 'additionalStars'>
+    & { character: CharacterBase & { series: SeriesBase[] } }
+  >>;
+  addFav: (this: UserDocument, name: string) => Promise<CharacterDocument>;
+  delFav: (this: UserDocument, name: string) => Promise<CharacterDocument>;
 }
 export type UserModel = Model<UserDocument>;
+export interface UserSearchCharactersOptions {
+  name?: string;
+  series?: string;
+  stars?: number;
+  limit?: number;
+  skip?: number;
+}
 
 export interface UserCharacterBase extends DocumentBase {
   character: Types.ObjectId | CharacterDocument;
@@ -57,6 +72,16 @@ export interface CharacterDocument extends Document, CharacterBase {
 }
 export interface CharacterModel extends Model<CharacterDocument> {
   random(this: CharacterModel, n: number, pipeline?: Record<string, unknown>[]): Promise<CharacterDocument[]>;
+  search: <T = CharacterBase>(this: CharacterModel, options: CharacterSearchOptions) => Promise<T[]>;
+}
+export interface CharacterSearchOptions {
+  searchTerm: string;
+  match?: { [key in keyof CharacterBase]?: unknown };
+  series?: Types.ObjectId[];
+  skip?: number;
+  limit?: number;
+  populate?: boolean;
+  project?: { [key in keyof CharacterBase]?: unknown };
 }
 
 export interface SeriesBase extends DocumentBase {
@@ -66,7 +91,15 @@ export interface SeriesBase extends DocumentBase {
 export interface SeriesDocument extends Document, SeriesBase {
   _id: Types.ObjectId;
 }
-export type SeriesModel = Model<SeriesDocument>;
+export interface SeriesModel extends Model<SeriesDocument> {
+  search: <T = SeriesBase>(this: SeriesModel, options: SeriesSearchOptions) => Promise<T[]>;
+}
+export interface SeriesSearchOptions {
+  searchTerm: string;
+  skip?: number;
+  limit?: number;
+  project?: { [key in keyof SeriesBase]?: unknown };
+}
 
 export interface AchievementBase extends DocumentBase {
   user: Types.ObjectId | UserDocument;
