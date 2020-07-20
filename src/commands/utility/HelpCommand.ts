@@ -73,7 +73,14 @@ const HelpCommand: Command<HelpCommandContext> = async (context) => {
 
   const embedDescription = [
     'Almost every command has subcommands and options.\n'
-    + `Type ${formatter.code(`${client.dispatcher.prefix}${Trigger.HELP[0]} <command name>`)} to get more details.`,
+    + `Type ${formatter.code(`${prefix}${Trigger.HELP[0]} <command name>`)} to get more details.`,
+    '\n\n',
+    formatter.bold('Quickstart:'),
+    formatter.codeBlock(`
+${prefix}${Trigger.DAILY[0]}
+${prefix}${Trigger.ROLL[0]}
+${prefix}${Trigger.PROFILE[0]}
+    `.trim()),
   ].join('');
   const embed = new MessageEmbed({
     title: 'List of Commands',
@@ -116,7 +123,7 @@ HelpCommand.config = {
           if (match) {
             const { item: { name } } = match;
             await message.reply(
-              `command ${MarkdownFormatter.code(value)} doesn't exist. Did you mean ${MarkdownFormatter.code(name)}?`
+              `Command ${MarkdownFormatter.code(value)} doesn't exist. Did you mean ${MarkdownFormatter.code(name)}?`
             );
           }
 
