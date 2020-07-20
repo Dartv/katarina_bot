@@ -110,3 +110,75 @@ export const adjustStars = (stars: number): CharacterStar => clamp(
   CharacterStar.SIX_STAR,
   stars,
 );
+
+export const getUserCharactersWithStarsPipeline = (): Record<string, any>[] => [
+  {
+    $lookup: {
+      from: 'characters',
+      as: 'character',
+      localField: 'character',
+      foreignField: '_id',
+    },
+  },
+  {
+    $unwind: '$character',
+  },
+  {
+    $addFields: {
+      baseStars: {
+        $switch: {
+          branches: [
+            {
+              case: {
+                $lte: ['$character.popularity', PopularityThreshold.FIVE_STAR],
+              },
+              then: CharacterStar.FIVE_STAR,
+            },
+            {
+              case: {
+                $and: [
+                  { $gt: ['$character.popularity', PopularityThreshold.FIVE_STAR] },
+                  { $lte: ['$character.popularity', PopularityThreshold.FOUR_STAR] },
+                ],
+              },
+              then: CharacterStar.FOUR_STAR,
+            },
+            {
+              case: {
+                $and: [
+                  { $gt: ['$character.popularity', PopularityThreshold.FOUR_STAR] },
+                  { $lte: ['$character.popularity', PopularityThreshold.THREE_STAR] },
+                ],
+              },
+              then: CharacterStar.THREE_STAR,
+            },
+            {
+              case: {
+                $gt: ['$character.popularity', PopularityThreshold.THREE_STAR],
+              },
+              then: CharacterStar.TWO_STAR,
+            },
+          ],
+          default: CharacterStar.TWO_STAR,
+        },
+      },
+      additionalStars: {
+        $switch: {
+          branches: [
+            { case: { $gte: ['$count', AwakeningStage.THIRD] }, then: 3 },
+            { case: { $gte: ['$count', AwakeningStage.SECOND] }, then: 2 },
+            { case: { $gte: ['$count', AwakeningStage.FIRST] }, then: 1 },
+          ],
+          default: 0,
+        },
+      },
+    },
+  },
+  {
+    $addFields: {
+      stars: {
+        $add: ['$baseStars', '$additionalStars'],
+      },
+    },
+  },
+];

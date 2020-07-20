@@ -1,3 +1,5 @@
+import { ParameterType as ParameterTypes } from 'diskat';
+
 import { UserSettings } from '../types';
 
 export const Trigger = {
@@ -15,6 +17,7 @@ export const Trigger = {
   FAV: ['fav'],
   SET_WAIFU: ['setwaifu'],
   SET_QUOTE: ['setquote'],
+  PROFILE: ['profile'],
 };
 
 export enum CommandGroupName {
@@ -102,3 +105,11 @@ export enum Emoji {
 }
 
 export const PITY_ROLLS = 100;
+
+export enum LocalParameterType {
+  DB_USER = 'db user',
+}
+export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = {
+  ...ParameterTypes,
+  ...LocalParameterType,
+};

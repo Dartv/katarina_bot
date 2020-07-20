@@ -19,7 +19,7 @@ export interface UserBase extends DocumentBase {
   discriminator: string;
   favorites: Types.ObjectId[] | CharacterDocument[];
   lastRolledAt?: Date;
-  waifu?: Types.ObjectId;
+  waifu?: Types.ObjectId | CharacterDocument;
   quote?: string;
   currency: number;
   correctQuizGuesses: number;

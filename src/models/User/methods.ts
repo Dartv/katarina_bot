@@ -3,13 +3,8 @@ import { Types } from 'mongoose';
 import { UserDocument } from '../../types';
 import { UserCharacter } from '../UserCharacter';
 import { Character } from '../Character';
-import {
-  PopularityThreshold,
-  CharacterStar,
-  AwakeningStage,
-} from '../../utils/constants';
 import { Series } from '../Series';
-import { adjustStars } from '../../utils/character';
+import { adjustStars, getUserCharactersWithStarsPipeline } from '../../utils/character';
 
 export const searchCharacters: UserDocument['searchCharacters'] = async function (options) {
   let seriesIds: Types.ObjectId[] = [];
@@ -44,104 +39,67 @@ export const searchCharacters: UserDocument['searchCharacters'] = async function
     characterIds = characters.map(({ _id }) => _id);
   }
 
-  return UserCharacter.aggregate([
+  const pipeline: Record<string, any>[] = [
     {
       $match: {
         user: this._id,
       },
     },
-    {
+  ];
+
+  if (options.name || options.series || options.ids) {
+    pipeline.push({
+      $lookup: {
+        from: 'characters',
+        as: 'characters',
+        pipeline: [
+          {
+            $match: {
+              _id: {
+                $in: characterIds,
+              },
+            },
+          },
+        ],
+      },
+    });
+  } else {
+    pipeline.push({
       $lookup: {
         from: 'characters',
         as: 'character',
         localField: 'character',
         foreignField: '_id',
       },
-    },
-    {
-      $unwind: '$character',
-    },
-    ...((options.name || options.series || options.ids) ? [
-      {
-        $match: {
-          'character._id': { $in: characterIds },
-        },
+    });
+  }
+
+  pipeline.push(getUserCharactersWithStarsPipeline().slice(1));
+
+  if (options.stars) {
+    pipeline.push({
+      $match: {
+        stars: adjustStars(options.stars),
       },
-    ] : []),
-    {
-      $addFields: {
-        baseStars: {
-          $switch: {
-            branches: [
-              {
-                case: {
-                  $lte: ['$character.popularity', PopularityThreshold.FIVE_STAR],
-                },
-                then: CharacterStar.FIVE_STAR,
-              },
-              {
-                case: {
-                  $and: [
-                    { $gt: ['$character.popularity', PopularityThreshold.FIVE_STAR] },
-                    { $lte: ['$character.popularity', PopularityThreshold.FOUR_STAR] },
-                  ],
-                },
-                then: CharacterStar.FOUR_STAR,
-              },
-              {
-                case: {
-                  $and: [
-                    { $gt: ['$character.popularity', PopularityThreshold.FOUR_STAR] },
-                    { $lte: ['$character.popularity', PopularityThreshold.THREE_STAR] },
-                  ],
-                },
-                then: CharacterStar.THREE_STAR,
-              },
-              {
-                case: {
-                  $gt: ['$character.popularity', PopularityThreshold.THREE_STAR],
-                },
-                then: CharacterStar.TWO_STAR,
-              },
-            ],
-            default: CharacterStar.TWO_STAR,
-          },
-        },
-        additionalStars: {
-          $switch: {
-            branches: [
-              { case: { $gte: ['$count', AwakeningStage.THIRD] }, then: 3 },
-              { case: { $gte: ['$count', AwakeningStage.SECOND] }, then: 2 },
-              { case: { $gte: ['$count', AwakeningStage.FIRST] }, then: 1 },
-            ],
-            default: 0,
-          },
-        },
-      },
+    });
+  }
+
+  if (options.skip) {
+    pipeline.push({ $skip: options.skip });
+  }
+
+  if (options.limit) {
+    pipeline.push({ $limit: options.limit });
+  }
+
+  pipeline.push({
+    $lookup: {
+      from: 'series',
+      as: 'character.series',
+      localField: 'character.series',
+      foreignField: '_id',
     },
-    {
-      $addFields: {
-        stars: {
-          $add: ['$baseStars', '$additionalStars'],
-        },
-      },
-    },
-    ...(options.stars ? [
-      {
-        $match: {
-          stars: adjustStars(options.stars),
-        },
-      },
-    ] : []),
-    ...(options.skip ? [{ $skip: options.skip }] : []),
-    ...(options.limit ? [{ $limit: options.limit }] : []),
-    {
-      $lookup: {
-        from: 'series',
-        as: 'character.series',
-        localField: 'character.series',
-        foreignField: '_id',
-      },
-    },
-  ]);
+  });
+
+  return UserCharacter.aggregate(pipeline);
 };
