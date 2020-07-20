@@ -6,3 +6,4 @@ export { default as FavCommand } from './FavCommand';
 export { default as SetWaifuCommand } from './SetWaifuCommand';
 export { default as SetQuoteCommand } from './SetQuoteCommand';
 export { default as ProfileCommand } from './ProfileCommand';
+export { default as DailyCommand } from './DailyCommand';

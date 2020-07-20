@@ -1,6 +1,7 @@
 import { Command } from 'diskat';
 import { Trigger, CommandGroupName, DAILY_CURRENCY } from '../../utils/constants';
 import { Context, UserDocument } from '../../types';
+import { injectUser } from '../middleware';
 
 interface DailyCommandContext extends Context {
   user: UserDocument;
@@ -20,6 +21,9 @@ DailyCommand.config = {
   triggers: Trigger.DAILY,
   description: 'Acquire daily 💎',
   group: CommandGroupName.GACHA,
+  middleware: [
+    injectUser(),
+  ],
 };
 
 export default DailyCommand;
