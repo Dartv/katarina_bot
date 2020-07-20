@@ -46,6 +46,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [
         'People die when they are killed',
       ];
+    case Trigger.DAILY[0]:
+      return [''];
     default:
       return [];
   }

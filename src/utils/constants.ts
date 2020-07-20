@@ -18,6 +18,7 @@ export const Trigger = {
   SET_WAIFU: ['setwaifu'],
   SET_QUOTE: ['setquote'],
   PROFILE: ['profile'],
+  DAILY: ['daily'],
 };
 
 export enum CommandGroupName {
@@ -113,3 +114,5 @@ export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = 
   ...ParameterTypes,
   ...LocalParameterType,
 };
+
+export const DAILY_CURRENCY = 500;
