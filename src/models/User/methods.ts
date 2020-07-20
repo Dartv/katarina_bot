@@ -48,21 +48,31 @@ export const searchCharacters: UserDocument['searchCharacters'] = async function
   ];
 
   if (options.name || options.series || options.ids) {
-    pipeline.push({
-      $lookup: {
-        from: 'characters',
-        as: 'characters',
-        pipeline: [
-          {
-            $match: {
-              _id: {
-                $in: characterIds,
+    pipeline.push(
+      {
+        $lookup: {
+          from: 'characters',
+          as: 'character',
+          let: { character: '$character' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    {
+                      $eq: ['$_id', '$$character'],
+                    },
+                    {
+                      $in: ['$_id', characterIds],
+                    },
+                  ],
+                },
               },
             },
-          },
-        ],
+          ],
+        },
       },
-    });
+    );
   } else {
     pipeline.push({
       $lookup: {
@@ -74,7 +84,7 @@ export const searchCharacters: UserDocument['searchCharacters'] = async function
     });
   }
 
-  pipeline.push(getUserCharactersWithStarsPipeline().slice(1));
+  pipeline.push(...getUserCharactersWithStarsPipeline().slice(1));
 
   if (options.stars) {
     pipeline.push({
