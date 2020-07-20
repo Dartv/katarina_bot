@@ -87,19 +87,23 @@ const ProfileCommand: Command<ProfileCommandContext> = async (context): Promise<
     .addField(formatter.bold('Favorites'), user.favorites.length, true)
     .addField(formatter.bold('Characters guessed'), user.correctQuizGuesses, true)
     .addField('Katacoins', `${user.currency} 💎`, true)
-    .addField(formatter.bold('Achievements'), 0, true)
     .addField('\u200B', '\u200B', true)
-    .addField(
-      'Stars',
-      aggregationResult.map(({ stars }) => Emoji.STAR_DEFAULT.repeat(stars)).join('\n'),
-      true,
-    )
-    .addField('\u200B', '\u200B', true)
-    .addField(
-      'Count',
-      aggregationResult.map(({ count }) => count).join('\n'),
-      true,
-    );
+    .addField(formatter.bold('Achievements'), 0, true);
+
+  if (aggregationResult.length) {
+    embed
+      .addField(
+        'Stars',
+        aggregationResult.map(({ stars }) => Emoji.STAR_DEFAULT.repeat(stars)).join('\n'),
+        true,
+      )
+      .addField('\u200B', '\u200B', true)
+      .addField(
+        'Count',
+        aggregationResult.map(({ count }) => count).join('\n'),
+        true,
+      );
+  }
 
   if (user.waifu) {
     embed.addField(formatter.bold('Waifu'), waifu.name);
