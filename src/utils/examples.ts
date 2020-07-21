@@ -48,6 +48,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       ];
     case Trigger.DAILY[0]:
       return [''];
+    case Trigger.DUEL[0]:
+      return ['@user 100'];
     default:
       return [];
   }

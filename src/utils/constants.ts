@@ -19,6 +19,7 @@ export const Trigger = {
   SET_QUOTE: ['setquote'],
   PROFILE: ['profile'],
   DAILY: ['daily'],
+  DUEL: ['duel'],
 };
 
 export enum CommandGroupName {

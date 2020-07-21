@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { Types } from 'mongoose';
+import { Types, FilterQuery } from 'mongoose';
 
 import { UserCharacterDocument, UserDocument, CharacterDocument } from '../../types';
 import { UserCharacter } from '../UserCharacter';
@@ -35,10 +35,11 @@ export class UserCharacters extends Collection<string, UserCharacterDocument> {
     return userCharacter;
   }
 
-  async fetchMany(): Promise<UserCharacterDocument[]> {
+  async fetchMany(query: FilterQuery<UserCharacterDocument>): Promise<UserCharacterDocument[]> {
     const cursor = UserCharacter
       .find({
         user: this.user._id,
+        ...query,
       })
       .populate({
         path: 'character',
@@ -47,12 +48,34 @@ export class UserCharacters extends Collection<string, UserCharacterDocument> {
         },
       })
       .cursor();
+    const ids = new Set();
 
     await cursor.eachAsync((userCharacter) => {
-      this.set(getDocumentId(userCharacter.character).toHexString(), userCharacter);
+      const id = getDocumentId(userCharacter.character).toHexString();
+
+      ids.add(id);
+
+      this.set(id, userCharacter);
     });
 
-    return Array.from(this.values());
+    return Array.from(this.filter((value, key) => ids.has(key)).values());
+  }
+
+  async fetchRandom(n: number): Promise<UserCharacterDocument[]> {
+    const ids: Types.ObjectId[] = await UserCharacter.aggregate([
+      {
+        $match: {
+          user: this.user._id,
+        },
+      },
+      { $sample: { size: n } },
+      {
+        $project: {
+          _id: 1,
+        },
+      },
+    ]).then(res => res.map(({ _id }) => _id));
+    return this.fetchMany({ _id: { $in: ids } });
   }
 
   async add(character: Types.ObjectId | CharacterDocument): Promise<UserCharacterDocument> {

@@ -4,7 +4,9 @@ import { Middleware } from 'diskat';
 import { Context } from './common';
 import { UserDocument, UserCharacterPopulated } from './model';
 
-export type InjectUserMiddlewareConfig = (context: Context) => Promise<{ user: User }>;
+export type InjectUserMiddlewareConfig = (context: Context) => Promise<{
+  user: User;
+}>;
 export interface InjectUserMiddlewareContext extends Context {
   user: UserDocument;
 }

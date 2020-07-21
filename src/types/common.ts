@@ -1,7 +1,8 @@
 import { Context as DiskatContext } from 'diskat';
+import { User } from 'discord.js';
 
 import type { Client } from '../services/client';
-import type { SeriesBase } from './model';
+import type { SeriesBase, UserDocument, UserCharacterDocument } from './model';
 import type { CharacterStar } from '../utils/constants';
 
 export type Plugin = (client: Client) => void;
@@ -18,4 +19,10 @@ export interface CharacterEmbedOptions {
   color?: number;
   stars?: CharacterStar;
   additionalStars: number;
+}
+
+export interface Participant {
+  user: UserDocument;
+  author: User;
+  userCharacter: UserCharacterDocument;
 }

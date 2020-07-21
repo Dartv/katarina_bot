@@ -1,4 +1,4 @@
-import { MessageEmbed, Constants } from 'discord.js';
+import { MessageEmbed, Constants, User } from 'discord.js';
 
 import {
   CharacterStar,
@@ -6,8 +6,14 @@ import {
   AwakeningStage,
   Emoji,
 } from './constants';
-import { CharacterEmbedOptions } from '../types';
-import { resolveEmbedDescription } from './discord-common';
+import {
+  CharacterEmbedOptions,
+  UserCharacterDocument,
+  CharacterDocument,
+  UserDocument,
+  Participant,
+} from '../types';
+import { resolveEmbedDescription, awaitAnswer } from './discord-common';
 import { clamp } from './common';
 
 const { Colors } = Constants;
@@ -182,3 +188,46 @@ export const getUserCharactersWithStarsPipeline = (): Record<string, any>[] => [
     },
   },
 ];
+
+export const fight = (c1: UserCharacterDocument, c2: UserCharacterDocument): boolean => (
+  c1.stars > c2.stars || (c1.character as CharacterDocument).popularity < (c2.character as CharacterDocument).popularity
+);
+
+export const battle = (characters: UserCharacterDocument[]): UserCharacterDocument[] => characters.sort(
+  (a, b) => fight(a, b) ? -1 : 1,
+);
+
+export const pickCharacter = async (user: UserDocument, author: User, attempt = 0): Promise<UserCharacterDocument> => {
+  const [userCharacter] = await user.characters.fetchRandom(1);
+
+  if (attempt >= 5) {
+    return userCharacter;
+  }
+
+  await author.send(
+    'Do you want to pick this character? Type "yes" or "no"',
+    { embed: createCharacterEmbed((userCharacter.character as CharacterDocument).toObject()) },
+  );
+
+  const collectedMessage = await awaitAnswer(author, author.dmChannel, {
+    correct: ['yes'],
+    incorrect: ['no'],
+  });
+
+  if (collectedMessage) {
+    return userCharacter;
+  }
+
+  return pickCharacter(user, author, attempt + 1);
+};
+
+export const createParticipantEmbed = (
+  participant: Participant,
+): MessageEmbed => {
+  const character = participant.userCharacter.character as CharacterDocument;
+  const embed = createCharacterEmbed(character.toObject())
+    .setAuthor(participant.author.username, participant.author.avatarURL())
+    .setThumbnail(character.imageUrl)
+    .setImage(null);
+  return embed;
+};
