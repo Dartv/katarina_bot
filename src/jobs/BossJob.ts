@@ -56,6 +56,5 @@ export const BossJob: Job = (agenda, client) => {
     }
   });
 
-  // agenda.every('0 6 * * *', JOB_NAME);
-  agenda.now(JOB_NAME);
+  agenda.every('0 6 * * *', JOB_NAME);
 };
