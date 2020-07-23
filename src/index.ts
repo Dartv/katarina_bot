@@ -3,6 +3,7 @@ import { Client } from './services/client';
 import { logger } from './services/logger';
 import { ErrorResponse } from './commands/responses';
 import { Trigger } from './utils/constants';
+import { initJobs } from './jobs/agenda';
 
 const {
   BOT_PREFIX,
@@ -20,6 +21,8 @@ connectDB()
       client.logger.info(`I'm ready as ${client.user.tag} ${client.user.id}`);
 
       client.user.setActivity(`${client.dispatcher.prefix}${client.commands.get('help').name}`);
+
+      initJobs(client);
     });
 
     client.on('error', (err) => {

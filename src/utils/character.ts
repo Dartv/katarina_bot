@@ -12,6 +12,7 @@ import {
   CharacterDocument,
   UserDocument,
   Participant,
+  BossDocument,
 } from '../types';
 import { resolveEmbedDescription, awaitAnswer } from './discord-common';
 import { clamp } from './common';
@@ -79,7 +80,7 @@ export const createCharacterEmbed = (options: CharacterEmbedOptions): MessageEmb
     description = '',
     imageUrl = '',
     series = [],
-    stars = CharacterStar.TWO_STAR,
+    stars,
     additionalStars = 0,
     color = getColorByStars(stars),
   } = options;
@@ -231,3 +232,10 @@ export const createParticipantEmbed = (
     .setImage(null);
   return embed;
 };
+
+export const createBossEmbed = (boss: BossDocument): MessageEmbed => createCharacterEmbed({
+  ...(boss.character as CharacterDocument).toObject(),
+  stars: null,
+})
+  .setColor(Constants.Colors.DARK_RED)
+  .addField('❤️ HP', `${boss.stats.hp ?? '?'}/${boss.stats.maxHp ?? '?'}`);

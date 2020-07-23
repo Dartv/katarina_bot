@@ -7,3 +7,4 @@ export { Mission } from './Mission';
 export { Achievement } from './Achievement';
 export { Banner } from './Banner';
 export { UserRoll } from './UserRoll';
+export { Boss } from './Boss';

@@ -20,6 +20,7 @@ export const Trigger = {
   PROFILE: ['profile'],
   DAILY: ['daily'],
   DUEL: ['duel'],
+  ATTACK: ['attack'],
 };
 
 export enum CommandGroupName {
@@ -39,6 +40,7 @@ export enum ModelName {
   MISSION = 'mission',
   BANNER = 'banner',
   USER_ROLL = 'userRoll',
+  BOSS = 'boss',
 }
 
 export const DefaultUserSettings: UserSettings = {
@@ -117,3 +119,18 @@ export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = 
 };
 
 export const DAILY_CURRENCY = 500;
+
+export enum ChannelName {
+  WORLD_BOSS_ARENA = 'world-boss-arena',
+}
+
+export const DamageByStar: Record<CharacterStar, number> = {
+  [CharacterStar.ONE_STAR]: 0,
+  [CharacterStar.TWO_STAR]: 2,
+  [CharacterStar.THREE_STAR]: 5,
+  [CharacterStar.FOUR_STAR]: 15,
+  [CharacterStar.FIVE_STAR]: 45,
+  [CharacterStar.SIX_STAR]: 135,
+};
+
+export const WORLD_BOSS_SCALE_FACTOR = 35;

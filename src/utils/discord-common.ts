@@ -4,6 +4,7 @@ import {
   User,
   TextBasedChannelFields,
   Channel,
+  TextChannel,
 } from 'discord.js';
 import { DiscordLimit } from './constants';
 
@@ -52,3 +53,5 @@ export const awaitAnswer = async (
     return undefined;
   }
 };
+
+export const isTextChannel = (channel: Channel): channel is TextChannel => channel.type === 'text';

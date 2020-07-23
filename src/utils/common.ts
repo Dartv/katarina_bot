@@ -32,3 +32,14 @@ export const clamp = (min: number, max: number, value: number): number => {
 
   return value;
 };
+
+export const descend = <T>(fn: (x: T) => unknown, a: T, b: T): number => {
+  const aa = fn(a);
+  const bb = fn(b);
+
+  if (aa > bb) {
+    return -1;
+  }
+
+  return aa < bb ? 1 : 0;
+};

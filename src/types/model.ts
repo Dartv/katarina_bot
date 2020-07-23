@@ -161,3 +161,29 @@ export interface UserRollDocument extends Document, UserRollBase {
   _id: Types.ObjectId;
 }
 export type UserRollModel = Model<UserRollDocument>;
+
+export interface BossParticipantBase {
+  user: Types.ObjectId | UserDocument;
+  damage: number;
+  joinedAt: Date;
+}
+export interface BossParticipantDocument extends Document, BossParticipantBase {
+  _id: Types.ObjectId;
+}
+export interface BossStats {
+  hp?: number;
+  maxHp?: number;
+}
+export interface BossBase extends DocumentBase {
+  character: Types.ObjectId | CharacterDocument;
+  guild: Types.ObjectId | GuildDocument;
+  participants: Types.DocumentArray<BossParticipantDocument>;
+  endedAt?: Date;
+  isDefeated?: boolean;
+  stats: BossStats;
+}
+export interface BossDocument extends Document, BossBase {
+  _id: Types.ObjectId;
+  injure: (this: BossDocument, damage: number, user: UserDocument) => Promise<BossDocument>;
+}
+export type BossModel = Model<BossDocument>;

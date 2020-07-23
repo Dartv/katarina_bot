@@ -5,17 +5,17 @@ import {
   expectGuild,
 } from 'diskat';
 import { Signale } from 'signale';
-import { Collection } from 'discord.js';
 
-import type { Plugin } from '../types';
 import { logger } from './logger';
 import * as Commands from '../commands';
 import { CommandGroupName } from '../utils/constants';
 import { Parameters } from '../commands/parameters';
+import * as Plugins from '../plugins';
+import { Plugin } from '../types';
+import { injectGuild } from '../commands/middleware';
 
 export class Client extends DiskatClient {
   logger: Signale;
-  plugins: Collection<string, Plugin> = new Collection();
 
   constructor(options: ClientOptions) {
     super(options);
@@ -32,12 +32,11 @@ export class Client extends DiskatClient {
 
     this.commands.applyGroupMiddleware(CommandGroupName.GACHA, [
       expectGuild(),
+      injectGuild(),
     ]);
 
     this.once('ready', () => {
-      this.plugins.forEach((plugin) => {
-        plugin(this);
-      });
+      Object.values(Plugins).forEach((plugin: Plugin) => plugin(this));
     });
   }
 }
