@@ -1,5 +1,5 @@
 import { Context as DiskatContext } from 'diskat';
-import { User, GuildMember } from 'discord.js';
+import { User } from 'discord.js';
 import Agenda from 'agenda';
 
 import type { Client } from '../services/client';
@@ -7,7 +7,6 @@ import type {
   SeriesBase,
   UserDocument,
   UserCharacterDocument,
-  BossParticipantBase,
 } from './model';
 import type { CharacterStar } from '../utils/constants';
 
@@ -33,10 +32,4 @@ export interface Participant {
   user: UserDocument;
   author: User;
   userCharacter: UserCharacterDocument;
-}
-
-export interface BossWinner extends BossParticipantBase {
-  user: UserDocument;
-  member: GuildMember;
-  reward: number;
 }

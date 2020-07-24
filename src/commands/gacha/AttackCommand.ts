@@ -5,8 +5,6 @@ import {
   UserDocument,
   GuildDocument,
   CharacterDocument,
-  BossParticipantDocument,
-  BossWinner,
 } from '../../types';
 import {
   Trigger,
@@ -16,13 +14,10 @@ import {
 } from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { isTextChannel } from '../../utils/discord-common';
-import { Boss, User } from '../../models';
+import { Boss } from '../../models';
 import { ErrorResponse } from '../responses';
-import { createCharacterEmbed, createBossEmbed } from '../../utils/character';
-import { descend } from '../../utils/common';
-import { getDocumentId } from '../../utils/mongo-common';
+import { createCharacterEmbed } from '../../utils/character';
 import { rewardUser } from '../../utils/user';
-import { getBossReward, createBossStatisticsEmbed } from '../../utils/boss';
 
 export interface AttackCommandContext extends Context {
   user: UserDocument;
@@ -53,21 +48,20 @@ const attackWorldBoss = async (context: AttackCommandContext): Promise<any> => {
 
   const [userCharacter] = await user.characters.fetchRandom(1);
   const damage = DamageByStar[userCharacter.stars];
-  const embed = createCharacterEmbed({
-    ...userCharacter.toObject(),
-    ...(userCharacter.character as CharacterDocument).toObject(),
-  });
-
-  embed.setDescription('').setThumbnail(embed.image.url).setImage(null);
 
   await boss.injure(damage, user);
   await boss.save();
 
+  const embed = createCharacterEmbed({
+    ...userCharacter.toObject(),
+    ...(userCharacter.character as CharacterDocument).toObject(),
+  });
+  embed.setDescription('').setThumbnail(embed.image.url).setImage(null);
   await message.channel.send(
     `${message.member.displayName} deals ${damage} damage to ${(boss.character as CharacterDocument).name}`,
     { embed },
   );
-  await dispatch(createBossEmbed(boss));
+  await dispatch(boss.getEmbed());
 
   if (boss.isDefeated) {
     await rewardUser({
@@ -76,30 +70,7 @@ const attackWorldBoss = async (context: AttackCommandContext): Promise<any> => {
       title: 'Boss defeated',
       context,
     });
-    const participants: BossParticipantDocument[] = boss.participants.sort(
-      (p1, p2) => descend((p) => p.damage, p1, p2)
-    ).slice(0, 12);
-    const promises: Promise<BossWinner>[] = participants.map(async (participant, i) => {
-      const participantUser = await User.findOne({ _id: getDocumentId(participant.user) });
-      if (participantUser) {
-        const member = await message.guild.members.fetch(participantUser.discordId);
-        if (member) {
-          const reward = getBossReward(i);
-          participantUser.currency += reward;
-          await participantUser.save();
-          return {
-            ...participant.toObject(),
-            user: participantUser,
-            member,
-            reward,
-          };
-        }
-      }
-
-      return null;
-    });
-    const winners = await Promise.all(promises).then(res => res.filter(Boolean));
-    return createBossStatisticsEmbed(boss, winners);
+    return boss.getStatisticsEmbed(message.guild);
   }
 
   return null;

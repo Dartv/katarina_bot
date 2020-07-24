@@ -1,5 +1,5 @@
 import { Types, Model, Document } from 'mongoose';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, GuildMember, Guild } from 'discord.js';
 
 import type { UserSettingName, UserSetting, BannerType } from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
@@ -170,6 +170,12 @@ export interface BossParticipantBase {
 export interface BossParticipantDocument extends Document, BossParticipantBase {
   _id: Types.ObjectId;
 }
+export interface BossWinner {
+  participant: BossParticipantDocument;
+  user: UserDocument;
+  member: GuildMember;
+  reward: number;
+}
 export interface BossStats {
   hp?: number;
   maxHp?: number;
@@ -185,5 +191,11 @@ export interface BossBase extends DocumentBase {
 export interface BossDocument extends Document, BossBase {
   _id: Types.ObjectId;
   injure: (this: BossDocument, damage: number, user: UserDocument) => Promise<BossDocument>;
+  getEmbed: (this: BossDocument) => MessageEmbed;
+  getStatisticsEmbed: (this: BossDocument, guild: Guild) => Promise<MessageEmbed>;
+  getWinners: (this: BossDocument, guild: Guild) => Promise<BossWinner[]>;
 }
-export type BossModel = Model<BossDocument>;
+export interface BossModel extends Model<BossDocument> {
+  spawn: (this: BossModel, guild: Types.ObjectId) => Promise<BossDocument>;
+  reward: (this: BossModel, place: number) => number;
+}

@@ -7,6 +7,7 @@ import {
 import { BossDocument, BossModel } from '../../types';
 import { ModelName } from '../../utils/constants';
 import * as methods from './methods';
+import * as statics from './statics';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -56,6 +57,6 @@ const BossSchema = new Schema({
 
 BossSchema.index({ guild: 1, createdAt: -1 });
 
-Object.assign(BossSchema, { methods });
+Object.assign(BossSchema, { methods, statics });
 
 export const Boss = model<BossDocument, BossModel>(ModelName.BOSS, BossSchema);

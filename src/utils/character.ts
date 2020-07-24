@@ -12,7 +12,6 @@ import {
   CharacterDocument,
   UserDocument,
   Participant,
-  BossDocument,
 } from '../types';
 import { resolveEmbedDescription, awaitAnswer } from './discord-common';
 import { clamp } from './common';
@@ -232,10 +231,3 @@ export const createParticipantEmbed = (
     .setImage(null);
   return embed;
 };
-
-export const createBossEmbed = (boss: BossDocument): MessageEmbed => createCharacterEmbed({
-  ...(boss.character as CharacterDocument).toObject(),
-  stars: null,
-})
-  .setColor(Constants.Colors.DARK_RED)
-  .addField('❤️ HP', `${boss.stats.hp ?? '?'}/${boss.stats.maxHp ?? '?'}`);
