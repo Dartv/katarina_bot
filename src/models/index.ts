@@ -9,3 +9,5 @@ export { Banner } from './Banner';
 export { UserRoll } from './UserRoll';
 export { Boss } from './Boss';
 export { BossParticipant } from './BossParticipant';
+export { Battle } from './Battle';
+export { BattleParticipant } from './BattleParticipant';

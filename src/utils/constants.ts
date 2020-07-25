@@ -21,6 +21,7 @@ export const Trigger = {
   DAILY: ['daily'],
   DUEL: ['duel'],
   ATTACK: ['attack'],
+  ENTER: ['enter'],
 };
 
 export enum CommandGroupName {
@@ -42,6 +43,8 @@ export enum ModelName {
   USER_ROLL = 'userRoll',
   BOSS = 'boss',
   BOSS_PARTICIPANT = 'bossParticipant',
+  BATTLE = 'battle',
+  BATTLE_PARTICIPANT = 'battleParticipant',
 }
 
 export const DefaultUserSettings: UserSettings = {
@@ -123,6 +126,7 @@ export const DAILY_CURRENCY = 500;
 
 export enum ChannelName {
   WORLD_BOSS_ARENA = 'world-boss-arena',
+  BATTLE_ROYALE = 'waifu-royale',
 }
 
 export const DamageByStar: Record<CharacterStar, number> = {
@@ -135,3 +139,16 @@ export const DamageByStar: Record<CharacterStar, number> = {
 };
 
 export const WORLD_BOSS_SCALE_FACTOR = 35;
+
+export enum BattleStatus {
+  WAITING = 'WAITING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
+export enum BattleType {
+  ROYALE = 'ROYALE',
+}
+
+export const BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES = 10;

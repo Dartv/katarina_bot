@@ -1,7 +1,13 @@
 import { Types, Model, Document } from 'mongoose';
 import { MessageEmbed, GuildMember, Guild } from 'discord.js';
 
-import type { UserSettingName, UserSetting, BannerType } from '../utils/constants';
+import type {
+  UserSettingName,
+  UserSetting,
+  BannerType,
+  BattleStatus,
+  BattleType,
+} from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
 import { CharacterEmbedOptions } from './common';
 
@@ -201,3 +207,24 @@ export interface BossParticipantDocument extends Document, BossParticipantBase {
   _id: Types.ObjectId;
 }
 export type BossParticipantModel = Model<BossParticipantDocument>;
+
+export interface BattleBase extends DocumentBase {
+  guild: Types.ObjectId | GuildDocument;
+  status: BattleStatus;
+  type: BattleType;
+}
+export interface BattleDocument extends Document, BattleBase {
+  _id: Types.ObjectId;
+}
+export type BattleModel = Model<BattleDocument>;
+
+export interface BattleParticipantBase extends DocumentBase {
+  battle: Types.ObjectId | BattleDocument;
+  user: Types.ObjectId | UserDocument;
+  characters: Types.Array<Types.ObjectId> | Types.DocumentArray<UserCharacterDocument>;
+  isDefeated: boolean;
+}
+export interface BattleParticipantDocument extends Document, BattleParticipantBase {
+  _id: Types.ObjectId;
+}
+export type BattleParticipantModel = Model<BattleParticipantDocument>;

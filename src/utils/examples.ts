@@ -28,6 +28,7 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
         '',
         'John Doe',
         'John Doe --series "Animal Crossing" --stars 5 --page 2 --favorites',
+        'John Doe --global',
       ];
     case Trigger.BANNER[0]:
       return [''];
@@ -50,6 +51,10 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [''];
     case Trigger.DUEL[0]:
       return ['@user 100'];
+    case Trigger.ATTACK[0]:
+      return [''];
+    case Trigger.ENTER[0]:
+      return [''];
     default:
       return [];
   }

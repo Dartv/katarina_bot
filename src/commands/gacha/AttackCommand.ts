@@ -140,7 +140,7 @@ const AttackCommand: Command<AttackCommandContext> = async (context) => {
 
 AttackCommand.config = {
   triggers: Trigger.ATTACK,
-  description: 'Attack current enemy',
+  description: 'Attack World Boss (World Boss channel only)',
   middleware: [
     injectUser(),
     injectBoss(),

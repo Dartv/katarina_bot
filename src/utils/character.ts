@@ -225,7 +225,10 @@ export const createParticipantEmbed = (
   participant: Participant,
 ): MessageEmbed => {
   const character = participant.userCharacter.character as CharacterDocument;
-  const embed = createCharacterEmbed(character.toObject())
+  const embed = createCharacterEmbed({
+    ...participant.userCharacter.toObject(),
+    ...character.toObject(),
+  })
     .setAuthor(participant.author.username, participant.author.avatarURL())
     .setThumbnail(character.imageUrl)
     .setImage(null);
