@@ -162,14 +162,6 @@ export interface UserRollDocument extends Document, UserRollBase {
 }
 export type UserRollModel = Model<UserRollDocument>;
 
-export interface BossParticipantBase {
-  user: Types.ObjectId | UserDocument;
-  damage: number;
-  joinedAt: Date;
-}
-export interface BossParticipantDocument extends Document, BossParticipantBase {
-  _id: Types.ObjectId;
-}
 export interface BossWinner {
   participant: BossParticipantDocument;
   user: UserDocument;
@@ -183,7 +175,6 @@ export interface BossStats {
 export interface BossBase extends DocumentBase {
   character: Types.ObjectId | CharacterDocument;
   guild: Types.ObjectId | GuildDocument;
-  participants: Types.DocumentArray<BossParticipantDocument>;
   endedAt?: Date;
   isDefeated?: boolean;
   stats: BossStats;
@@ -199,3 +190,14 @@ export interface BossModel extends Model<BossDocument> {
   spawn: (this: BossModel, guild: Types.ObjectId) => Promise<BossDocument>;
   reward: (this: BossModel, place: number) => number;
 }
+
+export interface BossParticipantBase {
+  user: Types.ObjectId | UserDocument;
+  boss: Types.ObjectId | BossDocument;
+  damage: number;
+  lastAttackedAt: Date;
+}
+export interface BossParticipantDocument extends Document, BossParticipantBase {
+  _id: Types.ObjectId;
+}
+export type BossParticipantModel = Model<BossParticipantDocument>;

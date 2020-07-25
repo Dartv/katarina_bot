@@ -3,7 +3,6 @@ import { Constants, MessageEmbed } from 'discord.js';
 
 import {
   BossDocument,
-  BossParticipantDocument,
   CharacterDocument,
   BossWinner,
   UserDocument,
@@ -13,7 +12,7 @@ import { getDocumentId } from '../../utils/mongo-common';
 import { WORLD_BOSS_SCALE_FACTOR, ModelName } from '../../utils/constants';
 import { getDailyResetDate } from '../../utils/daily';
 import { createCharacterEmbed } from '../../utils/character';
-import { descend } from '../../utils/common';
+import { BossParticipant } from '../BossParticipant';
 
 const calculateHpScale = (): number => {
   const hoursLeft = differenceInHours(getDailyResetDate(), new Date());
@@ -21,26 +20,31 @@ const calculateHpScale = (): number => {
 };
 
 export const injure: BossDocument['injure'] = async function (damage, user) {
-  let participant = this.participants.find(p => getDocumentId(p.user).equals(user._id));
+  let participant = await BossParticipant.findOne({ boss: this._id, user: user._id });
   if (participant) {
     participant.damage += damage;
+    await participant.save();
   } else {
-    participant = {
-      damage,
-      user: user._id,
-      joinedAt: new Date(),
-    } as BossParticipantDocument;
+    const result = await Promise.all([
+      new BossParticipant({
+        damage,
+        boss: this._id,
+        user: user._id,
+        lastAttackedAt: new Date(),
+      }).save(),
+      BossParticipant.countDocuments({ boss: this._id }),
+    ]);
+    [participant] = result;
+    const [, participantsCount] = result;
     const hpScale = Math.max(calculateHpScale(), this.stats.maxHp ? 0 : 150);
 
     if (!this.stats.maxHp) {
       this.stats.hp = hpScale;
       this.stats.maxHp = hpScale;
-    } else if (this.participants.length > 3) {
+    } else if (participantsCount > 3) {
       this.stats.hp += hpScale;
       this.stats.maxHp += hpScale;
     }
-
-    this.participants.push(participant);
   }
 
   this.stats.hp -= damage;
@@ -63,9 +67,7 @@ export const getEmbed: BossDocument['getEmbed'] = function () {
 
 export const getWinners: BossDocument['getWinners'] = async function (guild) {
   const model = this.constructor as BossModel;
-  const participants = this.participants.sort(
-    (p1, p2) => descend((p) => p.damage, p1, p2)
-  ).slice(0, 12);
+  const participants = await BossParticipant.find({ boss: this._id }).sort({ damage: -1 }).limit(12);
   const promises: Promise<BossWinner>[] = participants.map(async (participant, i) => {
     const user = await this.model(ModelName.USER).findOne({
       _id: getDocumentId(participant.user),

@@ -23,7 +23,7 @@ const BossSchema = new Schema({
     required: true,
   },
   endedAt: Date,
-  defeated: Boolean,
+  isDefeated: Boolean,
   stats: {
     type: new Schema({
       hp: {

@@ -8,3 +8,4 @@ export { Achievement } from './Achievement';
 export { Banner } from './Banner';
 export { UserRoll } from './UserRoll';
 export { Boss } from './Boss';
+export { BossParticipant } from './BossParticipant';

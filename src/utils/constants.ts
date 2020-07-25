@@ -41,6 +41,7 @@ export enum ModelName {
   BANNER = 'banner',
   USER_ROLL = 'userRoll',
   BOSS = 'boss',
+  BOSS_PARTICIPANT = 'bossParticipant',
 }
 
 export const DefaultUserSettings: UserSettings = {
