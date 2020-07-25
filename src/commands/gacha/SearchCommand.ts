@@ -10,9 +10,12 @@ import {
 import {
   Context,
   UserDocument,
+  CharacterBase,
+  SeriesBase,
 } from '../../types';
 import { injectUser } from '../middleware';
 import { renderCharacterStars, createCharacterEmbed } from '../../utils/character';
+import { Character, Series } from '../../models';
 
 export interface SearchCommandContext extends Context {
   user: UserDocument;
@@ -27,6 +30,7 @@ export interface SearchCommandArguments extends Arguments {
   page?: number;
   stars?: number;
   favorites?: boolean;
+  global?: boolean;
 }
 
 const LIMIT_PER_PAGE = 10;
@@ -43,6 +47,49 @@ const SearchCommand: Command<SearchCommandContext> = async (context) => {
   const argv: SearchCommandArguments = parseArgs(searchTerm);
   const charactersSearchTerm = argv.name || argv._.join(' ');
   const { page = 1 } = argv;
+
+  if (argv.global) {
+    const series = argv.series ? await Series.search({
+      searchTerm: argv.series,
+      project: {
+        _id: 1,
+      },
+      limit: 10,
+    }) : [];
+
+    const characters = await Character.search<CharacterBase & { series: SeriesBase[] }>({
+      searchTerm: charactersSearchTerm,
+      skip: LIMIT_PER_PAGE * (page - 1),
+      limit: LIMIT_PER_PAGE,
+      populate: true,
+      ...(argv.series && {
+        series: series.map(({ _id }) => _id),
+      }),
+    });
+
+    if (!characters.length) {
+      return message.reply('Your search term did not match anything');
+    }
+
+    if (characters.length === 1) {
+      const embed = createCharacterEmbed(characters[0]);
+      return message.reply('', { embed });
+    }
+
+    const embed = new MessageEmbed()
+      .setTitle('Search Results')
+      .setFooter(`Page: ${page}`)
+      .setColor(Constants.Colors.BLUE);
+
+    characters.forEach((character) => {
+      embed.addField(
+        character.name,
+        `${formatter.bold('Appears in')}: ${series.map(({ title }) => title).join(', ')}`,
+      );
+    });
+
+    return message.reply('', { embed });
+  }
 
   const userCharacters = await user.searchCharacters({
     name: charactersSearchTerm,

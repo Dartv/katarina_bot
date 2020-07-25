@@ -25,7 +25,7 @@ export interface CharacterEmbedOptions {
   series?: SeriesBase[];
   color?: number;
   stars?: CharacterStar;
-  additionalStars: number;
+  additionalStars?: number;
 }
 
 export interface Participant {
