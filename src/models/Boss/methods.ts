@@ -23,6 +23,7 @@ export const injure: BossDocument['injure'] = async function (damage, user) {
   let participant = await BossParticipant.findOne({ boss: this._id, user: user._id });
   if (participant) {
     participant.damage += damage;
+    participant.lastAttackedAt = new Date();
     await participant.save();
   } else {
     const result = await Promise.all([

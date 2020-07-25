@@ -1,5 +1,5 @@
 import { Command, Middleware } from 'diskat';
-import { differenceInHours, addHours } from 'date-fns';
+import { addHours, isSameHour } from 'date-fns';
 
 import {
   Context,
@@ -59,7 +59,7 @@ const applyCooldown = (): Middleware<AttackCommandContext, AttackCommandContext>
     return next(context);
   }
 
-  if (differenceInHours(new Date(participant.lastAttackedAt), new Date()) < COOLDOWN_IN_HOURS) {
+  if (isSameHour(new Date(), new Date(participant.lastAttackedAt))) {
     return new CooldownResponse(context, addHours(new Date(participant.lastAttackedAt), COOLDOWN_IN_HOURS));
   }
 
