@@ -8,7 +8,12 @@ import {
   InjectUserMiddlewareContext,
   Participant,
 } from '../../types';
-import { Trigger, ParameterType, CommandGroupName } from '../../utils/constants';
+import {
+  Trigger,
+  ParameterType,
+  CommandGroupName,
+  MissionCode,
+} from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { ErrorResponse } from '../responses';
 import { battle, pickCharacter, createParticipantEmbed } from '../../utils/character';
@@ -66,7 +71,7 @@ const DuelCommand: Command<DuelCommandContext> = async (context): Promise<any> =
 
   await dispatch(`${args.member} accept the duel by typing "accept"`);
 
-  const collectedMessage = await awaitAnswer(
+  const answer = await awaitAnswer(
     args.member.user,
     message.channel,
     {
@@ -76,13 +81,13 @@ const DuelCommand: Command<DuelCommandContext> = async (context): Promise<any> =
     },
   );
 
-  if (!collectedMessage) {
+  if (!answer.message) {
     return new ErrorResponse(context, `${args.member.displayName} didn't accept the duel`);
   }
 
   const players: Omit<Participant, 'userCharacter'>[] = [
     { user, author: message.author },
-    { user: opponent, author: collectedMessage.author },
+    { user: opponent, author: answer.message.author },
   ];
 
   const promises = players.map(async (participant) => {
@@ -142,6 +147,26 @@ DuelCommand.config = {
       max: 1,
       window: 10,
     })),
+    async (next, context: DuelCommandContext) => {
+      const result = await next(context);
+
+      context.client.emitter.emit('mission', MissionCode.DUEL_DAILY, result, context);
+      context.client.emitter.emit(
+        'mission',
+        MissionCode.DUEL_DAILY,
+        result,
+        {
+          ...context,
+          user: context.opponent,
+          message: {
+            ...context.message,
+            author: context.args.member.user,
+          },
+        } as DuelCommandContext,
+      );
+
+      return result;
+    },
   ],
 };
 

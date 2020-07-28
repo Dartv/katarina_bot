@@ -56,8 +56,12 @@ export const MissionPlugin: Plugin = (client) => {
           }
           break;
         }
+        case MissionCode.DUEL_DAILY: {
+          mission.completedAt = new Date();
+          break;
+        }
         case MissionCode.ALL_COMPLETE_DAILY: {
-          const codes = Object.values(MissionCode).filter(c => c === MissionCode.CURRENCY_DAILY);
+          const codes = Object.values(MissionCode).filter(c => c !== MissionCode.ALL_COMPLETE_DAILY);
           const missions = await Mission.find({
             code: { $in: codes },
             user: user._id,
