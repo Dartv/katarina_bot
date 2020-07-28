@@ -38,7 +38,6 @@ export const MissionSchema = new Schema({
   },
 }, options);
 
-MissionSchema.index({ user: 1 });
-MissionSchema.index({ code: 1 }, { unique: true });
+MissionSchema.index({ code: 1, user: 1 }, { unique: true });
 
 export const Mission = model<MissionDocument, MissionModel>(ModelName.MISSION, MissionSchema);
