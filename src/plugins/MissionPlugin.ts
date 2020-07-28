@@ -1,6 +1,8 @@
+import { subDays } from 'date-fns';
+
 import { Plugin, Context, UserDocument } from '../types';
 import { ErrorResponse, SuccessResponse } from '../commands/responses';
-import { Mission } from '../models';
+import { Mission, UserRoll } from '../models';
 import { MissionType, MissionCode, Missions } from '../utils/constants';
 import { getDailyResetDate } from '../utils/daily';
 import { capitalize } from '../utils/common';
@@ -39,6 +41,19 @@ export const MissionPlugin: Plugin = (client) => {
       switch (code) {
         case MissionCode.CURRENCY_DAILY: {
           mission.completedAt = new Date();
+          break;
+        }
+        case MissionCode.ROLL_DAILY: {
+          const count = await UserRoll.countDocuments({
+            user: user._id,
+            createdAt: {
+              $gte: subDays(new Date(mission.resetsAt), 1),
+            },
+          });
+
+          if (count >= 3) {
+            mission.completedAt = new Date();
+          }
           break;
         }
         case MissionCode.ALL_COMPLETE_DAILY: {

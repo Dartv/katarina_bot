@@ -4,7 +4,12 @@ import {
   ParameterType,
 } from 'diskat';
 
-import { Trigger, BannerType, CommandGroupName } from '../../utils/constants';
+import {
+  Trigger,
+  BannerType,
+  CommandGroupName,
+  MissionCode,
+} from '../../utils/constants';
 import { RollCommandContext, CharacterDocument } from '../../types';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { rollLocalCharacter, rollExternalCharacter, rollBannerCharacter } from '../../utils/roll';
@@ -71,6 +76,13 @@ RollCommand.config = {
       window: 2,
       userId: user.id,
     })),
+    async (next, context: RollCommandContext) => {
+      const result = await next(context);
+
+      context.client.emitter.emit('mission', MissionCode.ROLL_DAILY, result, context);
+
+      return result;
+    },
   ],
   group: CommandGroupName.GACHA,
 };
