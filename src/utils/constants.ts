@@ -22,6 +22,7 @@ export const Trigger = {
   DUEL: ['duel'],
   ATTACK: ['attack'],
   ENTER: ['enter'],
+  MISSIONS: ['missions'],
 };
 
 export enum CommandGroupName {
@@ -52,7 +53,7 @@ export const DefaultUserSettings: UserSettings = {
 };
 
 export enum MissionCode {
-  DAILY = 'DAILY',
+  CURRENCY_DAILY = 'CURRENCY_DAILY',
   ROLL_DAILY = 'ROLL_DAILY',
   BATTLE_ROYALE_DAILY = 'BATTLE_ROYALE_DAILY',
   DUEL_DAILY = 'DUEL_DAILY',
@@ -60,6 +61,37 @@ export enum MissionCode {
   VERSUS_DAILY = 'VERSUS_DAILY',
   ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
 }
+
+export const Missions = {
+  [MissionCode.CURRENCY_DAILY]: {
+    description: 'acquire daily coins',
+    reward: 25,
+  },
+  [MissionCode.ROLL_DAILY]: {
+    description: 'roll 3 characters',
+    reward: 100,
+  },
+  [MissionCode.BATTLE_ROYALE_DAILY]: {
+    description: 'participate in a waifu royale',
+    reward: 100,
+  },
+  [MissionCode.DUEL_DAILY]: {
+    description: 'fight in a duel',
+    reward: 50,
+  },
+  [MissionCode.QUIZ_DAILY]: {
+    description: 'guess 5 characters',
+    reward: 50,
+  },
+  [MissionCode.VERSUS_DAILY]: {
+    description: 'vote in Waifu Wars',
+    reward: 50,
+  },
+  [MissionCode.ALL_COMPLETE_DAILY]: {
+    description: 'complete all missions',
+    reward: 150,
+  },
+};
 
 export enum AchievementCode {
   SERIES_SET = 'SERIES_SET',
@@ -152,3 +184,7 @@ export enum BattleType {
 }
 
 export const BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES = 10;
+
+export enum MissionType {
+  REGULAR = 'REGULAR',
+}

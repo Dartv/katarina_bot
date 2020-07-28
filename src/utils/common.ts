@@ -32,3 +32,10 @@ export const clamp = (min: number, max: number, value: number): number => {
 
   return value;
 };
+
+export const indexBy = <T = unknown>(
+  fn: (item: T) => string,
+  data: T[],
+): Record<string, T> => data.reduce((acc, item) => ({ ...acc, [fn(item)]: item }), {});
+
+export const capitalize = (str: string): string => str.charAt(0).toUpperCase().concat(str.slice(1));

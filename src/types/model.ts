@@ -7,6 +7,7 @@ import type {
   BannerType,
   BattleStatus,
   BattleType,
+  MissionType,
 } from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
 import { CharacterEmbedOptions } from './common';
@@ -141,6 +142,7 @@ export interface MissionBase extends DocumentBase {
   progress: number;
   code: string;
   meta: Record<string, unknown>;
+  type: MissionType;
 }
 export interface MissionDocument extends Document, MissionBase {
   _id: Types.ObjectId;
