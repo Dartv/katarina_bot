@@ -18,7 +18,7 @@ const applyCooldown = (): Middleware<DailyCommandContext, DailyCommandContext> =
   const { user } = context;
   const mission = await Mission.findOne({ code: MissionCode.CURRENCY_DAILY, user: user._id });
 
-  if (mission.completedAt) {
+  if (mission && mission.completedAt) {
     return new CooldownResponse(context, new Date(mission.resetsAt));
   }
 
