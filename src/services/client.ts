@@ -3,24 +3,24 @@ import {
   ClientOptions,
   Command,
   expectGuild,
+  TypedEventEmitter,
 } from 'diskat';
-import { Signale } from 'signale';
+import { EventEmitter } from 'events';
 
 import { logger } from './logger';
 import * as Commands from '../commands';
 import { CommandGroupName } from '../utils/constants';
 import { Parameters } from '../commands/parameters';
 import * as Plugins from '../plugins';
-import { Plugin } from '../types';
+import { Plugin, Events } from '../types';
 import { injectGuild } from '../commands/middleware';
 
 export class Client extends DiskatClient {
-  logger: Signale;
+  logger = logger;
+  emitter = new EventEmitter() as TypedEventEmitter<Events>;
 
   constructor(options: ClientOptions) {
     super(options);
-
-    this.logger = logger;
 
     Object.entries(Parameters).forEach(([key, resolver]) => {
       this.types.set(key, resolver.bind(this.types));

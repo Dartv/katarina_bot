@@ -62,7 +62,7 @@ export enum MissionCode {
   ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
 }
 
-export const Missions = {
+export const Missions: { [key in MissionCode]: { description: string; reward: number; } } = {
   [MissionCode.CURRENCY_DAILY]: {
     description: 'acquire daily coins',
     reward: 25,

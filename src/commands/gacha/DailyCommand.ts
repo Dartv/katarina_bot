@@ -1,5 +1,10 @@
 import { Command } from 'diskat';
-import { Trigger, CommandGroupName, DAILY_CURRENCY } from '../../utils/constants';
+import {
+  Trigger,
+  CommandGroupName,
+  DAILY_CURRENCY,
+  MissionCode,
+} from '../../utils/constants';
 import { Context, UserDocument } from '../../types';
 import { injectUser } from '../middleware';
 
@@ -22,7 +27,13 @@ DailyCommand.config = {
   description: 'Acquire daily 💎',
   group: CommandGroupName.GACHA,
   middleware: [
+    // TODO: add cooldown
     injectUser(),
+    async (next, context: Context) => {
+      const result = await next(context);
+      context.client.emitter.emit('mission', MissionCode.CURRENCY_DAILY, result, context);
+      return result;
+    },
   ],
 };
 

@@ -11,6 +11,7 @@ export interface SuccessResponseOptions {
   title?: string;
   description?: string;
   author?: User;
+  modify?: (embed: MessageEmbed) => MessageEmbed;
 }
 
 export class SuccessResponse extends Response<Message> {
@@ -19,6 +20,7 @@ export class SuccessResponse extends Response<Message> {
       title = 'Success',
       description = '',
       author = message.author,
+      modify = embed => embed,
     } = options;
     super(async () => {
       const embed = new MessageEmbed();
@@ -27,7 +29,7 @@ export class SuccessResponse extends Response<Message> {
         .setAuthor(author.username, author.avatarURL())
         .setTitle(`✅ ${title}`)
         .setDescription(description);
-      return message.channel.send('', { embed });
+      return message.channel.send('', { embed: modify(embed) });
     });
   }
 }

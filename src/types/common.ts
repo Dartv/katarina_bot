@@ -8,7 +8,7 @@ import type {
   UserDocument,
   UserCharacterDocument,
 } from './model';
-import type { CharacterStar } from '../utils/constants';
+import type { CharacterStar, MissionCode } from '../utils/constants';
 
 export type Plugin = (client: Client) => void;
 
@@ -32,4 +32,8 @@ export interface Participant {
   user: UserDocument;
   author: User;
   userCharacter: UserCharacterDocument;
+}
+
+export interface Events {
+  mission: (code: MissionCode, value: unknown, context: Context) => void;
 }

@@ -23,10 +23,10 @@ const MissionsCommandContext: Command<MissionsCommandContext> = async (context) 
         user: user._id,
       });
     }));
-
+  const color = missions.every(m => m.completedAt) ? Constants.Colors.GREEN : Constants.Colors.BLUE;
   const embed = new MessageEmbed()
     .setAuthor(message.member.displayName, message.author.avatarURL())
-    .setColor(Constants.Colors.BLUE)
+    .setColor(color)
     .addField(
       'Mission',
       missions.map(mission => {
