@@ -4,7 +4,7 @@ import { formatDistanceStrict, addWeeks } from 'date-fns';
 import { Trigger, PITY_ROLLS, CommandGroupName } from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { Banner, UserRoll } from '../../models';
-import { createCharacterEmbed } from '../../utils/character';
+import { createCharacterEmbed, getCharacterStarRating } from '../../utils/character';
 import { Context, UserDocument, CharacterDocument } from '../../types';
 import { ErrorResponse } from '../responses';
 
@@ -29,7 +29,10 @@ const BannerCommand: Command<BannerCommandContext> = async (context): Promise<an
   return message.channel.send(
     `${PITY_ROLLS - rolls} rolls until guaranteed summon\n${distance} left until next banner`,
     {
-      embed: createCharacterEmbed(character.toObject()),
+      embed: createCharacterEmbed({
+        ...character.toObject(),
+        stars: getCharacterStarRating(character.popularity),
+      }),
     },
   );
 };
