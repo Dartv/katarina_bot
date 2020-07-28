@@ -25,7 +25,7 @@ export const awaitAnswer = async (
     incorrect = [],
     ...collectorOptions
   }: PromptUserOptions = {},
-): Promise<Message | undefined> => {
+): Promise<{ message?: Message, error?: Error }> => {
   try {
     const answers = correct.concat(incorrect);
     const message = await channel.awaitMessages(
@@ -40,17 +40,13 @@ export const awaitAnswer = async (
       },
     ).then(messages => messages.first());
 
-    if (!message) {
-      return undefined;
-    }
-
     if (correct.includes(message.content.toLowerCase())) {
-      return message;
+      return { message };
     }
 
-    return undefined;
-  } catch (err) {
-    return undefined;
+    return {};
+  } catch (error) {
+    return { error };
   }
 };
 

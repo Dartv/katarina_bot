@@ -197,28 +197,38 @@ export const battle = (characters: UserCharacterDocument[]): UserCharacterDocume
   (a, b) => fight(a, b) ? -1 : 1,
 );
 
-export const pickCharacter = async (user: UserDocument, author: User, attempt = 0): Promise<UserCharacterDocument> => {
-  const [userCharacter] = await user.characters.fetchRandom(1);
-
+export const pickCharacter = async (
+  user: UserDocument,
+  author: User,
+  attempt = 0,
+  prev?: UserCharacterDocument,
+): Promise<UserCharacterDocument> => {
   if (attempt >= 5) {
-    return userCharacter;
+    return prev;
   }
+
+  const [userCharacter] = await user.characters.fetchRandom(1);
 
   await author.send(
     'Do you want to pick this character? Type "yes" or "no"',
-    { embed: createCharacterEmbed((userCharacter.character as CharacterDocument).toObject()) },
+    {
+      embed: createCharacterEmbed({
+        ...userCharacter.toObject(),
+        ...(userCharacter.character as CharacterDocument).toObject(),
+      }),
+    },
   );
 
-  const collectedMessage = await awaitAnswer(author, author.dmChannel, {
+  const answer = await awaitAnswer(author, author.dmChannel, {
     correct: ['yes'],
     incorrect: ['no'],
   });
 
-  if (collectedMessage) {
+  if (answer.message || answer.error) {
     return userCharacter;
   }
 
-  return pickCharacter(user, author, attempt + 1);
+  return pickCharacter(user, author, attempt + 1, userCharacter);
 };
 
 export const createParticipantEmbed = (
