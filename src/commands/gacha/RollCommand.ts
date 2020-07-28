@@ -6,7 +6,7 @@ import {
 
 import { Trigger, BannerType, CommandGroupName } from '../../utils/constants';
 import { RollCommandContext, CharacterDocument } from '../../types';
-import { injectUser } from '../middleware';
+import { injectUser, withInMemoryCooldown } from '../middleware';
 import { rollLocalCharacter, rollExternalCharacter, rollBannerCharacter } from '../../utils/roll';
 import { UserRoll } from '../../models';
 
@@ -66,6 +66,11 @@ RollCommand.config = {
   ],
   middleware: [
     injectUser(),
+    withInMemoryCooldown<RollCommandContext>(async ({ user }) => ({
+      max: 1,
+      window: 2,
+      userId: user.id,
+    })),
   ],
   group: CommandGroupName.GACHA,
 };

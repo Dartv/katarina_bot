@@ -13,7 +13,7 @@ import {
   CharacterBase,
   SeriesBase,
 } from '../../types';
-import { injectUser } from '../middleware';
+import { injectUser, withInMemoryCooldown } from '../middleware';
 import { renderCharacterStars, createCharacterEmbed } from '../../utils/character';
 import { Character, Series } from '../../models';
 
@@ -146,6 +146,11 @@ SearchCommand.config = {
   ],
   middleware: [
     injectUser(),
+    withInMemoryCooldown<SearchCommandContext>(async ({ user }) => ({
+      max: 1,
+      window: 5,
+      userId: user.id,
+    })),
   ],
   group: CommandGroupName.GACHA,
 };
