@@ -9,11 +9,12 @@ import {
   BattleType,
   BattleStatus,
   BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES,
+  MissionCode,
 } from '../../utils/constants';
 import { isTextChannel } from '../../utils/discord-common';
 import { Battle, BattleParticipant } from '../../models';
 import { ErrorResponse, SuccessResponse } from '../responses';
-import { injectUser } from '../middleware';
+import { injectUser, withInMemoryCooldown } from '../middleware';
 
 interface EnterCommandContext extends Context {
   guild: GuildDocument;
@@ -98,6 +99,18 @@ EnterCommand.config = {
   description: 'Enter Waifu Royale (Waifu Royale channel only)',
   middleware: [
     injectUser(),
+    withInMemoryCooldown<EnterCommandContext>(async ({ user }) => ({
+      userId: user.id,
+      max: 1,
+      window: 5,
+    })),
+    async (next, context: EnterCommandContext) => {
+      const result = await next(context);
+
+      context.client.emitter.emit('mission', MissionCode.BATTLE_ROYALE_DAILY, result, context);
+
+      return result;
+    },
   ],
 };
 
