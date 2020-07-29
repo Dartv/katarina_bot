@@ -23,6 +23,7 @@ export const Trigger = {
   ATTACK: ['attack'],
   ENTER: ['enter'],
   MISSIONS: ['missions'],
+  QUIZ: ['quiz'],
 };
 
 export enum CommandGroupName {
@@ -80,7 +81,7 @@ export const Missions: { [key in MissionCode]: { description: string; reward: nu
     reward: 50,
   },
   [MissionCode.QUIZ_DAILY]: {
-    description: 'guess 5 characters',
+    description: 'guess a character',
     reward: 50,
   },
   [MissionCode.VERSUS_DAILY]: {

@@ -55,6 +55,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [''];
     case Trigger.ENTER[0]:
       return [''];
+    case Trigger.QUIZ[0]:
+      return [''];
     default:
       return [];
   }

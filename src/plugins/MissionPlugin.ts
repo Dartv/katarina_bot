@@ -64,6 +64,10 @@ export const MissionPlugin: Plugin = (client) => {
           mission.completedAt = new Date();
           break;
         }
+        case MissionCode.QUIZ_DAILY: {
+          mission.completedAt = new Date();
+          break;
+        }
         case MissionCode.ALL_COMPLETE_DAILY: {
           const codes = Object.values(MissionCode).filter(c => c !== MissionCode.ALL_COMPLETE_DAILY);
           const missions = await Mission.find({
