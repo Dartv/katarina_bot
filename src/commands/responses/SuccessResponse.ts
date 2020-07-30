@@ -29,6 +29,7 @@ export class SuccessResponse extends Response<Message> {
         .setAuthor(author.username, author.avatarURL())
         .setTitle(`✅ ${title}`)
         .setDescription(description);
+
       return message.channel.send('', { embed: modify(embed) });
     });
   }

@@ -1,6 +1,11 @@
 import { subDays } from 'date-fns';
 
-import { Plugin, Context, UserDocument } from '../types';
+import {
+  Plugin,
+  Context,
+  UserDocument,
+  MissionDescriptor,
+} from '../types';
 import { ErrorResponse, SuccessResponse } from '../commands/responses';
 import { Mission, UserRoll } from '../models';
 import { MissionType, MissionCode, Missions } from '../utils/constants';
@@ -68,6 +73,10 @@ export const MissionPlugin: Plugin = (client) => {
           mission.completedAt = new Date();
           break;
         }
+        case MissionCode.VERSUS_DAILY: {
+          mission.completedAt = new Date();
+          break;
+        }
         case MissionCode.ALL_COMPLETE_DAILY: {
           const codes = Object.values(MissionCode).filter(c => c !== MissionCode.ALL_COMPLETE_DAILY);
           const missions = await Mission.find({
@@ -89,23 +98,28 @@ export const MissionPlugin: Plugin = (client) => {
       await mission.save();
 
       if (mission.completedAt) {
-        const descriptor = Missions[mission.code];
+        const descriptor: MissionDescriptor | undefined = Missions[mission.code];
 
         if (descriptor) {
-          await new SuccessResponse({
-            title: 'Mission Completed',
-            modify: (embed) => embed
-              .addField(
-                'Mission',
-                capitalize(descriptor.description),
-                true,
-              )
-              .addField(
-                'Reward',
-                `${descriptor.reward} 💎`,
-                true,
-              ),
-          }, context).respond();
+          user.currency += descriptor.reward;
+          await user.save();
+
+          if (!descriptor.silent) {
+            await new SuccessResponse({
+              title: 'Mission Completed',
+              modify: (embed) => embed
+                .addField(
+                  'Mission',
+                  capitalize(descriptor.description),
+                  true,
+                )
+                .addField(
+                  'Reward',
+                  `${descriptor.reward} 💎`,
+                  true,
+                ),
+            }, context).respond();
+          }
         }
 
         if (mission.type === MissionType.REGULAR) {

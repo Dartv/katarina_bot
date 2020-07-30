@@ -37,3 +37,9 @@ export interface Participant {
 export interface Events {
   mission: (code: MissionCode, value: unknown, context: Context) => void;
 }
+
+export interface MissionDescriptor {
+  description: string;
+  reward: number;
+  silent: boolean;
+}

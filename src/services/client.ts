@@ -4,6 +4,7 @@ import {
   Command,
   expectGuild,
   TypedEventEmitter,
+  Dispatcher,
 } from 'diskat';
 import { EventEmitter } from 'events';
 
@@ -18,6 +19,7 @@ import { injectGuild } from '../commands/middleware';
 export class Client extends DiskatClient {
   logger = logger;
   emitter = new EventEmitter() as TypedEventEmitter<Events>;
+  dispatcher: Dispatcher<Client>;
 
   constructor(options: ClientOptions) {
     super(options);
