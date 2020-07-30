@@ -1,8 +1,8 @@
 import { Command } from 'diskat';
 
 import { Context, UserDocument } from '../../types';
-import { Trigger, CommandGroupName } from '../../utils/constants';
-import { injectUser } from '../middleware';
+import { Trigger, CommandGroupName, PriceTable } from '../../utils/constants';
+import { injectUser, withPrice } from '../middleware';
 import { SuccessResponse } from '../responses';
 
 export interface SetQuoteCommandContext extends Context {
@@ -35,6 +35,7 @@ SetQuoteCommand.config = {
   ],
   middleware: [
     injectUser(),
+    withPrice(PriceTable.SET_QUOTE),
   ],
   group: CommandGroupName.GACHA,
 };

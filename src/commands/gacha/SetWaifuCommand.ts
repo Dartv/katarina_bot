@@ -1,6 +1,6 @@
 import { Command } from 'diskat';
-import { Trigger, CommandGroupName } from '../../utils/constants';
-import { injectUser, withUserCharacter } from '../middleware';
+import { Trigger, CommandGroupName, PriceTable } from '../../utils/constants';
+import { injectUser, withUserCharacter, withPrice } from '../middleware';
 import { Context, UserDocument, WithUserCharacterMiddlewareContext } from '../../types';
 import { SuccessResponse } from '../responses';
 
@@ -28,6 +28,7 @@ SetWaifuCommand.config = {
   description: 'Set your profile character',
   middleware: [
     injectUser(),
+    withPrice(PriceTable.SET_WAIFU),
     withUserCharacter(async ({ user, args: { slug } }: SetWaifuCommandContextBase) => ({
       slug,
       user,

@@ -8,9 +8,10 @@ import {
   MissionCode,
   AchievementCode,
   ParameterType,
+  PriceTable,
 } from '../../utils/constants';
 import { CharacterDocument, Context, UserDocument } from '../../types';
-import { injectUser, withInMemoryCooldown } from '../middleware';
+import { injectUser, withInMemoryCooldown, withPrice } from '../middleware';
 import { rollLocalCharacter, rollExternalCharacter, rollBannerCharacter } from '../../utils/roll';
 import { UserRoll } from '../../models';
 import { expectOwner } from '../middleware/expectOwner';
@@ -42,7 +43,11 @@ const roll = async (context: RollCommandContext): Promise<CharacterDocument> => 
 };
 
 const RollCommand: Command<RollCommandContext> = async (context) => {
-  const { user, message, args: { banner } } = context;
+  const {
+    user,
+    args: { banner },
+    dispatch,
+  } = context;
 
   const character = await roll(context);
   const userCharacter = await user.characters.add(character);
@@ -58,9 +63,7 @@ const RollCommand: Command<RollCommandContext> = async (context) => {
     user.save(),
   ]);
 
-  await message.reply('', { embed: userCharacter.createEmbed() });
-
-  return null;
+  return dispatch(userCharacter.createEmbed());
 };
 
 RollCommand.config = {
@@ -86,16 +89,21 @@ RollCommand.config = {
     },
   ],
   middleware: [
+    withInMemoryCooldown(async ({ message }) => ({
+      max: 1,
+      window: 2,
+      userId: message.author.id,
+    })),
     branch(
       ({ args }: RollCommandContext) => !!args.url,
       expectOwner(),
     ),
     injectUser(),
-    withInMemoryCooldown<RollCommandContext>(async ({ user }) => ({
-      max: 1,
-      window: 2,
-      userId: user.id,
-    })),
+    branch(
+      ({ args }: RollCommandContext) => args.banner === BannerType.LOCAL,
+      withPrice(PriceTable.ROLL_LOCAL),
+      withPrice(PriceTable.ROLL_NORMAL),
+    ),
     async (next, context: RollCommandContext) => {
       const result = await next(context);
 

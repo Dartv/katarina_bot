@@ -32,3 +32,5 @@ export interface InjectGuildMiddlewareContext extends Context {
 export type injectGuildMiddleware = <T extends Context>() => Middleware<T, T & InjectGuildMiddlewareContext>;
 
 export type WithInMemoryCooldownContext = Context & WithCooldownContext;
+
+export type WithPriceMiddleware = <T extends Context & { user: UserDocument }>(price: number) => Middleware<T, T>;
