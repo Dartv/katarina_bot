@@ -1,4 +1,4 @@
-import { Context as DiskatContext } from 'diskat';
+import { Context as DiskatContext, CommandConfigurator as DiskatCommandConfigurator } from 'diskat';
 import { User } from 'discord.js';
 import Agenda from 'agenda';
 
@@ -8,7 +8,7 @@ import type {
   UserDocument,
   UserCharacterDocument,
 } from './model';
-import type { CharacterStar, MissionCode } from '../utils/constants';
+import type { CharacterStar, MissionCode, AchievementCode } from '../utils/constants';
 
 export type Plugin = (client: Client) => void;
 
@@ -34,8 +34,17 @@ export interface Participant {
   userCharacter: UserCharacterDocument;
 }
 
+export interface MissionEventContext extends Context {
+  user?: UserDocument;
+}
+
+export interface AchievementEventContext extends Context {
+  user?: UserDocument;
+}
+
 export interface Events {
-  mission: (code: MissionCode, value: unknown, context: Context) => void;
+  mission: (code: MissionCode, value: unknown, context: MissionEventContext) => void;
+  achievement: (code: AchievementCode, value: unknown, context: AchievementEventContext) => void;
 }
 
 export interface MissionDescriptor {
@@ -43,3 +52,5 @@ export interface MissionDescriptor {
   reward: number;
   silent: boolean;
 }
+
+export type CommandConfigurator<T extends Context = Context, R = unknown> = DiskatCommandConfigurator<T, R, Client>;

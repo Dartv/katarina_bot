@@ -1,22 +1,35 @@
-import {
-  Command,
-  TypeResolver,
-  ParameterType,
-} from 'diskat';
+import { Command, TypeResolver, branch } from 'diskat';
+import { URL } from 'url';
 
 import {
   Trigger,
   BannerType,
   CommandGroupName,
   MissionCode,
+  AchievementCode,
+  ParameterType,
 } from '../../utils/constants';
-import { RollCommandContext, CharacterDocument } from '../../types';
+import { CharacterDocument, Context, UserDocument } from '../../types';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { rollLocalCharacter, rollExternalCharacter, rollBannerCharacter } from '../../utils/roll';
 import { UserRoll } from '../../models';
+import { expectOwner } from '../middleware/expectOwner';
+
+interface RollCommandContext extends Context {
+  user: UserDocument;
+  args: {
+    banner: BannerType;
+    url?: URL;
+  };
+}
 
 const roll = async (context: RollCommandContext): Promise<CharacterDocument> => {
-  const { args: { banner }, user } = context;
+  const { args: { banner, url }, user } = context;
+
+  if (url) {
+    return rollExternalCharacter(url.href);
+  }
+
   switch (banner) {
     case BannerType.LOCAL:
       return rollLocalCharacter();
@@ -59,17 +72,24 @@ RollCommand.config = {
       description: Object.values(BannerType).join('/'),
       optional: true,
       defaultValue: BannerType.NORMAL,
-      type: TypeResolver.compose(
-        ParameterType.STRING,
-        (banner: string) => banner.trim().toLowerCase(),
-        TypeResolver.oneOf(
-          ParameterType.STRING,
-          Object.values(BannerType),
-        ),
+      type: TypeResolver.oneOf(
+        ParameterType.STRING_LOWER,
+        Object.values(BannerType),
       ),
+    },
+    {
+      name: 'url',
+      description: 'url (admin only)',
+      optional: true,
+      defaultValue: '',
+      type: ParameterType.URL,
     },
   ],
   middleware: [
+    branch(
+      ({ args }: RollCommandContext) => !!args.url,
+      expectOwner(),
+    ),
     injectUser(),
     withInMemoryCooldown<RollCommandContext>(async ({ user }) => ({
       max: 1,
@@ -80,6 +100,7 @@ RollCommand.config = {
       const result = await next(context);
 
       context.client.emitter.emit('mission', MissionCode.ROLL_DAILY, result, context);
+      context.client.emitter.emit('achievement', AchievementCode.SERIES_SET, result, context);
 
       return result;
     },

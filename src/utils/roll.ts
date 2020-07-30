@@ -47,7 +47,9 @@ const setupBrowser = async () => {
   logger.info(`Started Puppeteer with pid ${browser.process().pid}`);
 };
 
-export const rollExternalCharacter = async (): Promise<CharacterDocument> => {
+export const rollExternalCharacter = async (
+  targetUrl = 'https://mywaifulist.moe/random',
+): Promise<CharacterDocument> => {
   if (!browser) {
     await setupBrowser();
   }
@@ -61,7 +63,7 @@ export const rollExternalCharacter = async (): Promise<CharacterDocument> => {
       domain: '.mywaifulist.moe',
     });
     await page.goto(
-      'https://mywaifulist.moe/random',
+      targetUrl,
       {
         waitUntil: ['networkidle0', 'networkidle2'],
       },
