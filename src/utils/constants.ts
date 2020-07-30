@@ -29,6 +29,7 @@ export const Trigger = {
 
 export enum CommandGroupName {
   GACHA = 'Gacha',
+  GAMES = 'Games',
   FUN = 'Fun',
   UTILITY = 'Utility',
   ADMIN = 'Admin',

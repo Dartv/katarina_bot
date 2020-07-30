@@ -134,7 +134,7 @@ DuelCommand.config = {
       type: ParameterType.NUMBER,
     },
   ],
-  group: CommandGroupName.GACHA,
+  group: CommandGroupName.GAMES,
   middleware: [
     injectUser(async ({ args: { member } }: Context & Pick<DuelCommandContext, 'args'>) => ({
       user: member.user,

@@ -95,7 +95,7 @@ const EnterCommand: Command<EnterCommandContext> = async (context) => {
 
 EnterCommand.config = {
   triggers: Trigger.ENTER,
-  group: CommandGroupName.GACHA,
+  group: CommandGroupName.GAMES,
   description: 'Enter Waifu Royale (Waifu Royale channel only)',
   middleware: [
     injectUser(),

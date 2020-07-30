@@ -27,7 +27,7 @@ GayCommand.config = {
       type: ParameterType.MEMBER,
     },
   ],
-  description: 'Test how gay is a person?',
+  description: 'Test how gay is a person',
   group: CommandGroupName.FUN,
 };
 

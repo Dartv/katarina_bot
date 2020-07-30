@@ -2,7 +2,12 @@ import { Command } from 'diskat';
 import { MessageEmbed, Constants } from 'discord.js';
 
 import { Context, UserDocument } from '../../types';
-import { Trigger, MissionCode, Missions } from '../../utils/constants';
+import {
+  Trigger,
+  MissionCode,
+  Missions,
+  CommandGroupName,
+} from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { Mission } from '../../models';
 import { indexBy, capitalize } from '../../utils/common';
@@ -47,6 +52,7 @@ const MissionsCommandContext: Command<MissionsCommandContext> = async (context) 
 MissionsCommandContext.config = {
   triggers: Trigger.MISSIONS,
   description: 'View your missions',
+  group: CommandGroupName.GAMES,
   middleware: [
     injectUser(),
   ],

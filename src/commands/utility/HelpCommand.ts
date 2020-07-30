@@ -90,7 +90,7 @@ ${prefix}${Trigger.PROFILE[0]}
 
   Object
     .values(CommandGroupName)
-    .filter(groupName => groupName !== CommandGroupName.ADMIN)
+    .filter(groupName => ![CommandGroupName.ADMIN, CommandGroupName.UTILITY].includes(groupName))
     .forEach((groupName) => {
       const group = client.commands.groups.get(groupName);
       const cmds = group.commands.map(

@@ -8,7 +8,7 @@ import {
   SeriesDocument,
   WithInMemoryCooldownContext,
 } from '../../types';
-import { Trigger, MissionCode } from '../../utils/constants';
+import { Trigger, MissionCode, CommandGroupName } from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { Character } from '../../models';
 import { createCharacterEmbed } from '../../utils/character';
@@ -61,6 +61,7 @@ const QuizCommand: Command<QuizCommandContext> = async (context): Promise<any> =
 QuizCommand.config = {
   triggers: Trigger.QUIZ,
   description: 'Guess the series by character',
+  group: CommandGroupName.GAMES,
   middleware: [
     withInMemoryCooldown(async ({ message }) => ({
       max: 1,

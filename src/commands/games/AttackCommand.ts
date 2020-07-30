@@ -146,7 +146,7 @@ AttackCommand.config = {
     injectBoss(),
     applyCooldown(),
   ],
-  group: CommandGroupName.GACHA,
+  group: CommandGroupName.GAMES,
 };
 
 export default AttackCommand;
