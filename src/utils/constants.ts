@@ -24,6 +24,7 @@ export const Trigger = {
   ENTER: ['enter'],
   MISSIONS: ['missions'],
   QUIZ: ['quiz'],
+  VERSUS: ['versus'],
 };
 
 export enum CommandGroupName {
@@ -160,6 +161,7 @@ export const DAILY_CURRENCY = 500;
 export enum ChannelName {
   WORLD_BOSS_ARENA = 'world-boss-arena',
   BATTLE_ROYALE = 'waifu-royale',
+  WAIFU_WARS = 'waifu-wars',
 }
 
 export const DamageByStar: Record<CharacterStar, number> = {
