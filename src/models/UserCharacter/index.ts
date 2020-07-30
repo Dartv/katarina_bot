@@ -8,7 +8,7 @@ import {
 import type { UserCharacterDocument, UserCharacterModel } from '../../types';
 import { ModelName } from '../../utils/constants';
 import { isDocument } from '../../utils/mongo-common';
-import { getCharacterStarRating, getCharacterAdditionalStars } from '../../utils/character';
+import { getCharacterStarRating, getCharacterAdditionalStars, adjustStars } from '../../utils/character';
 import * as methods from './methods';
 
 const options: SchemaOptions = {
@@ -40,7 +40,7 @@ const UserCharacterSchema = new Schema({
 
 UserCharacterSchema.virtual('stars').get(function (this: UserCharacterDocument) {
   if (isDocument(this.character)) {
-    return getCharacterStarRating(this.character.popularity) + this.additionalStars;
+    return adjustStars(getCharacterStarRating(this.character.popularity) + this.additionalStars);
   }
 
   throw new TypeError('Trying to get stars of a non-populated character');

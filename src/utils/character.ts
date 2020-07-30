@@ -183,7 +183,10 @@ export const getUserCharactersWithStarsPipeline = (): Record<string, any>[] => [
   {
     $addFields: {
       stars: {
-        $add: ['$baseStars', '$additionalStars'],
+        $min: [
+          { $add: ['$baseStars', '$additionalStars'] },
+          CharacterStar.SIX_STAR,
+        ],
       },
     },
   },
