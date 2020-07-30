@@ -1,23 +1,14 @@
 import { subDays } from 'date-fns';
 
-import {
-  Plugin,
-  Context,
-  UserDocument,
-  MissionDescriptor,
-} from '../types';
+import { Plugin, MissionDescriptor } from '../types';
 import { ErrorResponse, SuccessResponse } from '../commands/responses';
 import { Mission, UserRoll } from '../models';
 import { MissionType, MissionCode, Missions } from '../utils/constants';
 import { getDailyResetDate } from '../utils/daily';
 import { capitalize } from '../utils/common';
 
-interface MissionContext extends Context {
-  user?: UserDocument;
-}
-
 export const MissionPlugin: Plugin = (client) => {
-  client.emitter.on('mission', async (code, value, context: MissionContext) => {
+  client.emitter.on('mission', async (code, value, context) => {
     try {
       const { user } = context;
 
