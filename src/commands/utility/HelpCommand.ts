@@ -90,12 +90,15 @@ ${prefix}${Trigger.PROFILE[0]}
 
   Object
     .values(CommandGroupName)
-    .filter(groupName => ![CommandGroupName.ADMIN, CommandGroupName.UTILITY].includes(groupName))
+    .filter(groupName => ![CommandGroupName.ADMIN].includes(groupName))
     .forEach((groupName) => {
       const group = client.commands.groups.get(groupName);
-      const cmds = group.commands.map(
-        ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
-      ).join('\n');
+      const cmds = group.commands
+        .filter(({ name }) => name !== context.command.name)
+        .map(
+          ({ name, description }) => `${formatter.bold(`${prefix}${name}:`)} ${description}`,
+        )
+        .join('\n');
       embed.addField(
         formatter.underline(group.name),
         cmds,

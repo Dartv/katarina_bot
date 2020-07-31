@@ -25,6 +25,7 @@ export const Trigger = {
   MISSIONS: ['missions'],
   QUIZ: ['quiz'],
   VERSUS: ['versus'],
+  SETTINGS: ['settings'],
 };
 
 export enum CommandGroupName {

@@ -99,11 +99,10 @@ RollCommand.config = {
       expectOwner(),
     ),
     injectUser(),
-    branch(
-      ({ args }: RollCommandContext) => args.banner === BannerType.LOCAL,
-      withPrice(PriceTable.ROLL_LOCAL),
-      withPrice(PriceTable.ROLL_NORMAL),
-    ),
+    withPrice<RollCommandContext>(async ({ args, user }) => ({
+      price: args.banner === BannerType.LOCAL ? PriceTable.ROLL_LOCAL : PriceTable.ROLL_NORMAL,
+      silent: !user.settings.displayrollprice,
+    })),
     async (next, context: RollCommandContext) => {
       const result = await next(context);
 

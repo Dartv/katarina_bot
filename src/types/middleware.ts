@@ -33,4 +33,10 @@ export type injectGuildMiddleware = <T extends Context>() => Middleware<T, T & I
 
 export type WithInMemoryCooldownContext = Context & WithCooldownContext;
 
-export type WithPriceMiddleware = <T extends Context & { user: UserDocument }>(price: number) => Middleware<T, T>;
+export type WithPriceMiddlewareConfig<T> = (context: T) => Promise<{
+  price: number;
+  silent?: boolean;
+}>;
+export type WithPriceMiddleware = <T extends Context & { user: UserDocument }>(
+  config: number | WithPriceMiddlewareConfig<T>
+) => Middleware<T, T>;

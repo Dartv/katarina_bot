@@ -43,14 +43,14 @@ export const UserSchema = new Schema({
     min: 0,
   },
   settings: {
-    type: {
+    type: new Schema({
       displayrollprice: {
         type: Number,
         min: 0,
         max: 1,
         default: DefaultUserSettings.displayrollprice,
       },
-    },
+    }),
     default: DefaultUserSettings,
   },
 }, options);
