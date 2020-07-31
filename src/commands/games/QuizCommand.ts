@@ -22,7 +22,7 @@ const SIMILARITY_THRESHOLD = 0.8;
 const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, b) >= SIMILARITY_THRESHOLD;
 
 const QuizCommand: Command<QuizCommandContext> = async (context): Promise<any> => {
-  const { message } = context;
+  const { message, user } = context;
   const [character] = await Character.random(1);
   const embed = createCharacterEmbed({
     ...character.toObject(),
@@ -46,6 +46,8 @@ const QuizCommand: Command<QuizCommandContext> = async (context): Promise<any> =
     ).then(messages => messages.first());
 
     if (answer) {
+      user.correctQuizGuesses += 1;
+      await user.save();
       return answer.reply(
         'Congratulations! Your guess was correct',
         { embed: createCharacterEmbed(character.toObject()) },
