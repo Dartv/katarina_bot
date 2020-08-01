@@ -69,7 +69,9 @@ const DuelCommand: Command<DuelCommandContext> = async (context): Promise<any> =
     opponent,
   } = context;
 
-  await dispatch(`${args.member} accept the duel by typing "accept"`);
+  await dispatch(
+    `${args.member}, ${message.member} proposed a duel for ${args.bet} 💎. Accept by typing "accept".`
+  );
 
   const answer = await awaitAnswer(
     args.member.user,
@@ -136,17 +138,17 @@ DuelCommand.config = {
   ],
   group: CommandGroupName.GAMES,
   middleware: [
+    withInMemoryCooldown(async ({ message }) => ({
+      userId: message.author.id,
+      max: 1,
+      window: 10,
+    })),
     injectUser(async ({ args: { member } }: Context & Pick<DuelCommandContext, 'args'>) => ({
       user: member.user,
     })),
     injectOpponent(),
     injectUser(),
     validateUsers(),
-    withInMemoryCooldown(async (context: DuelCommandContext) => ({
-      userId: context.user.id,
-      max: 1,
-      window: 10,
-    })),
     async (next, context: DuelCommandContext) => {
       const result = await next(context);
 
