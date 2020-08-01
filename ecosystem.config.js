@@ -24,9 +24,8 @@ module.exports = {
       repo: 'git@github.com:Dartv/katarina_bot.git',
       path: '/opt/pm2/katarina',
       max_memory_restart: '600M',
-      'pre-setup': 'sudo npm i -g pm2 yarn',
-      'pre-deploy': 'git reset --hard',
-      'post-deploy': 'yarn install && yarn build && pm2 startOrRestart ecosystem.config.js --env production --update-env',
+      'pre-deploy': 'git reset --hard && rm -rf dist node_modules',
+      'post-deploy': 'npm i && npm run build && pm2 startOrRestart ecosystem.config.js --env production --update-env',
     },
   },
 };
