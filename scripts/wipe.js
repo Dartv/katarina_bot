@@ -6,6 +6,12 @@ const eachAsync = async (callback, stream) => {
   }
 };
 
+const drop = async (collection, collections) => {
+  if (collections.find(({ name }) => name === collection.collectionName)) {
+    return collection.drop();
+  }
+};
+
 console.log('Starting wipe...');
 
 MongoClient
@@ -29,6 +35,8 @@ MongoClient
     const Versus = db.collection('versus');
     const WallOfShame = db.collection('wallOfShame');
     const WorldBosses = db.collection('worldbosses');
+    const Stages = db.collection('stages');
+    const collections = await db.listCollections().toArray();
 
     await eachAsync(
       async (user) => Promise.all([
@@ -53,19 +61,21 @@ MongoClient
             },
           },
         ),
-        UserCharacters.insertOne({
-          count: 1,
-          user: user._id,
-          character: user.waifu,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }),
-        UserRolls.insertOne({
-          drop: user.waifu,
-          banner: 'normal',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }),
+        ...(user.waifu ? [
+          UserCharacters.insertOne({
+            count: 1,
+            user: user._id,
+            character: user.waifu,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }),
+          UserRolls.insertOne({
+            drop: user.waifu,
+            banner: 'normal',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }),
+        ] : []),
       ]),
       db.collection('users').find({}).stream(),
     );
@@ -77,22 +87,23 @@ MongoClient
       },
     });
 
-    await Achievements.deleteMany({});
-    await Missions.deleteMany({});
-    await AgendaJobs.deleteMany({});
-    await Banners.deleteMany({});
-    await CharacterInfo.drop();
-    await Marriages.drop();
-    await Versus.drop();
-    await WallOfShame.drop();
-    await WorldBosses.drop();
-
     await Characters.updateMany({}, {
       $unset: {
         cardImageUrl: '',
         stars: '',
       },
     });
+
+    await Achievements.deleteMany({});
+    await Missions.deleteMany({});
+    await AgendaJobs.deleteMany({});
+    await Banners.deleteMany({});
+    await drop(CharacterInfo, collections);
+    await drop(Marriages, collections);
+    await drop(Versus, collections);
+    await drop(WallOfShame, collections);
+    await drop(WorldBosses, collections);
+    await drop(Stages, collections);
   })
   .then(() => {
     console.log('Wipe finished');
