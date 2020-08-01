@@ -4,3 +4,4 @@ env
 ecosystem.config.js
 jest.config.js
 .vscode
+scripts
