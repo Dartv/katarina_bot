@@ -1,6 +1,6 @@
 {
   "name": "katarina-bot",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "main": "src/index.js",
   "author": "Dartv",
   "license": "MIT",
