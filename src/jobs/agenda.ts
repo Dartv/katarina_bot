@@ -2,7 +2,6 @@
 
 import Agenda from 'agenda';
 import mongoose from 'mongoose';
-import { addMinutes } from 'date-fns';
 
 import { Client } from '../services/client';
 import * as jobs from '.';
@@ -47,9 +46,5 @@ export const initJobs = (client: Client): void => {
 
   agenda.on('fail', (err, job: Agenda.Job) => {
     client.logger.error(`Failed job "${job.attrs.name}"`, err);
-    // retry 1 minute later
-    // eslint-disable-next-line no-param-reassign
-    job.attrs.nextRunAt = addMinutes(new Date(), 1);
-    job.save().catch(client.logger.error);
   });
 };
