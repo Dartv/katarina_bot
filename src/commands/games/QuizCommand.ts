@@ -19,6 +19,7 @@ interface QuizCommandContext extends WithInMemoryCooldownContext {
 
 const SIMILARITY_THRESHOLD = 0.8;
 const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, b) >= SIMILARITY_THRESHOLD;
+const GUESS_REWARD = 10;
 
 const QuizCommand: Command<QuizCommandContext> = async (context) => {
   const { message, user } = context;
@@ -54,9 +55,10 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
 
     if (answer) {
       user.correctQuizGuesses += 1;
+      user.currency += GUESS_REWARD;
       await user.save();
       return answer.reply(
-        'Congratulations! Your guess was correct',
+        `Congratulations! Your guess was correct.\nYou received ${GUESS_REWARD} 💎`,
         {
           embed: createCharacterEmbed({
             ...character.toObject(),
