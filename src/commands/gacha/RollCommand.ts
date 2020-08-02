@@ -46,7 +46,7 @@ const RollCommand: Command<RollCommandContext> = async (context) => {
   const {
     user,
     args: { banner },
-    dispatch,
+    message,
   } = context;
 
   const character = await roll(context);
@@ -63,7 +63,7 @@ const RollCommand: Command<RollCommandContext> = async (context) => {
     user.save(),
   ]);
 
-  return dispatch(userCharacter.createEmbed());
+  return message.reply('', { embed: userCharacter.createEmbed() });
 };
 
 RollCommand.config = {
