@@ -37,6 +37,11 @@ export class Client extends DiskatClient {
       injectGuild(),
     ]);
 
+    this.commands.applyGroupMiddleware(CommandGroupName.GAMES, [
+      expectGuild(),
+      injectGuild(),
+    ]);
+
     this.once('ready', () => {
       Object.values(Plugins).forEach((plugin: Plugin) => plugin(this));
     });
