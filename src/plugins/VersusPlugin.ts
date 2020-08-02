@@ -9,7 +9,7 @@ export const VersusPlugin: Plugin = (client) => {
   client.on('messageReactionAdd', async (reaction, author) => {
     const { message } = reaction;
     const { channel } = message;
-    if (isTextChannel(channel) && channel.name === ChannelName.WAIFU_WARS && reaction.emoji.name === '❤️') {
+    if (isTextChannel(channel) && channel.name.startsWith(ChannelName.WAIFU_WARS) && reaction.emoji.name === '❤️') {
       const user = await User.findOne({ discordId: author.id });
       if (user) {
         message.author = author as DiscordUser;
