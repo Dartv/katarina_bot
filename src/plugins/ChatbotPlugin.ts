@@ -1,13 +1,25 @@
-import { Client } from 'ghastly';
-import random from 'random-int';
 import path from 'path';
 import fs from 'fs';
 
-import { BOT_PREFIXES } from '../util';
+import { Plugin } from '../types';
+import { randomInt } from '../utils/common';
 
-export const ChatbotPlugin = (client: Client) => {
+export const BOT_PREFIXES = [
+  '!',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '|',
+  ',',
+  '.',
+  '=',
+  '?',
+];
+
+export const ChatbotPlugin: Plugin = (client) => {
   const MESSAGE_LIMIT = 3000;
-  const CECE_CLOWN_EMOTE = '<:CeceClownW:561235965197418498>';
   const botPrefixesRegex = new RegExp(`^[${BOT_PREFIXES.join('')}]`);
   const endsWithEmoteRegex = /(<:\w+:\d+>)$/;
   const CACHED_MESSAGES_PATH = path.resolve(__dirname, '../../.cached-messages');
@@ -16,19 +28,21 @@ export const ChatbotPlugin = (client: Client) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    if (message.content.startsWith(client.dispatcher.prefix)) return;
+    if (message.content.startsWith(client.dispatcher.prefix as string)) return;
 
     if (botPrefixesRegex.test(message.content)) return;
 
     if (message.guild === null) return;
 
-    if (message.content.split(' ').length < 2) return;
+    if (!messages.length) return;
 
-    const index = random(messages.length);
+    if (message.guild.id !== '557804417550909440') return;
 
-    if (message.isMentioned(client.user)) {
-      const reply = messages[index] ? messages[index] : CECE_CLOWN_EMOTE;
-      const emoji = client.emojis.random();
+    const index = randomInt(0, messages.length);
+
+    if (message.mentions.has(client.user)) {
+      const reply = messages[index];
+      const emoji = client.emojis.cache.random();
 
       messages.splice(index, 1);
       await message.reply(`${reply.replace(endsWithEmoteRegex, '')} ${emoji}`);
@@ -38,6 +52,8 @@ export const ChatbotPlugin = (client: Client) => {
     if (messages.length > MESSAGE_LIMIT) {
       messages.splice(index, 1);
     }
+
+    if (message.content.split(' ').length < 2) return;
 
     if (message.content) {
       messages.push(message.content);
@@ -51,14 +67,16 @@ export const ChatbotPlugin = (client: Client) => {
       messages = parsedMessages;
     }
   } catch (err) {
-    console.log('Error reading cached messages');
-    console.error(err);
-  } // eslint-disable-line
+    client.logger.error('Error reading cached messages');
+    client.logger.error(err);
+  }
 
   setInterval(() => {
     fs.writeFile(CACHED_MESSAGES_PATH, JSON.stringify(messages), (err) => {
-      if (err) console.error('Error writing cached messages');
-      console.error(err);
+      if (err) {
+        client.logger.error('Error writing cached messages');
+        client.logger.error(err);
+      }
     });
   }, 5 * 60 * 1000);
 };

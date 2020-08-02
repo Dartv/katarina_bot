@@ -4,4 +4,6 @@ yarn-error.log
 .idea
 .vscode
 dist
+.DS_Store
 .cached-messages
+npm-debug.log

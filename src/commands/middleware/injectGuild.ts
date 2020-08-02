@@ -1,16 +1,12 @@
 import { Guild } from '../../models';
-import { ErrorResponse } from '../responses';
+import { injectGuildMiddleware } from '../../types';
 
-export default () => async (next, context) => {
+export const injectGuild: injectGuildMiddleware = () => async (next, context) => {
   const { message: { guild: { id: discordId } } } = context;
 
-  try {
-    let guild = await Guild.findOneByDiscordId(discordId);
+  let guild = await Guild.findOne({ discordId });
 
-    if (!guild) guild = await new Guild({ discordId }).save();
+  if (!guild) guild = await new Guild({ discordId }).save();
 
-    return next({ ...context, guild });
-  } catch (err) {
-    return ErrorResponse(err.message, context);
-  }
+  return next({ ...context, guild });
 };

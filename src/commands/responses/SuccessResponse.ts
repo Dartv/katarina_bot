@@ -1,21 +1,36 @@
-import R from 'ramda';
-import { Response } from 'ghastly/command';
-import { RichEmbed } from 'discord.js';
+import { Response } from 'diskat';
+import {
+  Message,
+  MessageEmbed,
+  Constants,
+  User,
+} from 'discord.js';
+import { Context } from '../../types';
 
-import { Color } from '../../util/constants';
+export interface SuccessResponseOptions {
+  title?: string;
+  description?: string;
+  author?: User;
+  modify?: (embed: MessageEmbed) => MessageEmbed;
+}
 
-export class SuccessResponse extends Response {
-  constructor(title, description, { message }) {
+export class SuccessResponse extends Response<Message> {
+  constructor(options: SuccessResponseOptions, { message }: Context) {
+    const {
+      title = 'Success',
+      description = '',
+      author = message.author,
+      modify = embed => embed,
+    } = options;
     super(async () => {
-      const embed = new RichEmbed();
+      const embed = new MessageEmbed();
       embed
-        .setColor(Color.SUCCESS)
-        .setAuthor(message.author.username, message.author.avatarURL)
+        .setColor(Constants.Colors.GREEN)
+        .setAuthor(author.username, author.avatarURL())
         .setTitle(`✅ ${title}`)
         .setDescription(description);
-      return message.channel.send({ embed });
+
+      return message.channel.send('', { embed: modify(embed) });
     });
   }
 }
-
-export default R.construct(SuccessResponse);

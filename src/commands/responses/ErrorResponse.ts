@@ -1,23 +1,18 @@
-import R from 'ramda';
-import { Response } from 'ghastly/command';
-import { RichEmbed } from 'discord.js';
-
-import { Color } from '../../util/constants';
+import { Context, Response } from 'diskat';
+import { MessageEmbed, Constants, Message } from 'discord.js';
 
 const DEFAULT_ERROR_MESSAGE = 'Ooops... Something went wrong!';
 
-export class ErrorResponse extends Response {
-  constructor(error, { message, formatter: { code } }) {
+export class ErrorResponse extends Response<Message> {
+  constructor({ message, formatter }: Context, error = DEFAULT_ERROR_MESSAGE) {
     super(async () => {
-      const embed = new RichEmbed();
+      const embed = new MessageEmbed();
       embed
-        .setColor(Color.ERROR)
-        .setAuthor(message.author.username, message.author.avatarURL)
-        .addField('💬 INPUT', code(message.content))
-        .addField('🚫 ERROR', error || DEFAULT_ERROR_MESSAGE);
+        .setColor(Constants.Colors.RED)
+        .setAuthor(message.author.username, message.author.avatarURL())
+        .addField('💬 INPUT', formatter.code(message.content))
+        .addField('🚫 ERROR', error);
       return message.channel.send({ embed });
     });
   }
 }
-
-export default R.construct(ErrorResponse);

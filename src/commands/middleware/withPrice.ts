@@ -1,55 +1,44 @@
-import { Middleware } from 'ghastly';
-import { Error } from 'mongoose';
-import { ErrorResponse } from '../responses/ErrorResponse';
+import { WithPriceMiddleware } from '../../types';
+import { ErrorResponse } from '../responses';
+import { awaitAnswer } from '../../utils/discord-common';
 
-enum Answer {
-  YES = 'yes',
-  NO = 'no',
-}
+const ANSWER_TIME = 10000;
 
-const withPrice = (price: number): Middleware => async (next, context) => {
-  const { user, message } = context;
-  const { channel } = message;
+export const withPrice: WithPriceMiddleware = config => async (next, context) => {
+  const {
+    user,
+    dispatch,
+    message: { author, channel },
+  } = context;
+  const { price, silent } = typeof config === 'function'
+    ? await config(context)
+    : { price: config, silent: false };
 
-  // TODO: do this only for "roll" command
-  if (user?.settings?.displayRollPrice) {
-    await message.reply(`This command costs ${price}💎. Type "yes" if you want to proceed.`);
+  if (!silent) {
+    await dispatch(`This command costs ${price} 💎. Type "yes" if you want to proceed.`);
+    const answer = await awaitAnswer(author, channel, {
+      correct: ['yes'],
+      incorrect: ['no'],
+      time: ANSWER_TIME,
+    });
 
-    try {
-      const collectedMessages = await channel.awaitMessages(
-        ({
-          content,
-          member,
-        }) => member?.id === message.member?.id && Object.values(Answer).includes(content.toLowerCase()),
-        {
-          time: 10000,
-          maxMatches: 1,
-          errors: ['time'],
-        },
-      );
-      const collectedMessage = collectedMessages.first();
-
-      if (collectedMessage?.content?.toLowerCase() === Answer.NO) {
-        return null;
-      }
-    } catch (err) {
-      return new ErrorResponse('No answer. Skipping...', context);
+    if (!answer.message) {
+      return null;
     }
   }
 
-  if (user) {
-    try {
-      user.currency -= price;
-      await user.save();
-    } catch (err) {
-      if (err instanceof Error.ValidationError) {
-        return new ErrorResponse('You don\'t have enough 💎', context);
-      }
-      throw err;
-    }
+  if (!user || user.currency < price) {
+    return new ErrorResponse(context, 'You don\'t have enough 💎');
   }
 
-  return next(context);
+  const result = await next(context);
+
+  if (result instanceof ErrorResponse) {
+    return result;
+  }
+
+  user.currency -= price;
+  await user.save();
+
+  return result;
 };
-
-export default withPrice;

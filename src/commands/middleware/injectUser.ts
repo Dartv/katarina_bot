@@ -1,28 +1,20 @@
-import { User as DiscordUser } from 'discord.js';
-import { Middleware, ICommandContext } from 'ghastly';
-
+import { InjectUserMiddleware } from '../../types';
 import { User } from '../../models';
-import { ErrorResponse } from '../responses';
 
-type InjectUserConfigFn = (context: ICommandContext) => Promise<{ discordUser: DiscordUser }>;
-
-export default (config?: InjectUserConfigFn): Middleware => async (next, context) => {
-  const { message } = context;
-  let { author: discordUser } = message;
+export const injectUser: InjectUserMiddleware = (config) => async (next, context) => {
+  let { message: { author } } = context;
 
   if (config) {
-    ({ discordUser } = await config(context));
+    ({ user: author } = await config(context));
   }
 
-  try {
-    let user = await (User as any).findOneByDiscordId(discordUser.id);
+  const user = await User.findOneAndUpdate({ discordId: author.id }, {
+    $set: {
+      discordId: author.id,
+      username: author.username,
+      discriminator: author.discriminator,
+    },
+  }, { upsert: true });
 
-    if (!user) user = await new User({ discordId: discordUser.id }).save();
-
-    user.$locals.message = message;
-
-    return next({ ...context, user });
-  } catch (err) {
-    return ErrorResponse(err.message, context);
-  }
+  return next({ ...context, user });
 };
