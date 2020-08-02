@@ -11,8 +11,7 @@ import {
 import { Trigger, MissionCode, CommandGroupName } from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { Character } from '../../models';
-import { createCharacterEmbed } from '../../utils/character';
-import { ErrorResponse } from '../responses';
+import { createCharacterEmbed, getCharacterStarRating } from '../../utils/character';
 
 interface QuizCommandContext extends WithInMemoryCooldownContext {
   user: UserDocument;
@@ -21,9 +20,17 @@ interface QuizCommandContext extends WithInMemoryCooldownContext {
 const SIMILARITY_THRESHOLD = 0.8;
 const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, b) >= SIMILARITY_THRESHOLD;
 
-const QuizCommand: Command<QuizCommandContext> = async (context): Promise<any> => {
+const QuizCommand: Command<QuizCommandContext> = async (context) => {
   const { message, user } = context;
-  const [character] = await Character.random(1);
+  const [character] = await Character.random(1, [
+    {
+      $match: {
+        series: {
+          $ne: [],
+        },
+      },
+    },
+  ]);
   const embed = createCharacterEmbed({
     ...character.toObject(),
     series: [],
@@ -50,13 +57,23 @@ const QuizCommand: Command<QuizCommandContext> = async (context): Promise<any> =
       await user.save();
       return answer.reply(
         'Congratulations! Your guess was correct',
-        { embed: createCharacterEmbed(character.toObject()) },
+        {
+          embed: createCharacterEmbed({
+            ...character.toObject(),
+            stars: getCharacterStarRating(character.popularity),
+          }),
+        },
       );
     }
 
     throw new Error('');
   } catch (err) {
-    return new ErrorResponse(context, 'No correct answers...');
+    return message.channel.send('No correct answers...', {
+      embed: createCharacterEmbed({
+        ...character.toObject(),
+        stars: getCharacterStarRating(character.popularity),
+      }),
+    });
   }
 };
 
