@@ -40,11 +40,14 @@ const SetBannerCommand: Command<Context> = async (context): Promise<any> => {
       },
     ),
     ...(banner ? [UserRoll.deleteMany({ drop: banner.featured })] : []),
-    new Banner({
-      featured: character._id,
-    }).save(),
   ]);
+
+  await new Banner({
+    featured: character._id,
+  }).save();
+
   const embed = createCharacterEmbed(character.toObject());
+
   return message.reply(`Banner for "${character.name}" set`, { embed });
 };
 
