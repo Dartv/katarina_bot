@@ -24,7 +24,7 @@ module.exports = {
       repo: 'git@github.com:Dartv/katarina_bot.git',
       path: '/opt/pm2/katarina',
       max_memory_restart: '600M',
-      'pre-deploy': 'git reset --hard HEAD',
+      'pre-deploy': 'git clean  -d  -f . && git reset --hard HEAD',
       'post-deploy': 'rm -rf dist node_modules && npm i && npm run build && pm2 startOrRestart ecosystem.config.js --env production --update-env',
     },
   },
