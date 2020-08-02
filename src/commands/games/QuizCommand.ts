@@ -84,10 +84,10 @@ QuizCommand.config = {
   description: 'Guess the series by character',
   group: CommandGroupName.GAMES,
   middleware: [
-    withInMemoryCooldown(async () => ({
+    withInMemoryCooldown(async ({ message }) => ({
       max: 1,
       window: 15,
-      userId: 'quiz',
+      userId: message.guild.id,
     })),
     injectUser(),
     async (next, context: QuizCommandContext) => {
