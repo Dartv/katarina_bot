@@ -94,7 +94,7 @@ QuizCommand.config = {
       const initialCorrectGuesses = context.user.correctQuizGuesses;
       const result = await next(context);
 
-      context.cooldowns.delete(context.message.author.id);
+      context.cooldowns.delete(context.message.guild.id);
       // if user's correct quiz guesses increased
       // it means he guessed correctly
       if (initialCorrectGuesses < context.user.correctQuizGuesses) {
