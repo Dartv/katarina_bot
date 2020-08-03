@@ -28,7 +28,7 @@ export const getCharacterStarRating = (popularity: number): CharacterStar => {
 export const getPopularityRangeByStarRating = (stars: CharacterStar): [number, number] => {
   switch (clamp(CharacterStar.TWO_STAR, CharacterStar.FIVE_STAR, stars)) {
     case CharacterStar.FIVE_STAR:
-      return [PopularityThreshold.FIVE_STAR, -Infinity];
+      return [1, PopularityThreshold.FIVE_STAR];
     case CharacterStar.FOUR_STAR:
       return [PopularityThreshold.FIVE_STAR, PopularityThreshold.FOUR_STAR];
     case CharacterStar.THREE_STAR:

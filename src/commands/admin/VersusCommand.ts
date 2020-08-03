@@ -42,7 +42,7 @@ export const VersusCommand: Command<VersusCommandContext> = async (context): Pro
     },
   ]);
 
-  if (!characters.length) {
+  if (characters.length < 2) {
     return new ErrorResponse(context, 'No characters found');
   }
 
