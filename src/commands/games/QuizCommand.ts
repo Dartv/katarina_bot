@@ -91,10 +91,15 @@ QuizCommand.config = {
     })),
     injectUser(),
     async (next, context: QuizCommandContext) => {
+      const initialCorrectGuesses = context.user.correctQuizGuesses;
       const result = await next(context);
 
       context.cooldowns.delete(context.message.author.id);
-      context.client.emitter.emit('mission', MissionCode.QUIZ_DAILY, result, context);
+      // if user's correct quiz guesses increased
+      // it means he guessed correctly
+      if (initialCorrectGuesses < context.user.correctQuizGuesses) {
+        context.client.emitter.emit('mission', MissionCode.QUIZ_DAILY, result, context);
+      }
 
       return result;
     },
