@@ -153,6 +153,7 @@ export enum Emoji {
   STAR_DEFAULT = '⭐️',
   STAR_FULL = '★',
   STAR_EMPTY = '☆',
+  COOL_CHAMP = '<:CoolChamp:685274406829817945>',
 }
 
 export const PITY_ROLLS = 100;
@@ -207,3 +208,5 @@ export enum PriceTable {
   SET_WAIFU = 100,
   SET_QUOTE = 100,
 }
+
+export const TEST_GUILD_IDS = ['557804417550909440', '362966121319759882'];
