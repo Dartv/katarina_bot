@@ -26,6 +26,7 @@ export const Trigger = {
   QUIZ: ['quiz'],
   VERSUS: ['versus'],
   SETTINGS: ['settings'],
+  GIFT: ['gift'],
 };
 
 export enum CommandGroupName {
@@ -160,6 +161,7 @@ export const PITY_ROLLS = 100;
 
 export enum LocalParameterType {
   DB_USER = 'db user',
+  DB_MEMBER = 'db member',
 }
 export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = {
   ...ParameterTypes,
