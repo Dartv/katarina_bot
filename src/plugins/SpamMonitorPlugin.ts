@@ -17,7 +17,7 @@ export const SpamMonitorPlugin: Plugin = (client) => {
       const key = message.channel.id;
 
       if (CHANNEL_IDS.includes(key)) {
-        if (message.attachments.size || /https?/.test(message.content)) {
+        if (message.attachments.size || /https?/g.test(message.content)) {
           return;
         }
 
