@@ -4,7 +4,8 @@ import { Plugin } from '../types';
 
 const CHANNEL_IDS = ['362966121848111105', '557805526206119939', '620373848801411082'];
 const THRESHOLD = 2;
-const cache: Map<string, Snowflake[]> = new Map();
+const CLEAR_INTERVAL = 1 * 60 * 60 * 1000;
+const cache: Map<Snowflake, Set<Snowflake>> = new Map();
 
 export const SpamMonitorPlugin: Plugin = (client) => {
   client.on('message', async (message) => {
@@ -13,23 +14,28 @@ export const SpamMonitorPlugin: Plugin = (client) => {
         return;
       }
 
-      if (CHANNEL_IDS.includes(message.channel.id)) {
-        if (message.attachments.size) {
+      const key = message.channel.id;
+
+      if (CHANNEL_IDS.includes(key)) {
+        if (message.attachments.size || /https?/.test(message.content)) {
           return;
         }
 
         if (message.content.length) {
-          const key = message.author.id;
-          const ids = (cache.get(key) || []).concat(message.id);
+          if (!cache.has(key)) {
+            cache.set(key, new Set());
+          }
 
-          if (ids.length >= THRESHOLD) {
+          const ids = cache.get(key);
+
+          ids.add(message.id);
+
+          if (ids.size >= THRESHOLD) {
             cache.delete(key);
             await message
               .reply('please stop spamming in this channel 🚫')
-              .then(m => client.setTimeout(() => m.delete(), 5000));
-            await message.channel.bulkDelete(ids);
-          } else {
-            cache.set(key, ids);
+              .then(msg => client.setTimeout(() => msg.delete(), 5000));
+            await message.channel.bulkDelete(Array.from(ids));
           }
         }
       }
@@ -40,5 +46,5 @@ export const SpamMonitorPlugin: Plugin = (client) => {
 
   client.setInterval(() => {
     cache.clear();
-  }, 60000);
+  }, CLEAR_INTERVAL);
 };
