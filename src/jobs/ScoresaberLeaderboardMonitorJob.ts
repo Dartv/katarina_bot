@@ -135,6 +135,5 @@ export const ScoresaberLeaderboardMonitorJob: Job = (agenda, client) => {
     }
   });
 
-  // agenda.every('30 minutes', JOB_NAME);
-  agenda.now(JOB_NAME);
+  agenda.every('30 minutes', JOB_NAME);
 };
