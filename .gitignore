@@ -7,3 +7,4 @@ dist
 .DS_Store
 .cached-messages
 npm-debug.log
+assets/*
