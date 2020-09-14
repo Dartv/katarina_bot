@@ -10,6 +10,24 @@ const GuildSchema = new Schema({
     type: String,
     required: true,
   },
+  services: {
+    type: {
+      scoresaber: {
+        type: {
+          playerIds: {
+            type: [{
+              type: String,
+              required: true,
+            }],
+            default: [],
+          },
+        },
+      },
+    },
+    default: {},
+  },
 }, options);
+
+GuildSchema.index({ discordId: 1 });
 
 export const Guild = model<GuildDocument, GuildModel>(ModelName.GUILD, GuildSchema);

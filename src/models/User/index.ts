@@ -53,6 +53,15 @@ export const UserSchema = new Schema({
     }),
     default: DefaultUserSettings,
   },
+  services: {
+    type: {
+      scoresaber: {
+        playerId: String,
+        required: true,
+      },
+    },
+    default: {},
+  },
 }, options);
 
 UserSchema.index({ discordId: 1 });
