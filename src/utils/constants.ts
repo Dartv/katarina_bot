@@ -27,6 +27,7 @@ export const Trigger = {
   VERSUS: ['versus'],
   SETTINGS: ['settings'],
   GIFT: ['gift'],
+  ADD_PLAYER: ['addplayer'],
 };
 
 export enum CommandGroupName {
@@ -212,3 +213,10 @@ export enum PriceTable {
 }
 
 export const TEST_GUILD_IDS = ['557804417550909440', '362966121319759882'];
+
+export enum HTTPMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}

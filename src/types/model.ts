@@ -20,6 +20,12 @@ export interface DocumentBase {
   updatedAt: Date;
 }
 
+export interface UserScoresaberService {
+  playerId: string;
+}
+export interface UserServices {
+  scoresaber?: UserScoresaberService;
+}
 export interface UserBase extends DocumentBase {
   discordId: string;
   username: string;
@@ -31,6 +37,7 @@ export interface UserBase extends DocumentBase {
   currency: number;
   correctQuizGuesses: number;
   settings: UserSettings;
+  services: UserServices;
 }
 export interface UserDocument extends Document, UserBase {
   _id: Types.ObjectId;
@@ -127,8 +134,15 @@ export interface AchievementDocument extends Document, AchievementBase {
 }
 export type AchievementModel = Model<AchievementDocument>;
 
+export interface GuildScoresaberService {
+  playerIds: string[];
+}
+export interface GuildServices {
+  scoresaber?: GuildScoresaberService;
+}
 export interface GuildBase extends DocumentBase {
   discordId: string;
+  services: GuildServices;
 }
 export interface GuildDocument extends Document, GuildBase {
   _id: Types.ObjectId;
