@@ -19,7 +19,7 @@ interface Player {
 const JOB_NAME = 'scoresaber leaderboard monitor';
 const CHANNEL_ID = '620373848801411082';
 const LEADERBOARD_URL = 'https://scoresaber.com/global?country=AM,AZ,BY,KG,KZ,MD,RU,TJ,UA,UZ';
-const LEADERBOARD_PATH = path.join(process.cwd(), 'assets', 'leaderboard.json');
+const LEADERBOARD_PATH = path.join(process.cwd(), 'leaderboard.json');
 
 const writeFileAsync = promisify(writeFile);
 const readFileAsync = promisify(readFile);
