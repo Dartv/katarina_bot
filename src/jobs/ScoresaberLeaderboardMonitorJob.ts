@@ -3,9 +3,11 @@ import { readFile, writeFile } from 'fs';
 import puppeteer from 'puppeteer';
 import { promisify } from 'util';
 import path from 'path';
+import { MarkdownFormatter } from 'diskat';
 
 import { Job } from '../types';
 import { diff } from '../utils/common';
+import { ScoresaberAPI } from '../services/scoresaber';
 
 interface Player {
   id: string;
@@ -14,6 +16,8 @@ interface Player {
   avatarUrl: string;
   country: string;
   rank: number | string;
+  globalRank: number | string;
+  countryRank: number | string;
 }
 
 const JOB_NAME = 'scoresaber leaderboard monitor';
@@ -39,6 +43,7 @@ export const ScoresaberLeaderboardMonitorJob: Job = (agenda, client) => {
 
     try {
       const leaderboard: Player[] = await getLeaderboard();
+      const scoresaber = new ScoresaberAPI();
 
       browser = await puppeteer.launch({
         args: ['--disable-gpu', '--no-sandbox', '--single-process', '--no-zygote'],
@@ -68,24 +73,19 @@ export const ScoresaberLeaderboardMonitorJob: Job = (agenda, client) => {
             avatarUrl,
             country: flagUrl.match(/\/flags\/(.+)\.png/)?.[1],
             rank: i + 1,
+            globalRank: '?',
+            countryRank: '?',
           };
         }),
       );
 
-      await writeFileAsync(LEADERBOARD_PATH, JSON.stringify(players), 'utf8');
-
-      // skip on first run
-      if (!leaderboard.length) {
-        return;
-      }
-
-      const { added, removed } = diff(
+      const { added } = diff(
         players,
         leaderboard,
         (a, b) => a.id === b.id && a.rank === b.rank,
       );
 
-      const changes = added.map((current) => {
+      const promises = added.map(async (current) => {
         const mock: Player = {
           id: current.id,
           name: current.name,
@@ -93,29 +93,49 @@ export const ScoresaberLeaderboardMonitorJob: Job = (agenda, client) => {
           pp: '?',
           avatarUrl: current.avatarUrl,
           country: current.country,
+          globalRank: '?',
+          countryRank: '?',
         };
-        const previous = removed.find(prev => prev.id === current.id) || mock;
+        const previous = leaderboard.find(prev => prev.id === current.id) || mock;
+        const { playerInfo: { rank, countryRank } } = await scoresaber.fetchPlayerBasic(current.id);
 
-        return [previous, current];
+        return [previous, { ...current, globalRank: rank, countryRank }];
       });
+
+      const changes: Player[][] = await Promise.all(promises);
+      const playersWithRanks = players.map((player) => ({
+        ...player,
+        ...changes.find(([, curr]) => curr.id === player.id)?.[1],
+      }));
+
+      await writeFileAsync(
+        LEADERBOARD_PATH,
+        JSON.stringify(playersWithRanks),
+        'utf8',
+      );
 
       if (changes.length) {
         const embed = new MessageEmbed()
           .setTitle('📈 Leaderboard changed')
           .setColor(Constants.Colors.BLUE)
+          .setURL(LEADERBOARD_URL)
           .addField(
             'Player',
-            changes.map(([, curr]) => `:flag_${curr.country}: ${curr.name}`),
+            changes.map(([, curr]) => `:flag_${curr.country}: ${curr.name}`).join('\n\n\n'),
             true,
           )
           .addField(
             'Rank',
-            changes.map(([prev, curr]) => `${prev.rank} -> ${curr.rank}`),
+            changes.map(([prev, curr]) => [
+              `${MarkdownFormatter.bold('Leaderboard')}: ${prev.rank} -> ${curr.rank}`,
+              `${MarkdownFormatter.bold('Country')}: ${prev.countryRank} -> ${curr.countryRank}`,
+              `${MarkdownFormatter.bold('Global')}: ${prev.globalRank} -> ${curr.globalRank}`,
+            ].join('\n')),
             true,
           )
           .addField(
             'pp',
-            changes.map(([prev, curr]) => `${prev.pp} -> ${curr.pp}`),
+            changes.map(([prev, curr]) => `${prev.pp} -> ${curr.pp}`).join('\n\n\n'),
             true,
           );
         const channel = client.channels.cache.get(CHANNEL_ID) as TextChannel;
