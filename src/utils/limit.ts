@@ -5,4 +5,5 @@ const createAsyncQueue = (intervalCap: number, interval: number): PQueue['add'] 
   return queue.add.bind(queue);
 };
 
-export const limitScoresaberApiCalls = createAsyncQueue(5, 1000);
+// scoresaber api limit
+export const limitScoresaberApiCalls = createAsyncQueue(80, 1 * 60 * 1000);
