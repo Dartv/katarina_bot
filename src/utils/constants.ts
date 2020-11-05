@@ -28,6 +28,7 @@ export const Trigger = {
   SETTINGS: ['settings'],
   GIFT: ['gift'],
   ADD_PLAYER: ['addplayer'],
+  GUILD_SETTINGS: ['guildsettings'],
 };
 
 export enum CommandGroupName {
@@ -36,6 +37,7 @@ export enum CommandGroupName {
   FUN = 'Fun',
   UTILITY = 'Utility',
   ADMIN = 'Admin',
+  GUILD = 'Guild',
 }
 
 export enum ModelName {
@@ -171,12 +173,6 @@ export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = 
 
 export const DAILY_CURRENCY = 500;
 
-export enum ChannelName {
-  WORLD_BOSS_ARENA = 'world-boss-arena',
-  BATTLE_ROYALE = 'waifu-royale',
-  WAIFU_WARS = 'waifu-wars',
-}
-
 export const DamageByStar: Record<CharacterStar, number> = {
   [CharacterStar.ONE_STAR]: 0,
   [CharacterStar.TWO_STAR]: 2,
@@ -219,4 +215,10 @@ export enum HTTPMethod {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+}
+
+export enum GuildSetting {
+  BOSS_CHANNEL = 'bossChannel',
+  WARS_CHANNEL = 'warsChannel',
+  ROYALE_CHANNEL = 'royaleChannel',
 }

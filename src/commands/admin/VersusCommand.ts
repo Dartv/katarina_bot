@@ -1,15 +1,14 @@
 import { Command } from 'diskat';
-import { TextChannel } from 'discord.js';
 
 import { Context } from '../../types';
 import {
   CommandGroupName,
   Trigger,
   ParameterType,
-  ChannelName,
+  GuildSetting,
 } from '../../utils/constants';
 import { expectOwner } from '../middleware/expectOwner';
-import { Character } from '../../models';
+import { Character, Guild } from '../../models';
 import {
   getPopularityRangeByStarRating,
   adjustStars,
@@ -46,26 +45,32 @@ export const VersusCommand: Command<VersusCommandContext> = async (context): Pro
     return new ErrorResponse(context, 'No characters found');
   }
 
-  const channels = client.channels.cache.filter(
-    (channel) => isTextChannel(channel) && channel.name.startsWith(ChannelName.WAIFU_WARS)
-  );
-  await Promise.all(channels.map(async (channel: TextChannel) => {
-    try {
-      await channel.send('Who is a better waifu?');
-      const messages = await Promise.all(
-        characters.map((character) => {
-          const embed = createCharacterEmbed({
-            ...character.toObject(),
-            stars: getCharacterStarRating(character.popularity),
-          });
-          return channel.send('', { embed });
-        })
-      );
-      await Promise.all(messages.map(msg => msg.react('❤️')));
-    } catch (err) {
-      client.logger.error(`Not able to start waifu wars for guild ${channel.guild.id}`, err);
+  const cursor = Guild.find(
+    { [`settings.${GuildSetting.WARS_CHANNEL}`]: { $ne: null } },
+    { _id: 1, [`settings.${GuildSetting.WARS_CHANNEL}`]: 1 },
+  ).cursor();
+
+  await cursor.eachAsync(async (guild) => {
+    const channel = client.channels.cache.get(guild.settings.warsChannel);
+    if (isTextChannel(channel)) {
+      try {
+        await channel.send('Who is a better waifu?');
+        const messages = await Promise.all(
+          characters.map((character) => {
+            const embed = createCharacterEmbed({
+              ...character.toObject(),
+              stars: getCharacterStarRating(character.popularity),
+            });
+            return channel.send('', { embed });
+          })
+        );
+        await Promise.all(messages.map(msg => msg.react('❤️')));
+      } catch (err) {
+        client.logger.error(`Not able to start waifu wars for guild ${channel.guild.id}`);
+        client.logger.error(err);
+      }
     }
-  }));
+  });
 
   return null;
 };

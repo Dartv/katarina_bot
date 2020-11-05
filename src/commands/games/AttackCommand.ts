@@ -11,7 +11,6 @@ import {
 import {
   Trigger,
   CommandGroupName,
-  ChannelName,
   DamageByStar,
 } from '../../utils/constants';
 import { injectUser } from '../middleware';
@@ -66,7 +65,7 @@ const applyCooldown = (): Middleware<AttackCommandContext, AttackCommandContext>
   return next(context);
 };
 
-const attackWorldBoss = async (context: AttackCommandContext): Promise<any> => {
+const AttackCommand: Command<AttackCommandContext> = async (context): Promise<any> => {
   const {
     user,
     guild,
@@ -123,25 +122,23 @@ const attackWorldBoss = async (context: AttackCommandContext): Promise<any> => {
   return null;
 };
 
-const AttackCommand: Command<AttackCommandContext> = async (context) => {
-  const { message } = context;
-  const { channel } = message;
-
-  if (isTextChannel(channel)) {
-    switch (channel.name) {
-      case ChannelName.WORLD_BOSS_ARENA:
-        return attackWorldBoss(context);
-      default: return null;
-    }
-  }
-
-  return null;
-};
-
 AttackCommand.config = {
   triggers: Trigger.ATTACK,
   description: 'Attack World Boss (World Boss channel only)',
   middleware: [
+    async (next, context: Context & { guild: GuildDocument }) => {
+      const { guild, message: { channel } } = context;
+
+      if (!guild.settings.bossChannel) {
+        return new ErrorResponse(context, 'World Boss is not configured. Ask your instance admin to configure it');
+      }
+
+      if (isTextChannel(channel) && guild.settings.bossChannel === channel.id) {
+        return next(context);
+      }
+
+      return new ErrorResponse(context, 'Not a World Boss channel');
+    },
     injectUser(),
     injectBoss(),
     applyCooldown(),

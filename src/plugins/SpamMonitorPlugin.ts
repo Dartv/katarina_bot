@@ -2,7 +2,7 @@ import { Snowflake } from 'discord.js';
 
 import { Plugin } from '../types';
 
-const CHANNEL_IDS = ['362966121848111105', '557805526206119939', '620373848801411082'];
+const CHANNEL_IDS = ['557805526206119939', '620373848801411082'];
 const THRESHOLD = 2;
 const CLEAR_INTERVAL = 1 * 60 * 60 * 1000;
 const cache: Map<Snowflake, Set<Snowflake>> = new Map();

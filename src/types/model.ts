@@ -8,6 +8,7 @@ import type {
   BattleStatus,
   BattleType,
   MissionType,
+  GuildSetting,
 } from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
 import { CharacterEmbedOptions } from './common';
@@ -140,9 +141,11 @@ export interface GuildScoresaberService {
 export interface GuildServices {
   scoresaber?: GuildScoresaberService;
 }
+export type GuildSettings = Record<GuildSetting, string | null>;
 export interface GuildBase extends DocumentBase {
   discordId: string;
   services: GuildServices;
+  settings: GuildSettings;
 }
 export interface GuildDocument extends Document, GuildBase {
   _id: Types.ObjectId;

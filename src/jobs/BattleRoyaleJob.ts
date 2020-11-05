@@ -11,7 +11,7 @@ import {
   User,
   UserCharacter,
 } from '../models';
-import { BattleStatus, ChannelName } from '../utils/constants';
+import { BattleStatus } from '../utils/constants';
 import { isTextChannel } from '../utils/discord-common';
 import { createParticipantEmbed, fight } from '../utils/character';
 
@@ -28,9 +28,14 @@ export const BattleRoyaleJob: Job = (agenda, client) => {
         .eachAsync(async (battle) => {
           try {
             const guild = client.guilds.cache.get((battle.guild as GuildDocument).discordId);
-            const channel = guild.channels.cache.find(({ name }) => name === ChannelName.BATTLE_ROYALE);
 
-            if (!channel || !isTextChannel(channel)) {
+            if (!guild) {
+              throw new Error(`No guild found for battle ${battle.id}`);
+            }
+
+            const channel = guild.channels.cache.get((battle.guild as GuildDocument).settings.royaleChannel);
+
+            if (!isTextChannel(channel)) {
               throw new Error(`No channel found for battle ${battle.id}`);
             }
 
