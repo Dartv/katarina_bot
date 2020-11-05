@@ -16,6 +16,8 @@ export const MissionPlugin: Plugin = (client) => {
         return;
       }
 
+      client.logger.info(`Received mission ${code} for user ${user.id}`);
+
       let mission = await Mission.findOne({ code, user: user._id });
 
       if (!mission) {
@@ -27,6 +29,7 @@ export const MissionPlugin: Plugin = (client) => {
       }
 
       if (mission.completedAt) {
+        client.logger.info(`Mission ${code} for user ${user.id} is already completed`);
         return;
       }
 
@@ -95,7 +98,7 @@ export const MissionPlugin: Plugin = (client) => {
           user.currency += descriptor.reward;
           await user.save();
 
-          if (!descriptor.silent) {
+          if (!context.silent) {
             await new SuccessResponse({
               title: 'Mission Completed',
               modify: (embed) => embed

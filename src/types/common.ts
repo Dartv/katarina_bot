@@ -36,6 +36,7 @@ export interface Participant {
 
 export interface MissionEventContext extends Context {
   user?: UserDocument;
+  silent?: boolean;
 }
 
 export interface AchievementEventContext extends Context {
@@ -50,7 +51,6 @@ export interface Events {
 export interface MissionDescriptor {
   description: string;
   reward: number;
-  silent: boolean;
 }
 
 export type CommandConfigurator<T extends Context = Context, R = unknown> = DiskatCommandConfigurator<T, R, Client>;

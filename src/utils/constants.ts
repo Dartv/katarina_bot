@@ -74,37 +74,30 @@ export const Missions: { [key in MissionCode]: MissionDescriptor } = {
   [MissionCode.CURRENCY_DAILY]: {
     description: 'acquire daily coins',
     reward: 25,
-    silent: false,
   },
   [MissionCode.ROLL_DAILY]: {
     description: 'roll 3 characters',
     reward: 100,
-    silent: false,
   },
   [MissionCode.BATTLE_ROYALE_DAILY]: {
     description: 'participate in a waifu royale',
     reward: 100,
-    silent: false,
   },
   [MissionCode.DUEL_DAILY]: {
     description: 'fight in a duel',
     reward: 50,
-    silent: false,
   },
   [MissionCode.QUIZ_DAILY]: {
     description: 'guess a character',
     reward: 50,
-    silent: false,
   },
   [MissionCode.VERSUS_DAILY]: {
     description: 'vote in Waifu Wars',
     reward: 50,
-    silent: true,
   },
   [MissionCode.ALL_COMPLETE_DAILY]: {
     description: 'complete all missions',
     reward: 150,
-    silent: false,
   },
 };
 
