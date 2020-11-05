@@ -50,4 +50,4 @@ export const awaitAnswer = async (
   }
 };
 
-export const isTextChannel = (channel: Channel): channel is TextChannel => channel.type === 'text';
+export const isTextChannel = (channel: Channel): channel is TextChannel => channel?.type === 'text';

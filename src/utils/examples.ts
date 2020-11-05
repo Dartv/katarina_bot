@@ -1,3 +1,4 @@
+import { GuildSettingOption } from '../commands/guild/GuildSettingsCommand';
 import { Client } from '../services/client';
 import { Trigger, UserSettingName, UserSetting } from './constants';
 
@@ -59,6 +60,8 @@ export const getExamplesByCommand = (commandName: string, client: Client): strin
       return [''];
     case Trigger.SETTINGS[0]:
       return [`${UserSettingName.DISPLAY_ROLL_PRICE} ${UserSetting.OFF}`];
+    case Trigger.GUILD_SETTINGS[0]:
+      return [`${GuildSettingOption.BOSS_CHANNEL} #world-boss`];
     default:
       return [];
   }

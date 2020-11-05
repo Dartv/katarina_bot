@@ -1,7 +1,7 @@
 import { SchemaOptions, Schema, model } from 'mongoose';
 
 import type { GuildDocument, GuildModel } from '../../types';
-import { ModelName } from '../../utils/constants';
+import { GuildSetting, ModelName } from '../../utils/constants';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -13,7 +13,7 @@ const GuildSchema = new Schema({
   services: {
     type: {
       scoresaber: {
-        type: {
+        type: new Schema({
           playerIds: {
             type: [{
               type: String,
@@ -21,9 +21,26 @@ const GuildSchema = new Schema({
             }],
             default: [],
           },
-        },
+        }),
       },
     },
+    default: {},
+  },
+  settings: {
+    type: new Schema({
+      [GuildSetting.BOSS_CHANNEL]: {
+        type: String,
+        default: null,
+      },
+      [GuildSetting.WARS_CHANNEL]: {
+        type: String,
+        default: null,
+      },
+      [GuildSetting.ROYALE_CHANNEL]: {
+        type: String,
+        default: null,
+      },
+    }),
     default: {},
   },
 }, options);

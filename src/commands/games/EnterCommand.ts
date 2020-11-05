@@ -5,7 +5,6 @@ import { Context, GuildDocument, UserDocument } from '../../types';
 import {
   Trigger,
   CommandGroupName,
-  ChannelName,
   BattleType,
   BattleStatus,
   BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES,
@@ -21,7 +20,7 @@ interface EnterCommandContext extends Context {
   user: UserDocument;
 }
 
-const enterBattleRoyale = async (context: EnterCommandContext): Promise<any> => {
+const EnterCommand: Command<EnterCommandContext> = async (context): Promise<any> => {
   const {
     user,
     guild,
@@ -79,31 +78,30 @@ const enterBattleRoyale = async (context: EnterCommandContext): Promise<any> => 
   }, context);
 };
 
-const EnterCommand: Command<EnterCommandContext> = async (context) => {
-  const { message } = context;
-
-  if (isTextChannel(message.channel)) {
-    switch (message.channel.name) {
-      case ChannelName.BATTLE_ROYALE:
-        return enterBattleRoyale(context);
-      default:
-    }
-  }
-
-  return null;
-};
-
 EnterCommand.config = {
   triggers: Trigger.ENTER,
   group: CommandGroupName.GAMES,
   description: 'Enter Waifu Royale (Waifu Royale channel only)',
   middleware: [
-    injectUser(),
-    withInMemoryCooldown<EnterCommandContext>(async ({ user }) => ({
-      userId: user.id,
+    withInMemoryCooldown<EnterCommandContext>(async ({ message }) => ({
+      userId: message.author.id,
       max: 1,
       window: 5,
     })),
+    async (next, context: Context & { guild: GuildDocument }) => {
+      const { message: { channel }, guild } = context;
+
+      if (!guild.settings.royaleChannel) {
+        return new ErrorResponse(context, 'Waifu Royale is not configured. Ask instance admin to configure it');
+      }
+
+      if (isTextChannel(channel) && guild.settings.royaleChannel === channel.id) {
+        return next(context);
+      }
+
+      return new ErrorResponse(context, 'Not a Waifu Royale channel');
+    },
+    injectUser(),
     async (next, context: EnterCommandContext) => {
       const result = await next(context);
 

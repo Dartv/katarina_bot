@@ -3,6 +3,7 @@ import {
   ParameterType,
   TypeResolver,
   expectGuild,
+  TypeResolverContext,
 } from 'diskat';
 
 import { Context } from '../../types';
@@ -35,9 +36,9 @@ DiceCommand.config = {
     {
       name: 'sides',
       description: 'number of dice sides (6 min)',
-      type: TypeResolver.compose(
+      type: TypeResolver.compose<TypeResolverContext<number>>(
         ParameterType.INTEGER,
-        (sides: number) => Math.max(MIN_SIDES, sides),
+        ({ value }) => Math.max(MIN_SIDES, value),
       ),
       optional: true,
       defaultValue: MIN_SIDES,

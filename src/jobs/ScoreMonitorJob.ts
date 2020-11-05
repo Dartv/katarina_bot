@@ -11,6 +11,7 @@ import { MarkdownFormatter } from 'diskat';
 import { Guild } from '../models';
 import { PlayerBasic, PlayerRecentScore, ScoresaberAPI } from '../services/scoresaber';
 import { Job } from '../types';
+import { isProd } from '../utils/environment';
 
 const JOB_NAME = 'monitor scoresaber players';
 const INTERVAL = 15;
@@ -83,5 +84,7 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
     }
   });
 
-  agenda.every(`${INTERVAL} minutes`, JOB_NAME);
+  if (isProd()) {
+    agenda.every(`${INTERVAL} minutes`, JOB_NAME);
+  }
 };

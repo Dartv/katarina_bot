@@ -1,7 +1,6 @@
-import { TextChannel } from 'discord.js';
 import { MarkdownFormatter } from 'diskat';
 
-import { ChannelName, Trigger } from '../utils/constants';
+import { GuildSetting, Trigger } from '../utils/constants';
 import { Guild, Boss } from '../models';
 import { Job } from '../types';
 import { isTextChannel } from '../utils/discord-common';
@@ -11,24 +10,28 @@ const JOB_NAME = 'world boss';
 export const BossJob: Job = (agenda, client) => {
   agenda.define(JOB_NAME, async (job, done) => {
     try {
-      const promises = client.channels.cache
-        // TODO: get channels from guild settings
-        .filter((channel) => isTextChannel(channel) && channel.name === ChannelName.WORLD_BOSS_ARENA)
-        .map(async (channel: TextChannel) => {
-          const guild = await Guild.findOne({ discordId: channel.guild.id });
-          if (guild) {
-            const boss = await Boss.spawn(guild._id);
-            const embed = boss.getEmbed();
-            const command = MarkdownFormatter.code(`${client.dispatcher.prefix}${Trigger.ATTACK[0]}`);
-            await channel.send(
-              `World Boss appears! Raise your weapons and attack by typing ${command}`,
-              { embed },
-            );
-            await boss.save();
-          }
-        });
+      const cursor = Guild.find(
+        { [`settings.${GuildSetting.BOSS_CHANNEL}`]: { $ne: null } },
+        { _id: 1, [`settings.${GuildSetting.BOSS_CHANNEL}`]: 1 },
+      ).cursor();
+      await cursor.eachAsync(async (guild) => {
+        const { settings: { bossChannel } } = guild;
+        const channel = client.channels.cache.get(bossChannel);
 
-      await Promise.all(promises);
+        if (isTextChannel(channel)) {
+          const boss = await Boss.spawn(guild._id);
+          const embed = boss.getEmbed();
+          const command = MarkdownFormatter.code(`${client.dispatcher.prefix}${Trigger.ATTACK[0]}`);
+          await channel.send(
+            `World Boss appears! Raise your weapons and attack by typing ${command}`,
+            { embed },
+          );
+          await boss.save();
+        } else {
+          console.warn(`boss channel ${bossChannel} of guild ${guild._id} not found`);
+        }
+      });
+
       done();
     } catch (err) {
       job.fail(err);

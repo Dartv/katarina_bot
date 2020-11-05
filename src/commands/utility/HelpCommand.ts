@@ -2,9 +2,9 @@ import {
   Command,
   ParameterDefinition,
   MarkdownFormatter,
-  ParameterType,
   TypeResolver,
   CommandObject,
+  TypeResolverContext,
 } from 'diskat';
 import { MessageEmbed, Constants } from 'discord.js';
 import Fuse from 'fuse.js';
@@ -116,8 +116,8 @@ HelpCommand.config = {
     {
       name: 'command',
       description: 'command name',
-      type: TypeResolver.catch(
-        async (value: string, message, client) => {
+      type: TypeResolver.catch<TypeResolverContext<string>>(
+        async ({ value, message, client }) => {
           const fuse = new Fuse(Array.from(client.commands.values()), {
             keys: ['name'],
           });
@@ -132,7 +132,7 @@ HelpCommand.config = {
 
           return null;
         },
-        ParameterType.COMMAND,
+        TypeResolver.Types.COMMAND,
       ),
       optional: true,
     },

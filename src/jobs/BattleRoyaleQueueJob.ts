@@ -1,15 +1,14 @@
 import { MarkdownFormatter } from 'diskat';
-import { TextChannel } from 'discord.js';
 import { subMinutes } from 'date-fns';
 
 import { Job, GuildDocument, UserDocument } from '../types';
 import { Battle, BattleParticipant } from '../models';
 import {
   BattleStatus,
-  ChannelName,
   BattleType,
   BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES,
 } from '../utils/constants';
+import { isTextChannel } from '../utils/discord-common';
 
 const JOB_NAME = 'BATTLE_ROYALE_QUEUE';
 
@@ -29,9 +28,14 @@ export const BattleRoyaleQueueJob: Job = (agenda, client) => {
         .eachAsync(async (battle) => {
           try {
             const guild = client.guilds.cache.get((battle.guild as GuildDocument).discordId);
-            const channel = guild.channels.cache.find(({ name }) => name === ChannelName.BATTLE_ROYALE) as TextChannel;
 
-            if (!channel) {
+            if (!guild) {
+              throw new Error(`No guild found for battle ${battle.id}`);
+            }
+
+            const channel = guild.channels.cache.get((battle.guild as GuildDocument).settings.royaleChannel);
+
+            if (!isTextChannel(channel)) {
               throw new Error(`No channel found for battle ${battle.id}`);
             }
 
