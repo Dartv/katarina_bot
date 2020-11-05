@@ -8,13 +8,7 @@ export const injectUser: InjectUserMiddleware = (config) => async (next, context
     ({ user: author } = await config(context));
   }
 
-  const user = await User.findOneAndUpdate({ discordId: author.id }, {
-    $set: {
-      discordId: author.id,
-      username: author.username,
-      discriminator: author.discriminator,
-    },
-  }, { upsert: true });
+  const user = await User.register(author);
 
   return next({ ...context, user });
 };

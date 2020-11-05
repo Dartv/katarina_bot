@@ -1,5 +1,10 @@
 import { Types, Model, Document } from 'mongoose';
-import { MessageEmbed, GuildMember, Guild } from 'discord.js';
+import {
+  MessageEmbed,
+  GuildMember,
+  Guild,
+  User,
+} from 'discord.js';
 
 import type {
   UserSettingName,
@@ -52,7 +57,9 @@ export interface UserDocument extends Document, UserBase {
   addFav: (this: UserDocument, name: string) => Promise<CharacterDocument>;
   delFav: (this: UserDocument, name: string) => Promise<CharacterDocument>;
 }
-export type UserModel = Model<UserDocument>;
+export interface UserModel extends Model<UserDocument> {
+  register: (this: UserModel, user: User) => Promise<UserDocument>;
+}
 export interface UserSearchCharactersOptions {
   name?: string;
   series?: string;
