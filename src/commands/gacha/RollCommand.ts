@@ -91,7 +91,7 @@ RollCommand.config = {
   middleware: [
     withInMemoryCooldown(async ({ message }) => ({
       max: 1,
-      window: 2,
+      window: 5,
       userId: message.author.id,
     })),
     branch(
