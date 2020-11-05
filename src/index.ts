@@ -1,3 +1,5 @@
+import Agenda from 'agenda';
+
 import { connectDB } from './services/mongo';
 import { Client } from './services/client';
 import { logger } from './services/logger';
@@ -9,6 +11,8 @@ const {
   BOT_PREFIX,
   BOT_TOKEN,
 } = process.env;
+
+let agenda: Agenda;
 
 connectDB()
   .then(() => {
@@ -53,3 +57,14 @@ connectDB()
     logger.fatal(err);
     process.exit(1);
   });
+
+async function gracefulShutdown() {
+  if (agenda) {
+    await agenda.stop();
+  }
+
+  process.exit(0);
+}
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
