@@ -10,7 +10,7 @@ import {
 } from '../../types';
 import { Trigger, MissionCode, CommandGroupName } from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
-import { Character } from '../../models';
+import { Character, User } from '../../models';
 import { createCharacterEmbed, getCharacterStarRating } from '../../utils/character';
 
 interface QuizCommandContext extends WithInMemoryCooldownContext {
@@ -22,7 +22,7 @@ const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, 
 const GUESS_REWARD = 10;
 
 const QuizCommand: Command<QuizCommandContext> = async (context) => {
-  const { message, user } = context;
+  const { message } = context;
   const [character] = await Character.random(1, [
     {
       $match: {
@@ -54,9 +54,25 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
     ).then(messages => messages.first());
 
     if (answer) {
+      const user = await User.register(answer.author);
+
       user.correctQuizGuesses += 1;
       user.currency += GUESS_REWARD;
+
       await user.save();
+
+      context.client.emitter.emit(
+        'mission',
+        MissionCode.QUIZ_DAILY,
+        null,
+        // reassign user since the one who answered could be a different user
+        {
+          ...context,
+          user,
+          message: answer,
+        },
+      );
+
       return answer.reply(
         `Congratulations! Your guess was correct.\nYou received ${GUESS_REWARD} 💎`,
         {
@@ -91,15 +107,9 @@ QuizCommand.config = {
     })),
     injectUser(),
     async (next, context: QuizCommandContext) => {
-      const initialCorrectGuesses = context.user.correctQuizGuesses;
       const result = await next(context);
 
       context.cooldowns.delete(context.message.guild.id);
-      // if user's correct quiz guesses increased
-      // it means he guessed correctly
-      if (initialCorrectGuesses < context.user.correctQuizGuesses) {
-        context.client.emitter.emit('mission', MissionCode.QUIZ_DAILY, result, context);
-      }
 
       return result;
     },
