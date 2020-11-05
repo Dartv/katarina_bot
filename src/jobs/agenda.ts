@@ -7,7 +7,7 @@ import { Client } from '../services/client';
 import * as jobs from '.';
 import { Job } from '../types';
 
-export const initJobs = (client: Client): void => {
+export const initJobs = (client: Client): Agenda => {
   const agenda = new Agenda({
     mongo: mongoose.connection.db,
   });
@@ -47,4 +47,6 @@ export const initJobs = (client: Client): void => {
   agenda.on('fail', (err, job: Agenda.Job) => {
     client.logger.error(`Failed job "${job.attrs.name}"`, err);
   });
+
+  return agenda;
 };

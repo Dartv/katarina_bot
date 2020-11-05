@@ -18,7 +18,7 @@ import {
 import { isTextChannel } from '../../utils/discord-common';
 import { ErrorResponse } from '../responses';
 
-interface VersusCommandContext extends Context {
+export interface VersusCommandContext extends Context {
   args: {
     stars: number;
   };
