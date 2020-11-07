@@ -74,31 +74,31 @@ export enum MissionCode {
 export const Missions: { [key in MissionCode]: MissionDescriptor } = {
   [MissionCode.CURRENCY_DAILY]: {
     description: 'acquire daily coins',
-    reward: 25,
+    reward: 10,
   },
   [MissionCode.ROLL_DAILY]: {
-    description: 'roll 3 characters',
-    reward: 100,
+    description: 'roll a character',
+    reward: 30,
   },
   [MissionCode.BATTLE_ROYALE_DAILY]: {
     description: 'participate in a waifu royale',
-    reward: 100,
+    reward: 30,
   },
   [MissionCode.DUEL_DAILY]: {
     description: 'fight in a duel',
-    reward: 50,
+    reward: 15,
   },
   [MissionCode.QUIZ_DAILY]: {
     description: 'guess a character',
-    reward: 50,
+    reward: 15,
   },
   [MissionCode.VERSUS_DAILY]: {
     description: 'vote in Waifu Wars',
-    reward: 50,
+    reward: 15,
   },
   [MissionCode.ALL_COMPLETE_DAILY]: {
     description: 'complete all missions',
-    reward: 150,
+    reward: 100,
   },
 };
 
@@ -165,7 +165,9 @@ export const ParameterType: typeof ParameterTypes & typeof LocalParameterType = 
   ...LocalParameterType,
 };
 
-export const DAILY_CURRENCY = 500;
+export const DAILY_CURRENCY = 150;
+export const QUIZ_GUESS_CURRENCY = 10;
+export const BATTLE_ROYALE_WIN_CURRENCY = 100;
 
 export const DamageByStar: Record<CharacterStar, number> = {
   [CharacterStar.ONE_STAR]: 0,
