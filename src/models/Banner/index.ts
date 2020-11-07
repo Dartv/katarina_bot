@@ -7,6 +7,7 @@ import {
 import { BannerDocument, BannerModel } from '../../types';
 import { ModelName } from '../../utils/constants';
 import * as statics from './statics';
+import * as methods from './methods';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -21,6 +22,6 @@ const BannerSchema = new Schema({
 
 BannerSchema.index({ endedAt: 1, character: 1 });
 
-Object.assign(BannerSchema, { statics });
+Object.assign(BannerSchema, { statics, methods });
 
 export const Banner = model<BannerDocument, BannerModel>(ModelName.BANNER, BannerSchema);

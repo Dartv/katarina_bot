@@ -7,10 +7,10 @@ export const isDocumentArray = <
   U extends Types.DocumentArray<T>
 >(value: unknown): value is U => value instanceof Types.DocumentArray;
 
-export const getDocumentId = <T extends Document>(character: Types.ObjectId | T): Types.ObjectId => {
-  if (isDocument(character)) {
-    return character._id;
+export const getDocumentId = <T extends Document>(doc: Types.ObjectId | T): Types.ObjectId => {
+  if (isDocument(doc)) {
+    return doc._id;
   }
 
-  return character;
+  return doc;
 };
