@@ -69,6 +69,7 @@ export enum MissionCode {
   QUIZ_DAILY = 'QUIZ_DAILY',
   VERSUS_DAILY = 'VERSUS_DAILY',
   ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
+  WORLD_BOSS_DAILY = 'WORLD_BOSS_DAILY',
 }
 
 export const Missions: { [key in MissionCode]: MissionDescriptor } = {
@@ -94,6 +95,10 @@ export const Missions: { [key in MissionCode]: MissionDescriptor } = {
   },
   [MissionCode.VERSUS_DAILY]: {
     description: 'vote in Waifu Wars',
+    reward: 15,
+  },
+  [MissionCode.WORLD_BOSS_DAILY]: {
+    description: 'attack world boss',
     reward: 15,
   },
   [MissionCode.ALL_COMPLETE_DAILY]: {
