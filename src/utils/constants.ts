@@ -68,8 +68,8 @@ export enum MissionCode {
   DUEL_DAILY = 'DUEL_DAILY',
   QUIZ_DAILY = 'QUIZ_DAILY',
   VERSUS_DAILY = 'VERSUS_DAILY',
-  ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
   WORLD_BOSS_DAILY = 'WORLD_BOSS_DAILY',
+  ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
 }
 
 export const Missions: { [key in MissionCode]: MissionDescriptor } = {
