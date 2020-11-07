@@ -12,6 +12,7 @@ import {
   Trigger,
   CommandGroupName,
   DamageByStar,
+  MissionCode,
 } from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { isTextChannel } from '../../utils/discord-common';
@@ -142,6 +143,13 @@ AttackCommand.config = {
     injectUser(),
     injectBoss(),
     applyCooldown(),
+    async (next, context: AttackCommandContext) => {
+      const result = await next(context);
+
+      context.client.emitter.emit('mission', MissionCode.WORLD_BOSS_DAILY, result, context);
+
+      return result;
+    },
   ],
   group: CommandGroupName.GAMES,
 };

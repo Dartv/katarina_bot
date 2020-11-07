@@ -36,26 +36,12 @@ export const MissionPlugin: Plugin = (client) => {
       }
 
       switch (code) {
-        case MissionCode.CURRENCY_DAILY: {
-          mission.completedAt = new Date();
-          break;
-        }
-        case MissionCode.ROLL_DAILY: {
-          mission.completedAt = new Date();
-          break;
-        }
-        case MissionCode.DUEL_DAILY: {
-          mission.completedAt = new Date();
-          break;
-        }
-        case MissionCode.BATTLE_ROYALE_DAILY: {
-          mission.completedAt = new Date();
-          break;
-        }
-        case MissionCode.QUIZ_DAILY: {
-          mission.completedAt = new Date();
-          break;
-        }
+        case MissionCode.CURRENCY_DAILY:
+        case MissionCode.ROLL_DAILY:
+        case MissionCode.DUEL_DAILY:
+        case MissionCode.BATTLE_ROYALE_DAILY:
+        case MissionCode.QUIZ_DAILY:
+        case MissionCode.WORLD_BOSS_DAILY:
         case MissionCode.VERSUS_DAILY: {
           mission.completedAt = new Date();
           break;
