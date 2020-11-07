@@ -6,3 +6,5 @@ export { ScoreMonitorJob } from './ScoreMonitorJob';
 // export { ScoresaberLeaderboardMonitorJob } from './ScoresaberLeaderboardMonitorJob';
 export { VersusJob } from './VersusJob';
 export { BannerRefreshJob } from './BannerRefreshJob';
+export { ScrapeRecentCharactersJob } from './ScrapeRecentCharactersJob';
+export { BenchRetryJob } from './BenchRetryJob';

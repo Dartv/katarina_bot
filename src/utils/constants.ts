@@ -54,6 +54,7 @@ export enum ModelName {
   BOSS_PARTICIPANT = 'bossParticipant',
   BATTLE = 'battle',
   BATTLE_PARTICIPANT = 'battleParticipant',
+  BENCH = 'bench',
 }
 
 export const DefaultUserSettings: UserSettings = {
@@ -215,3 +216,5 @@ export enum GuildSetting {
   WARS_CHANNEL = 'warsChannel',
   ROYALE_CHANNEL = 'royaleChannel',
 }
+
+export const MWL_BASE_URL = 'https://mywaifulist.moe';

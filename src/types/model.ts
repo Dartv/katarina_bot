@@ -256,3 +256,11 @@ export interface BattleParticipantDocument extends Document, BattleParticipantBa
   _id: Types.ObjectId;
 }
 export type BattleParticipantModel = Model<BattleParticipantDocument>;
+
+export interface BenchBase extends DocumentBase {
+  slug: string;
+}
+export interface BenchDocument extends Document, BenchBase {
+  _id: Types.ObjectId;
+}
+export type BenchModel = Model<BenchDocument>;
