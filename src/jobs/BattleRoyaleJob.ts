@@ -11,12 +11,11 @@ import {
   User,
   UserCharacter,
 } from '../models';
-import { BattleStatus } from '../utils/constants';
+import { BattleStatus, BATTLE_ROYALE_WIN_CURRENCY } from '../utils/constants';
 import { isTextChannel } from '../utils/discord-common';
 import { createParticipantEmbed, fight } from '../utils/character';
 
 const JOB_NAME = 'BATTLE_ROYALE';
-const REWARD = 100;
 
 export const BattleRoyaleJob: Job = (agenda, client) => {
   agenda.define(JOB_NAME, async (job, done) => {
@@ -77,13 +76,13 @@ export const BattleRoyaleJob: Job = (agenda, client) => {
             if (participants.length < 2) {
               const { user, author } = participants[0];
 
-              user.currency += REWARD;
+              user.currency += BATTLE_ROYALE_WIN_CURRENCY;
               await user.save();
 
               battle.set('status', BattleStatus.COMPLETED);
 
               return Promise.all([
-                channel.send(`${author} received ${REWARD} 💎`),
+                channel.send(`${author} received ${BATTLE_ROYALE_WIN_CURRENCY} 💎`),
                 battle.save(),
               ]);
             }

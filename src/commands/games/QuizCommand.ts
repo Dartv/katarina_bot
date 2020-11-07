@@ -8,7 +8,12 @@ import {
   SeriesDocument,
   WithInMemoryCooldownContext,
 } from '../../types';
-import { Trigger, MissionCode, CommandGroupName } from '../../utils/constants';
+import {
+  Trigger,
+  MissionCode,
+  CommandGroupName,
+  QUIZ_GUESS_CURRENCY,
+} from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { Character, User } from '../../models';
 import { createCharacterEmbed, getCharacterStarRating } from '../../utils/character';
@@ -19,7 +24,6 @@ interface QuizCommandContext extends WithInMemoryCooldownContext {
 
 const SIMILARITY_THRESHOLD = 0.8;
 const isSimilarEnough = (a: string, b: string): boolean => compareTwoStrings(a, b) >= SIMILARITY_THRESHOLD;
-const GUESS_REWARD = 10;
 
 const QuizCommand: Command<QuizCommandContext> = async (context) => {
   const { message } = context;
@@ -57,7 +61,7 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
       const user = await User.register(answer.author);
 
       user.correctQuizGuesses += 1;
-      user.currency += GUESS_REWARD;
+      user.currency += QUIZ_GUESS_CURRENCY;
 
       await user.save();
 
@@ -74,7 +78,7 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
       );
 
       return answer.reply(
-        `Congratulations! Your guess was correct.\nYou received ${GUESS_REWARD} 💎`,
+        `Congratulations! Your guess was correct.\nYou received ${QUIZ_GUESS_CURRENCY} 💎`,
         {
           embed: createCharacterEmbed({
             ...character.toObject(),
