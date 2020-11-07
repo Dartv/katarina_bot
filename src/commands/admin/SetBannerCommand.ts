@@ -1,52 +1,35 @@
 import { Command } from 'diskat';
 
-import { Trigger, CommandGroupName, PopularityThreshold } from '../../utils/constants';
+import { Trigger, CommandGroupName } from '../../utils/constants';
 import { expectOwner } from '../middleware/expectOwner';
-import { Banner, Character, UserRoll } from '../../models';
-import { createCharacterEmbed } from '../../utils/character';
-import { Context } from '../../types';
+import { Banner } from '../../models';
+import { createCharacterEmbed, getCharacterStarRating } from '../../utils/character';
+import { CharacterDocument, Context } from '../../types';
 import { ErrorResponse } from '../responses';
+import { isDocument } from '../../utils/mongo-common';
 
 const SetBannerCommand: Command<Context> = async (context): Promise<any> => {
   const { message } = context;
-  const [banner, [character]] = await Promise.all([
-    Banner.fetchLatest(),
-    Character.random(1, [
-      {
-        $match: {
-          popularity: {
-            $lte: PopularityThreshold.FIVE_STAR,
-          },
-        },
-      },
-    ]),
-  ]);
+  const banner = await Banner.refresh();
 
-  if (!character) {
+  if (!banner) {
     return new ErrorResponse(context, 'No 5 ⭐️ characters found');
   }
 
-  await Promise.all([
-    Banner.updateMany(
-      {
-        endedAt: {
-          $exists: false,
-        },
+  if (!isDocument(banner.featured)) {
+    await banner.populate({
+      path: 'featured',
+      populate: {
+        path: 'series',
       },
-      {
-        $set: {
-          endedAt: new Date(),
-        },
-      },
-    ),
-    ...(banner ? [UserRoll.deleteMany({ drop: banner.featured })] : []),
-  ]);
+    }).execPopulate();
+  }
 
-  await new Banner({
-    featured: character._id,
-  }).save();
-
-  const embed = createCharacterEmbed(character.toObject());
+  const character = banner.featured as CharacterDocument;
+  const embed = createCharacterEmbed({
+    ...character.toObject(),
+    stars: getCharacterStarRating(character.popularity),
+  });
 
   return message.reply(`Banner for "${character.name}" set`, { embed });
 };

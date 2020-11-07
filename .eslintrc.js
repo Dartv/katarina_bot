@@ -51,5 +51,6 @@ module.exports = {
     '@typescript-eslint/no-useless-constructor': 'error',
     'import/no-cycle': 0,
     'lines-between-class-members': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
   },
 };

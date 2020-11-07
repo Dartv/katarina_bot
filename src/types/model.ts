@@ -179,9 +179,11 @@ export interface BannerBase extends DocumentBase {
 }
 export interface BannerDocument extends Document, BannerBase {
   _id: Types.ObjectId;
+  isExpired: (this: BannerDocument) => boolean;
 }
 export interface BannerModel extends Model<BannerDocument> {
   fetchLatest: (this: BannerModel) => Promise<BannerDocument>;
+  refresh: (this: BannerModel) => Promise<BannerDocument>;
 }
 
 export interface UserRollBase extends DocumentBase {
