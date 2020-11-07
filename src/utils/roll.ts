@@ -9,10 +9,10 @@ import {
   Series,
   Banner,
   UserRoll,
+  Bench,
 } from '../models';
 import { logger } from '../services/logger';
-import { isDev } from './environment';
-import { PITY_ROLLS, PopularityThreshold } from './constants';
+import { MWL_BASE_URL, PITY_ROLLS, PopularityThreshold } from './constants';
 
 let browser: Browser;
 
@@ -39,40 +39,71 @@ export const getUpdatedSeries = async (series: { title: string, slug: string }[]
   return Promise.all(promises);
 };
 
-const setupBrowser = async () => {
-  browser = await puppeteer.launch({
-    args: ['--disable-gpu', '--no-sandbox'],
-  });
+export const setupBrowser = async () => {
+  if (!browser) {
+    logger.info('Starting Puppeteer...');
 
-  logger.info(`Started Puppeteer with pid ${browser.process().pid}`);
+    browser = await puppeteer.launch({
+      args: ['--disable-gpu', '--no-sandbox'],
+    });
+
+    logger.info(`Started Puppeteer with pid ${browser.process().pid}`);
+  }
+
+  return browser;
 };
 
 export const rollExternalCharacter = async (
-  targetUrl = 'https://mywaifulist.moe/random',
+  targetUrl = `${MWL_BASE_URL}/random`,
 ): Promise<CharacterDocument> => {
-  if (!browser) {
-    await setupBrowser();
-  }
+  await setupBrowser();
 
   const page = await browser.newPage();
 
   try {
-    await page.setCookie({
-      name: 'waifutheme',
-      value: 'dark',
-      domain: '.mywaifulist.moe',
-    });
+    // await page.setCookie({
+    //   name: 'waifutheme',
+    //   value: 'dark',
+    //   domain: '.mywaifulist.moe',
+    // });
+
+    logger.log(`Opening ${targetUrl}...`);
+
     await page.goto(
       targetUrl,
       {
-        waitUntil: ['networkidle0', 'networkidle2'],
+        waitUntil: ['networkidle0', 'networkidle2', 'domcontentloaded'],
       },
     );
-    await page.waitFor('.waifu-core-container');
+
+    const url = page.url();
+    const slug = url.substring(url.lastIndexOf('/') + 1);
+
+    await page.waitFor('.waifu-core-container', { timeout: 5000 });
+
+    try {
+      await page.waitForSelector('#popularity-rank', { timeout: 5000 });
+    } catch (err) {
+      logger.log(`${targetUrl} is not ranked. Putting in bench...`);
+
+      await Bench.findOneAndUpdate(
+        { slug },
+        {
+          $set: {
+            slug,
+          },
+        },
+        { upsert: true },
+      );
+
+      throw err;
+    }
+
     const popularity = await page.$eval(
       '#popularity-rank',
       el => el.textContent.match(/\d+/)?.[0]
     ).then(Number);
+
     const name = await page.$eval('#waifu-name', el => el.textContent);
     const description = await page.$eval('#description', el => el.textContent);
     const series = await page.$$eval(
@@ -89,8 +120,6 @@ export const rollExternalCharacter = async (
       const style = window.getComputedStyle(el);
       return style.backgroundImage?.slice(4, -1).replace(/["']/g, '');
     });
-    const url = page.url();
-    const slug = url.substring(url.lastIndexOf('/') + 1);
     // await page.evaluate((emoji) => {
     //   const el = document.createElement('div');
     //   const waifuEl = document.querySelector('.waifu-core-container');
@@ -116,6 +145,8 @@ export const rollExternalCharacter = async (
     //   document.body.prepend(el);
     // }, Emoji.STAR.repeat(stars));
 
+    logger.log(`Fetched character "${name}" of series "${series[0]?.title || 'No series'}"`);
+
     const characterSeries = await getUpdatedSeries(series);
     const character = await Character.findOneAndUpdate(
       { slug },
@@ -135,9 +166,6 @@ export const rollExternalCharacter = async (
     return character;
   } finally {
     await page.close();
-    if (isDev()) {
-      await browser.close();
-    }
   }
 };
 
