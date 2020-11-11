@@ -8,7 +8,12 @@ import type {
   UserDocument,
   UserCharacterDocument,
 } from './model';
-import type { CharacterStar, MissionCode, AchievementCode } from '../utils/constants';
+import type {
+  CharacterStar,
+  MissionCode,
+  AchievementCode,
+  MissionFrequency,
+} from '../utils/constants';
 
 export type Plugin = (client: Client) => void;
 
@@ -51,6 +56,7 @@ export interface Events {
 export interface MissionDescriptor {
   description: string;
   reward: number;
+  frequency: MissionFrequency;
 }
 
 export type CommandConfigurator<T extends Context = Context, R = unknown> = DiskatCommandConfigurator<T, R, Client>;

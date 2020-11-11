@@ -70,40 +70,69 @@ export enum MissionCode {
   VERSUS_DAILY = 'VERSUS_DAILY',
   WORLD_BOSS_DAILY = 'WORLD_BOSS_DAILY',
   ALL_COMPLETE_DAILY = 'ALL_COMPLETE_DAILY',
+  DEFEAT_WORLD_BOSS_WEEKLY = 'DEFEAT_WORLD_BOSS_WEEKLY',
+  ALL_COMPLETE_WEEKLY = 'ALL_COMPLETE_WEEKLY',
+}
+
+export enum MissionType {
+  REGULAR = 'REGULAR',
+}
+
+export enum MissionFrequency {
+  DAILY = 'DAILY',
+  WEEKLY = 'WEEKLY',
 }
 
 export const Missions: { [key in MissionCode]: MissionDescriptor } = {
   [MissionCode.CURRENCY_DAILY]: {
     description: 'acquire daily coins',
     reward: 10,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.ROLL_DAILY]: {
     description: 'roll a character',
     reward: 30,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.BATTLE_ROYALE_DAILY]: {
     description: 'participate in a waifu royale',
     reward: 30,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.DUEL_DAILY]: {
     description: 'fight in a duel',
     reward: 15,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.QUIZ_DAILY]: {
     description: 'guess a character',
     reward: 15,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.VERSUS_DAILY]: {
     description: 'vote in Waifu Wars',
     reward: 15,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.WORLD_BOSS_DAILY]: {
-    description: 'attack world boss',
+    description: 'attack World Boss',
     reward: 15,
+    frequency: MissionFrequency.DAILY,
   },
   [MissionCode.ALL_COMPLETE_DAILY]: {
     description: 'complete all missions',
     reward: 100,
+    frequency: MissionFrequency.DAILY,
+  },
+  [MissionCode.ALL_COMPLETE_WEEKLY]: {
+    description: 'complete all missions every day for a week',
+    reward: 300,
+    frequency: MissionFrequency.WEEKLY,
+  },
+  [MissionCode.DEFEAT_WORLD_BOSS_WEEKLY]: {
+    description: 'defeat World Boss',
+    reward: 50,
+    frequency: MissionFrequency.WEEKLY,
   },
 };
 
@@ -198,10 +227,6 @@ export enum BattleType {
 
 export const BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES = 10;
 
-export enum MissionType {
-  REGULAR = 'REGULAR',
-}
-
 export enum PriceTable {
   ROLL_NORMAL = 100,
   ROLL_LOCAL = 120,
@@ -225,3 +250,5 @@ export enum GuildSetting {
 }
 
 export const MWL_BASE_URL = 'https://mywaifulist.moe';
+
+export const DAYS_IN_WEEK = 7;

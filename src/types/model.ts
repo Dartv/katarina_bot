@@ -14,6 +14,7 @@ import type {
   BattleType,
   MissionType,
   GuildSetting,
+  MissionFrequency,
 } from '../utils/constants';
 import type { UserCharacters } from '../models/User/UserCharacters';
 import { CharacterEmbedOptions } from './common';
@@ -167,6 +168,7 @@ export interface MissionBase extends DocumentBase {
   code: string;
   meta: Record<string, unknown>;
   type: MissionType;
+  frequency: MissionFrequency;
 }
 export interface MissionDocument extends Document, MissionBase {
   _id: Types.ObjectId;
@@ -211,6 +213,7 @@ export interface BossBase extends DocumentBase {
   guild: Types.ObjectId | GuildDocument;
   endedAt?: Date;
   isDefeated?: boolean;
+  defeatedAt?: Date;
   stats: BossStats;
 }
 export interface BossDocument extends Document, BossBase {

@@ -6,7 +6,12 @@ import {
 } from 'mongoose';
 
 import type { MissionDocument, MissionModel } from '../../types';
-import { ModelName, MissionCode, MissionType } from '../../utils/constants';
+import {
+  ModelName,
+  MissionCode,
+  MissionType,
+  MissionFrequency,
+} from '../../utils/constants';
 
 const options: SchemaOptions = { timestamps: true };
 
@@ -35,6 +40,11 @@ export const MissionSchema = new Schema({
     type: String,
     enum: Object.values(MissionType),
     required: true,
+  },
+  frequency: {
+    type: String,
+    enum: Object.values(MissionFrequency),
+    default: MissionFrequency.DAILY,
   },
 }, options);
 

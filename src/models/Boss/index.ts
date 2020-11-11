@@ -24,6 +24,7 @@ const BossSchema = new Schema({
   },
   endedAt: Date,
   isDefeated: Boolean,
+  defeatedAt: Date,
   stats: {
     type: new Schema({
       hp: {

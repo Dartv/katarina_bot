@@ -5,6 +5,8 @@ import {
   startOfTomorrow,
   formatDistanceToNow,
   differenceInSeconds,
+  startOfWeek,
+  add,
 } from 'date-fns';
 
 export const getDailyResetDate = (): Date => {
@@ -18,3 +20,9 @@ export const getTimeInSecondsUntilDailyReset = (): number => differenceInSeconds
 );
 
 export const formatTimeUntilDailyReset = formatDistanceToNow(getDailyResetDate());
+
+// next Monday at 6 am local time
+export const getWeeklyResetDate = (): Date => add(
+  startOfWeek(getDailyResetDate(), { weekStartsOn: 1 }),
+  { weeks: 1, hours: 6 },
+);
