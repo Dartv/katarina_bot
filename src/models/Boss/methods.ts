@@ -52,6 +52,7 @@ export const injure: BossDocument['injure'] = async function (damage, user) {
 
   if (this.stats.hp <= 0) {
     this.isDefeated = true;
+    this.defeatedAt = new Date();
   }
 
   return this;

@@ -1,13 +1,23 @@
-import { Plugin, MissionDescriptor } from '../types';
+import { Plugin, MissionDescriptor, BossDocument } from '../types';
 import { ErrorResponse, SuccessResponse } from '../commands/responses';
-import { Mission } from '../models';
-import { MissionType, MissionCode, Missions } from '../utils/constants';
-import { getDailyResetDate } from '../utils/daily';
+import { Mission, BossParticipant } from '../models';
+import {
+  MissionType,
+  MissionCode,
+  Missions,
+  MissionFrequency,
+  DAYS_IN_WEEK,
+} from '../utils/constants';
+import { getDailyResetDate, getWeeklyResetDate } from '../utils/daily';
 import { capitalize } from '../utils/common';
 
 export const MissionPlugin: Plugin = (client) => {
   client.emitter.on('mission', async (code, value, context) => {
     try {
+      if (!Object.values(MissionCode).includes(code)) {
+        throw new Error(`Mission ${code} does not exist`);
+      }
+
       const { user } = context;
 
       if (value instanceof ErrorResponse || !user) {
@@ -23,6 +33,7 @@ export const MissionPlugin: Plugin = (client) => {
           code,
           user: user._id,
           type: MissionType.REGULAR,
+          frequency: Missions[code].frequency,
         });
       }
 
@@ -31,8 +42,16 @@ export const MissionPlugin: Plugin = (client) => {
         return;
       }
 
-      if (mission.type === MissionType.REGULAR) {
-        mission.resetsAt = getDailyResetDate();
+      if (!mission.resetsAt) {
+        if (mission.type === MissionType.REGULAR) {
+          if (mission.frequency === MissionFrequency.DAILY) {
+            mission.resetsAt = getDailyResetDate();
+          }
+
+          if (mission.frequency === MissionFrequency.WEEKLY) {
+            mission.resetsAt = getWeeklyResetDate();
+          }
+        }
       }
 
       switch (code) {
@@ -56,8 +75,47 @@ export const MissionPlugin: Plugin = (client) => {
           if (missions.length === codes.length) {
             if (missions.every(m => m.completedAt)) {
               mission.completedAt = new Date();
+
+              client.emitter.emit('mission', MissionCode.ALL_COMPLETE_WEEKLY, value, context);
             }
           }
+          break;
+        }
+        case MissionCode.DEFEAT_WORLD_BOSS_WEEKLY: {
+          const boss = value as BossDocument;
+          const cursor = BossParticipant.find({ boss: boss._id }).cursor();
+          const weeklyResetDate = getWeeklyResetDate();
+          await cursor.eachAsync(async (participant) => {
+            await Mission.findOneAndUpdate(
+              {
+                code,
+                user: participant.user,
+              },
+              {
+                $set: {
+                  completedAt: new Date(),
+                },
+                $setOnInsert: {
+                  code,
+                  user: participant.user,
+                  type: MissionType.REGULAR,
+                  frequency: MissionFrequency.WEEKLY,
+                  resetsAt: weeklyResetDate,
+                },
+              },
+              { upsert: true },
+            );
+          });
+
+          break;
+        }
+        case MissionCode.ALL_COMPLETE_WEEKLY: {
+          mission.progress += 1;
+
+          if (mission.progress >= DAYS_IN_WEEK) {
+            mission.completedAt = new Date();
+          }
+
           break;
         }
         default:

@@ -72,6 +72,7 @@ const AttackCommand: Command<AttackCommandContext> = async (context): Promise<an
     guild,
     message,
     dispatch,
+    client,
   } = context;
 
   const boss = await Boss
@@ -111,6 +112,8 @@ const AttackCommand: Command<AttackCommandContext> = async (context): Promise<an
   await dispatch(boss.getEmbed());
 
   if (boss.isDefeated) {
+    client.emitter.emit('mission', MissionCode.DEFEAT_WORLD_BOSS_WEEKLY, boss, context);
+
     await rewardUser({
       user,
       reward: 50,
