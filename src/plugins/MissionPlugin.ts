@@ -66,7 +66,9 @@ export const MissionPlugin: Plugin = (client) => {
           break;
         }
         case MissionCode.ALL_COMPLETE_DAILY: {
-          const codes = Object.values(MissionCode).filter(c => c !== MissionCode.ALL_COMPLETE_DAILY);
+          const codes = Object.entries(Missions)
+            .filter(([, descriptor]) => descriptor.frequency === MissionFrequency.DAILY)
+            .map(([key]) => key);
           const missions = await Mission.find({
             code: { $in: codes },
             user: user._id,
