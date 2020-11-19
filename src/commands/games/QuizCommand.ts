@@ -39,7 +39,7 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
   const embed = createCharacterEmbed({
     ...character.toObject(),
     series: [],
-  });
+  }).setDescription('');
   await message.channel.send('', { embed });
   const series = (character.series as Types.DocumentArray<SeriesDocument>).flatMap(
     ({ title }) => title.toLowerCase().split(' '),
