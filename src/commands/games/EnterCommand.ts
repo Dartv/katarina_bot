@@ -9,6 +9,7 @@ import {
   BattleStatus,
   BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES,
   MissionCode,
+  ActionThreshold,
 } from '../../utils/constants';
 import { isTextChannel } from '../../utils/discord-common';
 import { Battle, BattleParticipant } from '../../models';
@@ -28,6 +29,12 @@ const EnterCommand: Command<EnterCommandContext> = async (context): Promise<any>
     formatter,
     client,
   } = context;
+  const userCharactersCount = await user.characters.count();
+
+  if (userCharactersCount < ActionThreshold.PARTICIPATE_IN_ROYALE) {
+    return new ErrorResponse(context, `You should have at least ${ActionThreshold.PARTICIPATE_IN_ROYALE} characters`);
+  }
+
   let battle = await Battle.findOne({
     guild: guild._id,
     type: BattleType.ROYALE,
@@ -60,10 +67,6 @@ const EnterCommand: Command<EnterCommandContext> = async (context): Promise<any>
     user.characters.fetchRandom(1),
     BattleParticipant.countDocuments({ battle: battle._id }),
   ]);
-
-  if (!userCharacter) {
-    return new ErrorResponse(context, 'You have no characters');
-  }
 
   await new BattleParticipant({
     battle: battle._id,

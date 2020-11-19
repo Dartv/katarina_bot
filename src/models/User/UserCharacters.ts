@@ -78,6 +78,10 @@ export class UserCharacters extends Collection<string, UserCharacterDocument> {
     return this.fetchMany({ _id: { $in: ids } });
   }
 
+  async count(query?: FilterQuery<UserCharacterDocument>) {
+    return UserCharacter.find({ user: this.user._id, ...query }).count();
+  }
+
   async add(character: Types.ObjectId | CharacterDocument): Promise<UserCharacterDocument> {
     const characterId: Types.ObjectId = getDocumentId(character);
     let userCharacter = await this.fetchOne(characterId);
