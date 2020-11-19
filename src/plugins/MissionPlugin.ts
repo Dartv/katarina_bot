@@ -74,14 +74,13 @@ export const MissionPlugin: Plugin = (client) => {
           const missions = await Mission.find({
             code: { $in: codes },
             user: user._id,
+            completedAt: { $ne: null },
           }).select('completedAt');
 
           if (missions.length === codes.length) {
-            if (missions.every(m => m.completedAt)) {
-              mission.completedAt = new Date();
+            mission.completedAt = new Date();
 
-              client.emitter.emit('mission', MissionCode.ALL_COMPLETE_WEEKLY, value, context);
-            }
+            client.emitter.emit('mission', MissionCode.ALL_COMPLETE_WEEKLY, value, context);
           }
           break;
         }
