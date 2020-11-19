@@ -252,3 +252,9 @@ export enum GuildSetting {
 export const MWL_BASE_URL = 'https://mywaifulist.moe';
 
 export const DAYS_IN_WEEK = 7;
+
+export enum ActionThreshold {
+  ATTACK_WORLD_BOSS = 10,
+  PARTICIPATE_IN_DUEL = 10,
+  PARTICIPATE_IN_ROYALE = 10,
+}

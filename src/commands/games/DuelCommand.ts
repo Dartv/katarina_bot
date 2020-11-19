@@ -13,11 +13,13 @@ import {
   ParameterType,
   CommandGroupName,
   MissionCode,
+  ActionThreshold,
 } from '../../utils/constants';
 import { injectUser, withInMemoryCooldown } from '../middleware';
 import { ErrorResponse } from '../responses';
 import { battle, pickCharacter, createParticipantEmbed } from '../../utils/character';
-import { awaitAnswer } from '../../utils/discord-common';
+import { awaitAnswer, toUserMention } from '../../utils/discord-common';
+import { UserCharacter } from '../../models';
 
 export interface DuelCommandContext extends Context {
   user: UserDocument;
@@ -55,6 +57,20 @@ export const validateUsers = (): Middleware<DuelCommandContext, DuelCommandConte
 
   if (opponent.currency < args.bet) {
     return new ErrorResponse(context, `${args.member.displayName} doesn't have enough 💎`);
+  }
+
+  const threshold = ActionThreshold.PARTICIPATE_IN_DUEL;
+  const [userCharactersCount, opponentCharactersCount] = await Promise.all([
+    UserCharacter.find({ user: user._id }).count(),
+    UserCharacter.find({ user: opponent._id }).count(),
+  ]);
+
+  if (userCharactersCount < threshold) {
+    return `${toUserMention(user.discordId)} you should have at least ${threshold} characters`;
+  }
+
+  if (opponentCharactersCount < threshold) {
+    return `${toUserMention(opponent.discordId)} you should have at least ${threshold} characters`;
   }
 
   return next(context);

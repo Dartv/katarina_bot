@@ -13,10 +13,11 @@ import {
   CommandGroupName,
   DamageByStar,
   MissionCode,
+  ActionThreshold,
 } from '../../utils/constants';
 import { injectUser } from '../middleware';
 import { isTextChannel } from '../../utils/discord-common';
-import { Boss, BossParticipant } from '../../models';
+import { Boss, BossParticipant, UserCharacter } from '../../models';
 import { ErrorResponse, CooldownResponse } from '../responses';
 import { createCharacterEmbed } from '../../utils/character';
 import { rewardUser } from '../../utils/user';
@@ -87,6 +88,12 @@ const AttackCommand: Command<AttackCommandContext> = async (context): Promise<an
 
   if (!boss || boss.isDefeated) {
     return new ErrorResponse(context, 'There is no boss to fight');
+  }
+
+  const ownedCharacters = await UserCharacter.find({ user: user._id }).count();
+
+  if (ownedCharacters < ActionThreshold.ATTACK_WORLD_BOSS) {
+    return new ErrorResponse(context, `You should have at least ${ActionThreshold.ATTACK_WORLD_BOSS} characters`);
   }
 
   const [userCharacter] = await user.characters.fetchRandom(1);
