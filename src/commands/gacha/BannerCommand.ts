@@ -26,14 +26,19 @@ const BannerCommand: Command<BannerCommandContext> = async (context): Promise<an
   });
   const distance = formatDistanceStrict(new Date(), addWeeks(banner.createdAt, 2));
   const character = banner.featured as CharacterDocument;
+  const userCharacter = await user.characters.fetchOne(character._id);
+  const embed = createCharacterEmbed({
+    ...character.toObject(),
+    stars: getCharacterStarRating(character.popularity),
+  });
+
+  if (userCharacter) {
+    embed.setFooter(`You have x${userCharacter.count} of this character`);
+  }
+
   return message.channel.send(
     `${PITY_ROLLS - rolls} rolls until guaranteed summon\n${distance} left until next banner`,
-    {
-      embed: createCharacterEmbed({
-        ...character.toObject(),
-        stars: getCharacterStarRating(character.popularity),
-      }),
-    },
+    { embed },
   );
 };
 
