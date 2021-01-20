@@ -42,6 +42,9 @@ export const ChatbotPlugin: Plugin = (client) => {
       if (!messages.length) return;
 
       const reply = messages[index];
+
+      if (!reply) return;
+
       const emoji = client.emojis.cache.random();
 
       messages.splice(index, 1);
