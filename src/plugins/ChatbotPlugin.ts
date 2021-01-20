@@ -34,13 +34,13 @@ export const ChatbotPlugin: Plugin = (client) => {
 
     if (message.guild === null) return;
 
-    if (!messages.length) return;
-
     if (message.guild.id !== '557804417550909440') return;
 
     const index = randomInt(0, messages.length);
 
     if (message.mentions.has(client.user)) {
+      if (!messages.length) return;
+
       const reply = messages[index];
       const emoji = client.emojis.cache.random();
 
