@@ -1,4 +1,4 @@
-/* global document, window */
+/* global document */
 
 import puppeteer, { Browser } from 'puppeteer';
 import { Types } from 'mongoose';
@@ -116,9 +116,8 @@ export const rollExternalCharacter = async (
         })),
     );
     const imageUrl = await page.evaluate(() => {
-      const el = document.querySelector('.bg-cover');
-      const style = window.getComputedStyle(el);
-      return style.backgroundImage?.slice(4, -1).replace(/["']/g, '');
+      const el = document.querySelector<HTMLImageElement>('img.object-cover');
+      return el.src;
     });
     // await page.evaluate((emoji) => {
     //   const el = document.createElement('div');
