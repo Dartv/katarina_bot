@@ -43,7 +43,7 @@ const QuizCommand: Command<QuizCommandContext> = async (context) => {
   await message.channel.send('', { embed });
   const series = (character.series as Types.DocumentArray<SeriesDocument>).flatMap(
     ({ title }) => title.toLowerCase().split(' '),
-  ).filter(title => title.length > 2);
+  ).filter(title => title.length > 3);
   try {
     const answer = await message.channel.awaitMessages(
       ({ content }: Message) => {
