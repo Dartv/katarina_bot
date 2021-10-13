@@ -27,8 +27,11 @@ jobs:
           mkdir -p env
           cd env
           touch lookenv.dev.js lookenv.prod.js
-          echo "${{secrets.ENV_DEV}}" >> lookenv.dev.js
-          echo "${{secrets.ENV_PROD}}" >> lookenv.prod.js
+          echo "$ENV_DEV" >> lookenv.dev.js
+          echo "$ENV_PROD" >> lookenv.prod.js
+        env:
+          ENV_DEV: ${{secrets.ENV_DEV}}
+          ENV_PROD: ${{secrets.ENV_PROD}}
 
       - name: Install PM2
         run: npm i pm2
