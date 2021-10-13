@@ -24,21 +24,16 @@ const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean =
   score.pp >= PP_THRESHOLD && score.rank <= RANK_THRESHOLD && new Date(score.timeSet).getTime() > lastRunAt
 );
 
-const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos: BeatSaviorInfo[]): BeatSaviorInfo => {
-  if (scoreInfos.length) {
-    scoreInfos.slice().reverse().forEach(scoreInfo => {
-      if (scoreInfo.songID === score.songHash
-          && scoreInfo.songDifficultyRank === score.difficulty
-          && scoreInfo.trackers.winTracker.won
-          && scoreInfo.trackers.scoreTracker.rawRatio > scoreInfo.trackers.scoreTracker.personalBestRawRatio) {
-        return scoreInfo;
-      }
-    });
-  }
-  return null;
+const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => {
+  return scoreInfos?.slice().reverse().find(scoreInfo =>
+      scoreInfo?.songID === score.songHash
+      && scoreInfo?.songDifficultyRank === score.difficulty
+      && scoreInfo?.trackers?.winTracker?.won
+      && scoreInfo?.trackers?.scoreTracker?.rawRatio > scoreInfo?.trackers?.scoreTracker?.personalBestRawRatio
+  );
 };
 
-const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerInfo'], beatSaviorInfo: BeatSaviorInfo) => {
+const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerInfo'], beatSaviorInfo?: BeatSaviorInfo) => {
   const fields = {
     Rank: `#${score.rank}`,
     pp: `${score.pp.toFixed(2)} (${(score.pp * score.weight).toFixed(2)})`,
@@ -46,10 +41,10 @@ const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerI
     Difficulty: score.difficultyRaw.split('_')[1] || '',
   };
 
-  if (beatSaviorInfo?.trackers.hitTracker.badCuts > 0) {
+  if (beatSaviorInfo?.trackers?.hitTracker?.badCuts > 0) {
     fields.BadCuts = beatSaviorInfo.trackers.hitTracker.badCuts;
   }
-  if (beatSaviorInfo?.trackers.hitTracker.missedNotes > 0) {
+  if (beatSaviorInfo?.trackers?.hitTracker?.missedNotes > 0) {
     fields.MissedNotes = beatSaviorInfo.trackers.hitTracker.missedNotes;
   }
 
@@ -82,11 +77,14 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
         await Promise.all(playerIds.map(async (playerId) => {
           const scoresaber = new ScoresaberAPI();
           const beatsavior = new BeatsaviorAPI();
-          const [{ scores }, { playerInfo }] = await Promise.all([
+          const [{ scores }, { playerInfo }, saviorData] = await Promise.all([
             scoresaber.fetchPlayerRecentScores(playerId),
             scoresaber.fetchPlayerBasic(playerId),
+            beatsavior.fetchUserLastPlayedInfo(playerId).catch(err => {
+              console.error(err);
+              return []
+            })
           ]);
-          const saviorData = await beatsavior.fetchUserLastPlayedInfo(playerId);
           await Promise.all(scores.reduce((acc: Promise<Message>[], score) => {
             if (shouldSyncScore(score, lastRunAt)) {
               const channel = guild?.channels.cache.find(({ id }) => CHANNEL_IDS.includes(id));
