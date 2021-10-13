@@ -80,9 +80,9 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
           const [{ scores }, { playerInfo }, saviorData] = await Promise.all([
             scoresaber.fetchPlayerRecentScores(playerId),
             scoresaber.fetchPlayerBasic(playerId),
-            beatsavior.fetchUserLastPlayedInfo(playerId).catch(err => {
+            beatsavior.fetchUserLastPlayedInfo(playerId).catch((err) => {
               console.error(err);
-              return []
+              return [];
             })
           ]);
           await Promise.all(scores.reduce((acc: Promise<Message>[], score) => {
