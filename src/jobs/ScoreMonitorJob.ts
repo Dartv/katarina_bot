@@ -26,10 +26,10 @@ const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean =
 
 const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => {
   return scoreInfos?.slice().reverse().find(scoreInfo =>
-      scoreInfo?.songID === score.songHash
-      && scoreInfo?.songDifficultyRank === score.difficulty
-      && scoreInfo?.trackers?.winTracker?.won
-      && scoreInfo?.trackers?.scoreTracker?.rawRatio > scoreInfo?.trackers?.scoreTracker?.personalBestRawRatio
+      scoreInfo.songID === score.songHash
+      && scoreInfo.songDifficultyRank === score.difficulty
+      && scoreInfo.trackers?.winTracker?.won
+      && scoreInfo.trackers?.scoreTracker?.rawRatio > scoreInfo.trackers?.scoreTracker?.personalBestRawRatio
   );
 };
 
@@ -39,14 +39,13 @@ const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerI
     pp: `${score.pp.toFixed(2)} (${(score.pp * score.weight).toFixed(2)})`,
     Accuracy: `${(score.unmodififiedScore / (score.maxScore || score.score) * 100).toFixed(2)}%`,
     Difficulty: score.difficultyRaw.split('_')[1] || '',
+    ...(beatSaviorInfo?.trackers?.hitTracker?.badCuts > 0 && {
+      "Bad cuts": beatSaviorInfo.trackers.hitTracker.badCuts,
+    }),
+    ...(beatSaviorInfo?.trackers?.hitTracker?.missedNotes > 0 && {
+      "Missed notes": beatSaviorInfo.trackers.hitTracker.missedNotes,
+    }),
   };
-
-  if (beatSaviorInfo?.trackers?.hitTracker?.badCuts > 0) {
-    fields.BadCuts = beatSaviorInfo.trackers.hitTracker.badCuts;
-  }
-  if (beatSaviorInfo?.trackers?.hitTracker?.missedNotes > 0) {
-    fields.MissedNotes = beatSaviorInfo.trackers.hitTracker.missedNotes;
-  }
 
   return new MessageEmbed()
     .setTitle(`${score.songAuthorName} - ${score.songName} ${score.songSubName}`.trim())
@@ -80,10 +79,10 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
           const [{ scores }, { playerInfo }, saviorData] = await Promise.all([
             scoresaber.fetchPlayerRecentScores(playerId),
             scoresaber.fetchPlayerBasic(playerId),
-            beatsavior.fetchUserLastPlayedInfo(playerId).catch((err) => {
+            beatsavior.fetchUserLastPlayedInfo(playerId).catch(err => {
               console.error(err);
               return [];
-            })
+            }),
           ]);
           await Promise.all(scores.reduce((acc: Promise<Message>[], score) => {
             if (shouldSyncScore(score, lastRunAt)) {
