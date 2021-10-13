@@ -10,6 +10,7 @@ import { MarkdownFormatter } from 'diskat';
 
 import { Guild } from '../models';
 import { PlayerBasic, PlayerRecentScore, ScoresaberAPI } from '../services/scoresaber';
+import { BeatsaviorAPI, BeatSaviorInfo } from '../services/beatsavior';
 import { Job } from '../types';
 import { isProd } from '../utils/environment';
 
@@ -23,13 +24,34 @@ const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean =
   score.pp >= PP_THRESHOLD && score.rank <= RANK_THRESHOLD && new Date(score.timeSet).getTime() > lastRunAt
 );
 
-const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerInfo']) => {
+const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos: BeatSaviorInfo[]): BeatSaviorInfo => {
+  if (scoreInfos.length) {
+    scoreInfos.slice().reverse().forEach(scoreInfo => {
+      if (scoreInfo.songID === score.songHash
+          && scoreInfo.songDifficultyRank === score.difficulty
+          && scoreInfo.trackers.winTracker.won
+          && scoreInfo.trackers.scoreTracker.rawRatio > scoreInfo.trackers.scoreTracker.personalBestRawRatio) {
+        return scoreInfo;
+      }
+    });
+  }
+  return null;
+};
+
+const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerInfo'], beatSaviorInfo: BeatSaviorInfo) => {
   const fields = {
     Rank: `#${score.rank}`,
     pp: `${score.pp.toFixed(2)} (${(score.pp * score.weight).toFixed(2)})`,
     Accuracy: `${(score.unmodififiedScore / (score.maxScore || score.score) * 100).toFixed(2)}%`,
     Difficulty: score.difficultyRaw.split('_')[1] || '',
   };
+
+  if (beatSaviorInfo?.trackers.hitTracker.badCuts > 0) {
+    fields.BadCuts = beatSaviorInfo.trackers.hitTracker.badCuts;
+  }
+  if (beatSaviorInfo?.trackers.hitTracker.missedNotes > 0) {
+    fields.MissedNotes = beatSaviorInfo.trackers.hitTracker.missedNotes;
+  }
 
   return new MessageEmbed()
     .setTitle(`${score.songAuthorName} - ${score.songName} ${score.songSubName}`.trim())
@@ -59,15 +81,18 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
         const guild: DiscordGuild = client.guilds.cache.get(discordId);
         await Promise.all(playerIds.map(async (playerId) => {
           const scoresaber = new ScoresaberAPI();
+          const beatsavior = new BeatsaviorAPI();
           const [{ scores }, { playerInfo }] = await Promise.all([
             scoresaber.fetchPlayerRecentScores(playerId),
             scoresaber.fetchPlayerBasic(playerId),
           ]);
+          const saviorData = await beatsavior.fetchUserLastPlayedInfo(playerId);
           await Promise.all(scores.reduce((acc: Promise<Message>[], score) => {
             if (shouldSyncScore(score, lastRunAt)) {
               const channel = guild?.channels.cache.find(({ id }) => CHANNEL_IDS.includes(id));
               if (channel) {
-                const embed = createScoreEmbed(score, playerInfo);
+                const beatSaviorInfo = recentSongBeatSaviorInfo(score, saviorData);
+                const embed = createScoreEmbed(score, playerInfo, beatSaviorInfo);
                 return [...acc, (channel as TextChannel).send(embed)];
               }
             }
