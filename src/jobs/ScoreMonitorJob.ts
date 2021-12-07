@@ -17,38 +17,39 @@ import { isProd } from '../utils/environment';
 const JOB_NAME = 'monitor scoresaber players';
 const INTERVAL = 15;
 const WEIGHT_TOP_8 = 0.77; // top 8 = 0.965^7
-const WEIGHT_TOP_20 = 0.5 // top 20 = 0.965^19
+const WEIGHT_TOP_20 = 0.5; // top 20 = 0.965^19
 const CHANNEL_IDS = ['687020972670320669', '620373848801411082'];
 
 const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean => !!(
-  score.pp >= 250 &&
   new Date(score.timeSet).getTime() > lastRunAt && (
-    score.rank <= 10 ||
-    score.weight >= WEIGHT_TOP_8 ||
-    (score.rank <= 100 && score.weight >= WEIGHT_TOP_20)
+    score.rank <= 10
+    || score.weight >= WEIGHT_TOP_8
+    || (score.rank <= 100 && score.weight >= WEIGHT_TOP_20)
   )
 );
 
-const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => {
-  return scoreInfos?.slice().reverse().find(scoreInfo =>
-      scoreInfo.songID === score.songHash
-      && scoreInfo.songDifficultyRank === score.difficulty
-      && scoreInfo.trackers?.winTracker?.won
-      && scoreInfo.trackers?.scoreTracker?.rawRatio > scoreInfo.trackers?.scoreTracker?.personalBestRawRatio
+const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => scoreInfos
+  ?.slice()
+  .reverse()
+  .find(scoreInfo => scoreInfo.songID === score.songHash
+    && scoreInfo.songDifficultyRank === score.difficulty
+    && scoreInfo.trackers?.winTracker?.won
+    && scoreInfo.trackers?.scoreTracker?.rawRatio > scoreInfo.trackers?.scoreTracker?.personalBestRawRatio
   );
-};
 
-const createScoreEmbed = (score: PlayerRecentScore, player: PlayerBasic['playerInfo'], beatSaviorInfo?: BeatSaviorInfo) => {
+const createScoreEmbed = (
+  score: PlayerRecentScore,
+  player: PlayerBasic['playerInfo'],
+  beatSaviorInfo?: BeatSaviorInfo
+) => {
   const fields = {
     Rank: `#${score.rank}`,
     pp: `${score.pp.toFixed(2)} (${(score.pp * score.weight).toFixed(2)})`,
     Accuracy: `${(score.unmodififiedScore / (score.maxScore || score.score) * 100).toFixed(2)}%`,
     Difficulty: score.difficultyRaw.split('_')[1] || '',
-    ...(beatSaviorInfo?.trackers?.hitTracker?.badCuts > 0 && {
-      "Bad cuts": beatSaviorInfo.trackers.hitTracker.badCuts,
-    }),
-    ...(beatSaviorInfo?.trackers?.hitTracker?.missedNotes > 0 && {
-      "Missed notes": beatSaviorInfo.trackers.hitTracker.missedNotes,
+    ...(beatSaviorInfo && {
+      'Bad cuts': beatSaviorInfo.trackers?.hitTracker?.badCuts ?? 0,
+      'Missed notes': beatSaviorInfo.trackers?.hitTracker?.missedNotes ?? 0,
     }),
   };
 
