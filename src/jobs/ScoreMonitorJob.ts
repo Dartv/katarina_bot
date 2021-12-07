@@ -21,7 +21,6 @@ const WEIGHT_TOP_20 = 0.5 // top 20 = 0.965^19
 const CHANNEL_IDS = ['687020972670320669', '620373848801411082'];
 
 const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean => !!(
-  score.pp >= 250 &&
   new Date(score.timeSet).getTime() > lastRunAt && (
     score.rank <= 10 ||
     score.weight >= WEIGHT_TOP_8 ||
