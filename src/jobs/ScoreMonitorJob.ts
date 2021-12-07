@@ -16,12 +16,17 @@ import { isProd } from '../utils/environment';
 
 const JOB_NAME = 'monitor scoresaber players';
 const INTERVAL = 15;
-const RANK_THRESHOLD = 100;
-const PP_THRESHOLD = 250;
+const WEIGHT_TOP_8 = 0.77; // top 8 = 0.965^7
+const WEIGHT_TOP_20 = 0.5 // top 20 = 0.965^19
 const CHANNEL_IDS = ['687020972670320669', '620373848801411082'];
 
 const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean => !!(
-  score.pp >= PP_THRESHOLD && score.rank <= RANK_THRESHOLD && new Date(score.timeSet).getTime() > lastRunAt
+  score.pp >= 250 &&
+  new Date(score.timeSet).getTime() > lastRunAt && (
+    score.rank <= 10 ||
+    score.weight >= WEIGHT_TOP_8 ||
+    (score.rank <= 100 && score.weight >= WEIGHT_TOP_20)
+  )
 );
 
 const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => {
