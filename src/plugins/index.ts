@@ -5,3 +5,4 @@ export { VersusPlugin } from './VersusPlugin';
 export { AchievementPlugin } from './AchievementPlugin';
 export { MessageVoteMonitorPlugin } from './MessageVoteMonitorPlugin';
 export { SpamMonitorPlugin } from './SpamMonitorPlugin';
+export { RoleMonitorPlugin } from './RoleMonitorPlugin';
