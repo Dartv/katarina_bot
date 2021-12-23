@@ -28,6 +28,10 @@ const shouldSyncScore = (score: PlayerRecentScore, lastRunAt: number): boolean =
   )
 );
 
+const shouldAddReplay = (score: PlayerRecentScore): boolean => !!(
+  score.pp > 0 && score.rank <= 500
+);
+
 const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSaviorInfo[]): BeatSaviorInfo => scoreInfos
   ?.slice()
   .reverse()
@@ -40,7 +44,8 @@ const recentSongBeatSaviorInfo = (score: PlayerRecentScore, scoreInfos?: BeatSav
 const createScoreEmbed = (
   score: PlayerRecentScore,
   player: PlayerBasic['playerInfo'],
-  beatSaviorInfo?: BeatSaviorInfo
+  beatSaviorInfo?: BeatSaviorInfo,
+  replay?: boolean
 ) => {
   const fields = {
     Rank: `#${score.rank}`,
@@ -50,6 +55,9 @@ const createScoreEmbed = (
     ...(beatSaviorInfo && {
       'Bad cuts': beatSaviorInfo.trackers?.hitTracker?.badCuts ?? 0,
       'Missed notes': beatSaviorInfo.trackers?.hitTracker?.missedNotes ?? 0,
+    }),
+    ...(replay && {
+      'Open replay': `[Link](https://www.replay.beatleader.xyz/?hash=${score.songHash}&difficulty=${score.difficultyRaw}&playerID=${player.playerId})`,
     }),
   };
 
@@ -95,7 +103,7 @@ export const ScoreMonitorJob: Job = (agenda, client) => {
               const channel = guild?.channels.cache.find(({ id }) => CHANNEL_IDS.includes(id));
               if (channel) {
                 const beatSaviorInfo = recentSongBeatSaviorInfo(score, saviorData);
-                const embed = createScoreEmbed(score, playerInfo, beatSaviorInfo);
+                const embed = createScoreEmbed(score, playerInfo, beatSaviorInfo, shouldAddReplay(score));
                 return [...acc, (channel as TextChannel).send(embed)];
               }
             }
