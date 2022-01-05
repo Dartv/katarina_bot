@@ -74,7 +74,7 @@ RollCommand.config = {
       name: 'banner',
       description: Object.values(BannerType).join('/'),
       optional: true,
-      defaultValue: BannerType.NORMAL,
+      defaultValue: BannerType.LOCAL,
       type: TypeResolver.oneOf(
         ParameterType.STRING_LOWER,
         Object.values(BannerType),

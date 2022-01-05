@@ -181,7 +181,7 @@ export const rollBannerCharacter = async (userId: Types.ObjectId): Promise<Chara
       },
     });
 
-  if (banner.endedAt) {
+  if (!banner || banner.endedAt) {
     throw new Error('Could not roll on an ended banner');
   }
 
@@ -190,7 +190,7 @@ export const rollBannerCharacter = async (userId: Types.ObjectId): Promise<Chara
       user: userId,
       banner: banner._id,
     }),
-    rollExternalCharacter(),
+    rollLocalCharacter(),
   ]);
 
   if (character.popularity <= PopularityThreshold.FIVE_STAR || rolls >= PITY_ROLLS - 1) {
