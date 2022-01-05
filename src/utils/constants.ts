@@ -229,7 +229,7 @@ export const BATTLE_ROYALE_QUEUE_TIME_IN_MINUTES = 10;
 
 export enum PriceTable {
   ROLL_NORMAL = 100,
-  ROLL_LOCAL = 120,
+  ROLL_LOCAL = 100,
   SET_WAIFU = 100,
   SET_QUOTE = 100,
 }
