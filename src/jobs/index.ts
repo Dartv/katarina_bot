@@ -7,4 +7,3 @@ export { ScoreMonitorJob } from './ScoreMonitorJob';
 export { VersusJob } from './VersusJob';
 export { BannerRefreshJob } from './BannerRefreshJob';
 export { ScrapeRecentCharactersJob } from './ScrapeRecentCharactersJob';
-export { BenchRetryJob } from './BenchRetryJob';
