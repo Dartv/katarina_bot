@@ -33,15 +33,15 @@ export interface ScoreTracker {
 }
 
 export class BeatsaviorAPI {
-  static BASE_URL = 'https://www.beatsavior.io';
-  static API_BASE = `${BeatsaviorAPI.BASE_URL}/api/`;
+  static BASE_URL = 'https://beat-savior.herokuapp.com';
+  static API_BASE = `${BeatsaviorAPI.BASE_URL}/api`;
 
   fetchUserLastPlayedInfo(playerId: string): Promise<BeatSaviorInfo[]> {
     return this.callApi(`livescores/player/${playerId}`);
   }
 
   async callApi(path: string, options: Partial<OptionsWithUrl> = {}): Promise<any> {
-    const url = `${BeatsaviorAPI.API_BASE}${path}`;
+    const url = `${BeatsaviorAPI.API_BASE}/${path}`;
     const defaults: OptionsWithUrl = {
       url,
       method: HTTPMethod.GET,
