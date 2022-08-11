@@ -29,6 +29,7 @@ export const Trigger = {
   GIFT: ['gift'],
   ADD_PLAYER: ['addplayer'],
   GUILD_SETTINGS: ['guildsettings'],
+  TRACK_VRCHAT_CREATOR: ['trackvrchatcreator'],
 };
 
 export enum CommandGroupName {
@@ -38,6 +39,7 @@ export enum CommandGroupName {
   UTILITY = 'Utility',
   ADMIN = 'Admin',
   GUILD = 'Guild',
+  VRCHAT = 'VRChat'
 }
 
 export enum ModelName {

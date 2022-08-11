@@ -52,5 +52,6 @@ module.exports = {
     'import/no-cycle': 0,
     'lines-between-class-members': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
+    'max-classes-per-file': 0,
   },
 };

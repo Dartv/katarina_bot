@@ -1,6 +1,6 @@
 import PQueue from 'p-queue';
 
-const createAsyncQueue = (intervalCap: number, interval: number): PQueue['add'] => {
+export const createAsyncQueue = (intervalCap: number, interval: number): PQueue['add'] => {
   const queue = new PQueue({ intervalCap, interval });
   return queue.add.bind(queue);
 };

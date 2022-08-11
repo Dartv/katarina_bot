@@ -23,6 +23,17 @@ const GuildSchema = new Schema({
           },
         }),
       },
+      vrchat: {
+        type: new Schema({
+          trackedCreatorIds: {
+            type: [{
+              type: String,
+              required: true,
+            }],
+            default: [],
+          },
+        }),
+      },
     },
     default: {},
   },

@@ -4,3 +4,4 @@ export * from './gacha';
 export * from './admin';
 export * from './games';
 export * from './guild';
+export * from './vrchat';
