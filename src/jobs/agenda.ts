@@ -27,7 +27,15 @@ export const initJobs = (client: Client): Agenda => {
 
   agenda.on('ready', async () => {
     client.logger.info('Starting agenda');
-    await agenda.start();
+
+    try {
+      await agenda.start();
+
+      client.logger.success('Successfully started agenda');
+    } catch (err) {
+      client.logger.fatal('Failed to start agenda. Exiting...');
+      process.exit(1);
+    }
 
     Object.values(jobs).forEach((job: Job) => job(agenda, client));
   });

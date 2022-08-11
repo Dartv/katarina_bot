@@ -146,8 +146,13 @@ export type AchievementModel = Model<AchievementDocument>;
 export interface GuildScoresaberService {
   playerIds: string[];
 }
+
+export interface GuildVRChatService {
+  trackedCreatorIds: string[];
+}
 export interface GuildServices {
   scoresaber?: GuildScoresaberService;
+  vrchat?: GuildVRChatService;
 }
 export type GuildSettings = Record<GuildSetting, string | null>;
 export interface GuildBase extends DocumentBase {

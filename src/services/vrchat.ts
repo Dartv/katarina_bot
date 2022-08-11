@@ -15,6 +15,10 @@ const { VRC_USERNAME, VRC_PASSWORD } = process.env as Record<string, string>;
 const enqueue = createAsyncQueue(1, 2 * 1000);
 
 export class VRChat {
+  static baseUrl = 'https://vrchat.com';
+  static homeUrl = `${VRChat.baseUrl}/home`;
+  static baseApiUrl = 'https://api.vrchat.cloud/api/1';
+
   public worldsApi: WorldsApi;
   public usersApi: UsersApi;
   public authenticationApi: AuthenticationApi;
@@ -29,6 +33,10 @@ export class VRChat {
     this.authenticationApi = new AuthenticationApi(configuration);
     this.worldsApi = new WorldsApi();
     this.usersApi = new UsersApi();
+  }
+
+  static getWorldPublicUrl(worldId: string) {
+    return `${VRChat.homeUrl}/launch?worldId=${worldId}`;
   }
 
   private async authenticate() {

@@ -249,6 +249,7 @@ export enum GuildSetting {
   BOSS_CHANNEL = 'bossChannel',
   WARS_CHANNEL = 'warsChannel',
   ROYALE_CHANNEL = 'royaleChannel',
+  VRC_WORLDS_CHANNEL = 'vrcWorldsChannel',
 }
 
 export const MWL_BASE_URL = 'https://mywaifulist.moe';
