@@ -29,6 +29,7 @@ export const Trigger = {
   GIFT: ['gift'],
   ADD_PLAYER: ['addplayer'],
   GUILD_SETTINGS: ['guildsettings'],
+  TRACK_VRCHAT_CREATOR: ['trackvrchatcreator'],
 };
 
 export enum CommandGroupName {
@@ -38,6 +39,7 @@ export enum CommandGroupName {
   UTILITY = 'Utility',
   ADMIN = 'Admin',
   GUILD = 'Guild',
+  VRCHAT = 'VRChat'
 }
 
 export enum ModelName {
@@ -247,6 +249,7 @@ export enum GuildSetting {
   BOSS_CHANNEL = 'bossChannel',
   WARS_CHANNEL = 'warsChannel',
   ROYALE_CHANNEL = 'royaleChannel',
+  VRC_WORLDS_CHANNEL = 'vrcWorldsChannel',
 }
 
 export const MWL_BASE_URL = 'https://mywaifulist.moe';

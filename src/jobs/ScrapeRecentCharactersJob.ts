@@ -48,5 +48,5 @@ export const ScrapeRecentCharactersJob: Job = (agenda, client) => {
     }
   });
 
-  agenda.every('0 * * * *', JOB_NAME);
+  // agenda.every('0 * * * *', JOB_NAME);
 };

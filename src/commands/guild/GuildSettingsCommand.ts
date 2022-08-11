@@ -16,12 +16,14 @@ export enum GuildSettingOption {
   BOSS_CHANNEL = 'boss',
   WARS_CHANNEL = 'wars',
   ROYALE_CHANNEL = 'royale',
+  VRC_WORLDS_CHANNEL = 'vrcworlds',
 }
 
 export const GuildSettingOptionToSetting = {
   [GuildSettingOption.BOSS_CHANNEL]: GuildSetting.BOSS_CHANNEL,
   [GuildSettingOption.WARS_CHANNEL]: GuildSetting.WARS_CHANNEL,
   [GuildSettingOption.ROYALE_CHANNEL]: GuildSetting.ROYALE_CHANNEL,
+  [GuildSettingOption.VRC_WORLDS_CHANNEL]: GuildSetting.VRC_WORLDS_CHANNEL,
 };
 
 interface GuildSettingsContext extends Context {
@@ -39,7 +41,8 @@ const GuildSettingsCommand: Command<GuildSettingsContext> = async (context): Pro
   switch (setting) {
     case GuildSetting.BOSS_CHANNEL:
     case GuildSetting.WARS_CHANNEL:
-    case GuildSetting.ROYALE_CHANNEL: {
+    case GuildSetting.ROYALE_CHANNEL:
+    case GuildSetting.VRC_WORLDS_CHANNEL: {
       guild.settings[setting] = value.id;
       break;
     }
@@ -78,6 +81,7 @@ GuildSettingsCommand.config = {
             case GuildSettingOption.BOSS_CHANNEL:
             case GuildSettingOption.WARS_CHANNEL:
             case GuildSettingOption.ROYALE_CHANNEL:
+            case GuildSettingOption.VRC_WORLDS_CHANNEL:
               return client.types.resolve(TypeResolver.Types.TEXT_CHANNEL, context);
             default:
               return null;

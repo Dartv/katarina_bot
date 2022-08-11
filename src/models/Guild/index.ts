@@ -23,24 +23,25 @@ const GuildSchema = new Schema({
           },
         }),
       },
+      vrchat: {
+        type: new Schema({
+          trackedCreatorIds: {
+            type: [{
+              type: String,
+              required: true,
+            }],
+            default: [],
+          },
+        }),
+      },
     },
     default: {},
   },
   settings: {
-    type: new Schema({
-      [GuildSetting.BOSS_CHANNEL]: {
-        type: String,
-        default: null,
-      },
-      [GuildSetting.WARS_CHANNEL]: {
-        type: String,
-        default: null,
-      },
-      [GuildSetting.ROYALE_CHANNEL]: {
-        type: String,
-        default: null,
-      },
-    }),
+    type: new Schema(Object.fromEntries(Object.values(GuildSetting).map(setting => [
+      setting,
+      { type: String, default: null },
+    ]))),
     default: {},
   },
 }, options);
