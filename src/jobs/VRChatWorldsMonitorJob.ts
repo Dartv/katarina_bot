@@ -81,6 +81,7 @@ export const VRChatWorldsMonitorJob: Job = (agenda, client) => {
           }, []));
         } catch (err) {
           client.logger.error(`Something went wrong when tracking vrchat creator ${creatorId}`);
+          client.logger.error(err);
         }
       }
     } catch (err) {
