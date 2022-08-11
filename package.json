@@ -10,6 +10,7 @@
     "build": "tsc",
     "prebuild": "npm run clean",
     "start": "node dist/index.js",
+    "start:env": "lookenv --path=./env/lookenv.prod.js -- node dist/index.js",
     "dev": "lookenv --path=./env/lookenv.dev.js -- ./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/index.js\"",
     "eslint": "./node_modules/.bin/eslint",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx,.ts,.tsx",
