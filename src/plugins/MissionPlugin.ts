@@ -1,6 +1,6 @@
 import { Plugin, MissionDescriptor, BossDocument } from '../types';
 import { ErrorResponse, SuccessResponse } from '../commands/responses';
-import { Mission, BossParticipant } from '../models';
+import { Mission, BossParticipant, User } from '../models';
 import {
   MissionType,
   MissionCode,
@@ -131,8 +131,7 @@ export const MissionPlugin: Plugin = (client) => {
         const descriptor: MissionDescriptor | undefined = Missions[mission.code];
 
         if (descriptor) {
-          user.currency += descriptor.reward;
-          await user.save();
+          await User.updateOne({ _id: user._id }, { $inc: { currency: descriptor.reward } });
 
           if (!context.silent) {
             await new SuccessResponse({
