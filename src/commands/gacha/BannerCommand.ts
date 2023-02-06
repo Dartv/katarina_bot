@@ -24,7 +24,7 @@ const BannerCommand: Command<BannerCommandContext> = async (context): Promise<an
     user: user._id,
     banner: banner._id,
   });
-  const distance = formatDistanceStrict(new Date(), addWeeks(banner.createdAt, 2));
+  const distance = formatDistanceStrict(new Date(), addWeeks(banner.createdAt, 1));
   const character = banner.featured as CharacterDocument;
   const userCharacter = await user.characters.fetchOne(character._id);
   const embed = createCharacterEmbed({
