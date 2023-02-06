@@ -57,6 +57,7 @@ const createScoreEmbed = (
       'Missed notes': beatSaviorInfo.trackers?.hitTracker?.missedNotes ?? 0,
     }),
     ...(replay && {
+      // eslint-disable-next-line max-len
       'Open replay': `[Link](https://www.replay.beatleader.xyz/?hash=${score.songHash}&difficulty=${score.difficultyRaw.split('_')[1]}&playerID=${player.playerId})`,
     }),
   };
