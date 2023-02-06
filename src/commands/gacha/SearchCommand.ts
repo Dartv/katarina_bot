@@ -84,7 +84,7 @@ const SearchCommand: Command<SearchCommandContext> = async (context) => {
     characters.forEach((character) => {
       embed.addField(
         character.name,
-        `${formatter.bold('Appears in')}: ${series.map(({ title }) => title).join(', ')}`,
+        `${formatter.bold('Appears in')}: ${character?.series.map(({ title }) => title).join(', ') || ''}`,
       );
     });
 
