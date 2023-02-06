@@ -54,6 +54,8 @@ export const VRChatWorldsMonitorJob: Job = (agenda, client) => {
       // iterate creators, fetch their worlds and publish only the new worlds
       for await (const creatorId of channelIdsByCreatorId.keys()) {
         try {
+          await job.touch();
+
           const { data: worlds } = await vrchat.searchWorlds({
             userId: creatorId,
             limit: 5,
