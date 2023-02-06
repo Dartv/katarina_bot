@@ -7,6 +7,8 @@ const JOB_NAME = 'RESET_MISSIONS';
 
 export const ResetMissionsJob: Job = (agenda) => {
   agenda.define(JOB_NAME, async (job, done) => {
+    done();
+
     try {
       await Mission.updateMany(
         {
@@ -25,14 +27,11 @@ export const ResetMissionsJob: Job = (agenda) => {
           },
         },
       );
-
-      done();
     } catch (err) {
       job.fail(err);
       await job.save();
-      done(err);
     }
   });
 
-  agenda.every('0 * * * *', JOB_NAME);
+  agenda.every('0 6 * * *', JOB_NAME);
 };

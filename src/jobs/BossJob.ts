@@ -9,6 +9,8 @@ const JOB_NAME = 'world boss';
 
 export const BossJob: Job = (agenda, client) => {
   agenda.define(JOB_NAME, async (job, done) => {
+    done();
+
     try {
       const cursor = Guild.find(
         { [`settings.${GuildSetting.BOSS_CHANNEL}`]: { $ne: null } },
@@ -31,12 +33,9 @@ export const BossJob: Job = (agenda, client) => {
           console.warn(`boss channel ${bossChannel} of guild ${guild._id} not found`);
         }
       });
-
-      done();
     } catch (err) {
       job.fail(err);
       await job.save();
-      done(err);
     }
   });
 

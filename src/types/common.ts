@@ -1,6 +1,6 @@
 import { Context as DiskatContext, CommandConfigurator as DiskatCommandConfigurator } from 'diskat';
 import { User } from 'discord.js';
-import Agenda from 'agenda';
+import { Agenda } from '@hokify/agenda';
 
 import type { Client } from '../services/client';
 import type {

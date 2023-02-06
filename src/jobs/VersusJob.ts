@@ -6,6 +6,8 @@ const JOB_NAME = 'VERSUS';
 
 export const VersusJob: Job = (agenda, client) => {
   agenda.define(JOB_NAME, async (job, done) => {
+    done();
+
     try {
       const context = client.dispatcher.createContext({
         command: client.commands.get(Trigger.VERSUS[0]),
@@ -16,12 +18,9 @@ export const VersusJob: Job = (agenda, client) => {
       });
 
       await VersusCommand(context);
-
-      done();
     } catch (err) {
       job.fail(err);
       await job.save();
-      done(err);
     }
   });
 

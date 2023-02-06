@@ -68,5 +68,5 @@ export const BattleRoyaleQueueJob: Job = (agenda, client) => {
     }
   });
 
-  agenda.every('* * * * *', JOB_NAME);
+  agenda.every('1 minute', JOB_NAME);
 };

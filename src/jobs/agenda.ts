@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require */
 
-import Agenda from 'agenda';
+import { Agenda, Job as AgendaJob } from '@hokify/agenda';
 import mongoose from 'mongoose';
 
 import { Client } from '../services/client';
 import * as jobs from '.';
 import { Job } from '../types';
 
+const { MONGO_URI } = process.env;
+
 export const initJobs = (client: Client): Agenda => {
   const agenda = new Agenda({
-    mongo: mongoose.connection.db,
+    db: { address: MONGO_URI, collection: 'agendaJobs' },
+    defaultConcurrency: Number.MAX_SAFE_INTEGER,
+    maxConcurrency: Number.MAX_SAFE_INTEGER,
   });
 
   // Restart agenda when mongoose recovers connection
@@ -52,7 +56,7 @@ export const initJobs = (client: Client): Agenda => {
     client.logger.error('[Agenda Error]:', err);
   });
 
-  agenda.on('fail', (err, job: Agenda.Job) => {
+  agenda.on('fail', (err, job: AgendaJob) => {
     client.logger.error(`Failed job "${job.attrs.name}"`, err);
   });
 

@@ -1,4 +1,4 @@
-import Agenda from 'agenda';
+import { Agenda } from '@hokify/agenda';
 
 import { connectDB } from './services/mongo';
 import { Client } from './services/client';
