@@ -6,8 +6,32 @@ import mongoose from 'mongoose';
 import { Client } from '../services/client';
 import * as jobs from '.';
 import { Job } from '../types';
+import { DAILY_RESET_CRON } from './constants';
 
 const { MONGO_URI } = process.env;
+
+// runs jobs that are overdue
+// happens when server is down and job does not run at a scheduled time
+const runOverdueJobs = async (agenda: Agenda, client: Client) => {
+  /* eslint-disable no-await-in-loop */
+  for (const job of await agenda.jobs()) {
+    try {
+      // job that run on daily reset
+      if (job.attrs.repeatInterval === DAILY_RESET_CRON && !(await job.isRunning())) {
+        const lastRunAt = job.attrs.lastRunAt || new Date(null);
+        const distanceInHours = Math.abs(job.attrs.nextRunAt.getTime() - lastRunAt.getTime()) / 1000 / 60 / 60;
+
+        if (distanceInHours > 24) {
+          await job.run();
+          await job.save();
+        }
+      }
+    } catch (err) {
+      client.logger.error(`Failed to run overdue job ${job.attrs.name}`, err);
+    }
+  }
+  /* eslint-enable no-await-in-loop */
+};
 
 export const initJobs = (client: Client): Agenda => {
   const agenda = new Agenda({
@@ -42,6 +66,8 @@ export const initJobs = (client: Client): Agenda => {
     }
 
     Object.values(jobs).forEach((job: Job) => job(agenda, client));
+
+    runOverdueJobs(agenda, client);
   });
 
   agenda.on('start', (job) => {

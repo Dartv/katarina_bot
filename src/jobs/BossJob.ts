@@ -4,6 +4,7 @@ import { GuildSetting, Trigger } from '../utils/constants';
 import { Guild, Boss } from '../models';
 import { Job } from '../types';
 import { isTextChannel } from '../utils/discord-common';
+import { DAILY_RESET_CRON } from './constants';
 
 const JOB_NAME = 'world boss';
 
@@ -39,5 +40,5 @@ export const BossJob: Job = (agenda, client) => {
     }
   });
 
-  agenda.every('0 6 * * *', JOB_NAME);
+  agenda.every(DAILY_RESET_CRON, JOB_NAME);
 };

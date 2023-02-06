@@ -1,6 +1,7 @@
 import { VersusCommand } from '../commands';
 import { Job } from '../types';
 import { Trigger } from '../utils/constants';
+import { DAILY_RESET_CRON } from './constants';
 
 const JOB_NAME = 'VERSUS';
 
@@ -24,5 +25,5 @@ export const VersusJob: Job = (agenda, client) => {
     }
   });
 
-  agenda.every('0 6 * * *', JOB_NAME);
+  agenda.every(DAILY_RESET_CRON, JOB_NAME);
 };

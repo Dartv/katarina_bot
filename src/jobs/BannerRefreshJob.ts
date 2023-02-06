@@ -1,5 +1,6 @@
 import { Banner } from '../models';
 import { Job } from '../types';
+import { DAILY_RESET_CRON } from './constants';
 
 const JOB_NAME = 'BANNER_REFRESH';
 
@@ -20,5 +21,5 @@ export const BannerRefreshJob: Job = (agenda) => {
     }
   });
 
-  agenda.every('0 6 * * *', JOB_NAME);
+  agenda.every(DAILY_RESET_CRON, JOB_NAME);
 };

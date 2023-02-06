@@ -2,6 +2,7 @@ import { Job } from '../types';
 import { Mission } from '../models';
 import { getDailyResetDate } from '../utils/daily';
 import { MissionType } from '../utils/constants';
+import { DAILY_RESET_CRON } from './constants';
 
 const JOB_NAME = 'RESET_MISSIONS';
 
@@ -33,5 +34,5 @@ export const ResetMissionsJob: Job = (agenda) => {
     }
   });
 
-  agenda.every('0 6 * * *', JOB_NAME);
+  agenda.every(DAILY_RESET_CRON, JOB_NAME);
 };
