@@ -35,7 +35,9 @@ export const SpamMonitorPlugin: Plugin = (client) => {
             await message
               .reply('please stop spamming in this channel 🚫')
               .then(msg => client.setTimeout(() => msg.delete(), 5000));
-            await message.channel.bulkDelete(Array.from(ids));
+            if ('bulkDelete' in message.channel) {
+              await message.channel.bulkDelete(Array.from(ids));
+            }
           }
         }
       }

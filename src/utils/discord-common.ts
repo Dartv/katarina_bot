@@ -5,6 +5,7 @@ import {
   TextBasedChannelFields,
   Channel,
   TextChannel,
+  DMChannel,
 } from 'discord.js';
 import { DiscordLimit } from './constants';
 
@@ -19,7 +20,7 @@ export const resolveEmbedDescription = (
 
 export const awaitAnswer = async (
   user: User,
-  channel: Channel & TextBasedChannelFields,
+  channel: (Channel | DMChannel) & Omit<TextBasedChannelFields, 'bulkDelete'>,
   {
     correct = [],
     incorrect = [],
